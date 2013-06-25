@@ -1,0 +1,389 @@
+CWAC-Camera: Taking Pictures. Made Sensible.
+============================================
+
+Taking pictures or videos using a third-party app is fairly straightforward,
+using `ACTION_IMAGE_CAPTURE` or `ACTION_VIDEO_CAPTURE`. However, you as the
+developer have little control over what happens with the image or video,
+other than indicating where the result gets stored. Plus, different camera
+apps have slightly different behavior, meaning that you are prone to getting
+inconsistent results.
+
+Taking pictures or videos using the built-in `Camera` class directly is
+eminently possible, but is full of edge and corner cases, not to mention
+its own set of per-device idiosyncracies. As a result, a ton of code is
+required to successfully show a preview, take a picture, and take a video.
+
+`CWAC-Camera` is an effort to standardize that "ton of code" and hide it
+behind a scalable API. Here, "scalable" means "simple things are simple,
+but complex things may be a bit complex".
+
+This Android library project (also
+[available as a JAR](https://github.com/commonsguy/downloads))
+
+Basic Usage
+-----------
+
+Step #1: Download the JAR and put it in the `libs/` directory of your
+project (or, if you prefer, clone this GitHub repo and add
+it as a library project to your main project).
+
+Step #2: Add a `CameraFragment` to your UI. You have two versions of
+`CameraFragment` to choose from:
+
+- `com.commonsware.cwac.camera.CameraFragment` for use with native
+API Level 11+ fragments
+
+- `com.commonsware.cwac.camera.acl.CameraFragment` for use with
+the Android Support package's backport of fragments and
+[ActionBarSherlock](http://actionbarsherlock.com/), supporting API Level 9
+and 10
+
+(note: if you choose the latter, your project will also need
+to have the ActionBarSherlock library project)
+
+The `CameraFragment` is responsible for rendering your preview, so
+you need to size and position it as desired.
+
+Step #3: Call `takePicture()` on the `CameraFragment` when you want
+to take a picture, which will be stored in the default digital photos
+directory (e.g., `DCIM`) on external storage as `Photo_yyyyMMdd_HHmmss.jpg`, where
+`yyyyMMdd_HHmmss` is replaced by the current date and time.
+
+Step #3b: Call `startRecording()` and `stopRecording()` on the
+`CameraFragment` to record a video. **NOTE** that this is presently
+only available on `com.commonsware.cwac.camera.CameraFragment`
+for use with native API Level 11+ fragments. The resulting video
+will be stored in the default videos directory (e.g., `Movies`) on external storage as
+ `Video_yyyyMMdd_HHmmss.mp4`, where
+`yyyyMMdd_HHmmss` is replaced by the current date and time.
+
+Step #4: Add `android:largeHeap="true"` to the `<application>`
+element in the manifest (a requirement which will hopefully be
+relaxed in the future).
+
+And that's it.
+
+`CameraFragment` (and its underlying `CameraView`)
+will handle:
+
+- Showing the preview using an optimal preview frame size, and
+managing the aspect ratio of the on-screen preview `View` so
+that your previews do not appear stretched
+
+- Dealing with configuration changes and screen rotation, so
+your camera activity can work in portrait or landscape
+
+- Following the appropriate recipes for taking still pictures
+and videos, including choosing the largest-available image size
+for the resolution
+
+- Opening and closing the camera at the appropriate times, so
+when you are in the foreground you have exclusive camera access,
+but other apps will have access to the camera while your activity
+is not in the foreground
+
+- And more!
+
+Simple Configuration
+--------------------
+Of course, there are probably plenty of things that you will want to configure
+about the process of taking photos and videos. There are many hooks in `CWAC-Camera`
+to allow you to do just that.
+
+Much of this configuration involves creating a custom `CameraHost`. `CameraHost`
+is your primary interface with the `CWAC-Camera` classes for configurating
+the behavior of the camera. `CameraHost` is an interface, one that you are
+welcome to implement in full. Most times, though, you will be better served
+extending `SimpleCameraHost`, the default implementation of `CameraHost`,
+so that you can override only those methods where you want behavior different
+from the default.
+
+Given a customized `CameraHost` implementation, you can pass an instance
+of that to `setHost()` on your `CameraFragment`, to replace the default.
+**Do this shortly after constructing the fragment**, to ensure that the
+right `CameraHost` is used everywhere.
+
+### Controlling the Names and Locations of Output Files
+
+There are a series of methods that you can override on `SimpleCameraHost`
+to control where photos and videoes
+are stored once taken. These methods will be called for each `takePicture()`
+or `startRecording()` call, so you can create customized results for each
+distint photo or video.
+
+Specifically:
+
+- Override `getPhotoFilename()` to return the base name of the file to use
+to store the photo
+
+- Override `getPhotoDirectory()` to return the name of the directory in which
+to store the photo
+
+- Override `getPhotoPath()` to return the complete `File` object pointing
+to the desired file in the desired directory (the default implementation
+combines the results of `getPhotoDirectory()` and `getPhotoFilename()`, so
+overriding `getPhotoPath()` replaces all of that)
+
+There are equivalent `getVideoFilename()`, `getVideoDirectory()`, and
+`getVideoPath()` for controlling the output of the next video to be taken.
+
+### Controlling Which Camera is Used
+
+If you override `useFrontFacingCamera()` on `SimpleCameraHost` to return
+`true`, the front-facing camera will be used, instead of the default rear-facing
+camera.
+
+Or, override `getDeviceId()` (available on `CameraHost`), and you can provide
+the ID of the specific camera you want. This would involve your choosing an
+available camera based on your own criteria. See the JavaDocs for Android's
+`Camera` class, notably
+[`getNumberOfCameras()`](http://developer.android.com/reference/android/hardware/Camera.html#getNumberOfCameras())
+and [`getCameraInfo()`](http://developer.android.com/reference/android/hardware/Camera.html#getCameraInfo(int, android.hardware.Camera.CameraInfo))
+for more.
+
+### Controlling FFC Mirror Correction
+
+By default, the pictures taken from the front-facing camera are a mirror
+image of what is shown on the preview. If you wish for the front-facing
+camera photos to match the preview, override `mirrorFFC()` on your `CameraHost`
+and have it
+return `true`, and `CWAC-Camera` will reverse the image for you before
+saving it.
+
+### Handling Exceptions
+
+There are some exceptions that are thrown by the `Camera` class (and kin, like
+`MediaRecorder`). Those are passed to your host's `handleException()`
+method. The default implementation displays a `Toast` and logs the message
+to LogCat as an error, but you probably will want to replace that with
+something else that integrates better with your UI.
+
+### Wrapping the Preview UI
+
+From a UI standpoint, the `CameraFragment` solely handles the preview pane.
+Presumably, you will need
+more to your UI than this, such as buttons to allow users to take pictures or
+record videos. You have two major options here:
+
+1. You can put that UI as a peer to the `CameraFragment`, such as by having action
+bar items, as the demo apps do.
+
+2. You can subclass `CameraFragment` and override `onCreateView()`. Chain to the
+superclass to get the `CameraFragment`'s own UI, then wrap that in your own
+container with additional widgets, and return the combined UI from your `onCreateView()`. 
+
+Advanced Configuration
+----------------------
+In addition to the configuration hooks specified above, you can do more
+to tailor how photos and videos are taken.
+
+### Controlling Preview Sizes
+
+Your `CameraHost` will be called with `getPreviewSize()`, where you need to return
+a valid `Camera.Size` indicating the desired size of the preview frames. `getPreviewSize()`
+is passed:
+
+- the display orientation, in degrees, with 0 indicating landscape, 90 indicating
+portrait, etc.
+
+- the available width and height for the preview
+
+- the `Camera.Parameters` object, from which you can determine the valid preview sizes
+by calling `getSupportedPreviewSizes()`
+
+The `CameraUtils` class contains a pair of static methods with stock algorithms for
+choosing the preview size:
+
+1. `getOptimalPreviewSize()` uses the algorithm found in the SDK camera sample app
+
+2. `getBestAspectPreviewSize()` finds the preview size that most closely matches the
+aspect ratio of our available space
+
+`SimpleCameraHost` uses `getBestAspectPreviewSize()` for the default implementation
+of `getPreviewSize()`. You can override `getPreviewSize()` and substitute in your
+own selection algorithm. Just make sure that the returned size is one of the ones
+returned by `getSupportedPreviewSizes()`.
+
+### Controlling Picture Sizes
+
+Similarly, your `CameraHost` will be called with `getPictureSize()`, for you to return
+the desired `Camera.Size` of the still images taken by the camera. You are simply passed the
+`Camera.Parameters`, on which you can call `getSupportedPictureSizes()` to find out
+the possible picture sizes that you can choose from.
+
+The `CameraUtils` class has a pair of methods for simple algorithms for choosing a picture
+size:
+
+1. `getLargestPictureSize()` returns the `Camera.Size` that is the largest in area
+
+2. `getSmallestPictureSize()` returns the `Camera.Size` that is the smallest in area
+
+`SimpleCameraHost` uses `getLargestPictureSize()` for the default implementation
+of `getPictureSize()`. You can override `getPictureSize()` and substitute in your
+own selection algorithm. Just make sure that the returned size is one of the ones
+returned by `getSupportedPictureSizes()`.
+
+### Arbitrary Preview Configuration
+
+When setting up the camera preview, your `CameraHost` will be called with
+`adjustPreviewParameters()`, passing in a `Camera.Parameters`. Here, you can make
+any desired adjustments to the camera preview, *except* the preview size (which you
+should be handling in `getPreviewSize()`). `adjustPreviewParameters()` returns
+the revised `Camera.Parameters`, where the stock implementation in 
+`SimpleCameraHost` just returns the passed-in parameters unmodified.
+
+### Arbitrary Photo Configuration
+
+Shortly after you call `takePicture()` on your `CameraFragment`,
+your `CameraHost` will be called with
+`adjustPictureParameters()`, passing in a `Camera.Parameters`. Here, you can make
+any desired adjustments to the parameters related to taking photos,
+*except* the image size (which you
+should be handling in `getPictureSize()`). `adjustPictureParameters()` returns
+the revised `Camera.Parameters`, where the stock implementation in 
+`SimpleCameraHost` just returns the passed-in parameters unmodified.
+
+### Arbitrary Video Configuration
+
+Shortly after you call `startRecording()`, your `CameraHost` will be called
+with:
+
+- `configureRecorderAudio()`
+
+- `configureRecorderProfile()`
+
+- `configureRecorderOutput()`
+
+in that order. Here, you can help tailor the way videos get recorded.
+Each of these is passed the ID of the camera being used for recording plus
+the `MediaRecorder` instance that does the actual recording.
+
+The stock `SimpleCameraHost` does the following:
+
+- In `configureRecorderAudio()`, `SimpleCameraHost` calls
+`setAudioSource(MediaRecorder.AudioSource.CAMCORDER)` on the `MediaRecorder`
+
+- In `configureRecorderProfile()`, `SimpleCameraHost` calls
+`setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH))`
+on the `MediaRecorder`
+
+- In `configureRecorderOutput()`, `SimpleCameraHost` calls
+`setOutputFile(getVideoPath().getAbsolutePath())` on the `MediaRecorder`
+(where `getVideoPath()` was described earlier in this document)
+
+While these are reasonable defaults, you are welcome to override these
+implementations to do something else.
+
+### Overriding Photo Saving
+
+The default `SimpleCameraHost` logic for saving photos uses the `getPhotoPath()` 
+and related methods discussed above. Actually saving the photo is done in
+`saveImage()`, called on your `CameraHost`, where `SimpleCameraHost` has a
+`saveImage()` implementation that writes the supplied `byte[]` out to the desired
+location.
+
+You are welcome to override `saveImage()` and do something else with the `byte[]`, 
+such as send it over the Internet. `saveImage()` is called on a background thread,
+so you do not have to do your own asynchronous work.
+
+### Choosing a DeviceProfile
+
+TBD
+
+### Working Directly with CameraView
+
+TBD
+
+Known Limitations
+-----------------
+1. Taking videos in portrait mode will result in the video files still being
+stored as landscape, but with a bit in the MPEG-4 header indicating that the
+output should be rotated. Unfortunately, many video players ignore this header.
+This is a function of how `MediaRecorder` works, and there is no current
+workaround in `CWAC-Camera` for this behavior.
+
+2. Taking photos in portrait mode, for some devices, will have a similar
+effect: the photo is saved in landscape, with an EXIF field in the JPEG indicating
+that the results should be rotated. `CWAC-Camera` detects this and tries to
+correct it, so the image is saved in portrait. However, this may consume too
+much memory at present, which is why Step #4 above calls for you to add
+`android:largeHeap="true"`. This will hopefully be rectified in a future
+version of this component.
+
+3. The front-facing camera on the Nexus 4 does not work with the chosen camera
+settings.
+
+4. The Galaxy Nexus portrait-mode preview images are lower resolution than expected.
+
+5. While a picture or video is being taken, on some devices, the aspect
+ratio of the preview gets messed up. The aspect ratio is corrected by `CWAC-Camera`
+once the picture or video is completed, but more work is needed to try to prevent
+this in the first place, or at least mask it a bit better for photos.
+
+Tested Devices
+--------------
+- Galaxy Nexus
+- Nexus 4
+- Nexus 7
+- Nexus One
+- Nexus 10
+- Samsung Galaxy S3
+- Motorola RAZR i
+
+Dependencies
+------------
+This project depends on the Android Support package and ActionBarSherlock
+at compile time, if you are using
+the Android library project. It also depends on the Android Support package and
+ActionBarSherlock at runtime
+if you are using the `.acl` flavor of `CameraFragment`.
+
+Version
+-------
+This is version v0.0.1 of this module, meaning it is very much a proof of
+concept. Much more testing is required on a wider array of devices, and
+more camera-related features need to be exposed, either through wrapper logic
+on the existing `CameraFragment` or `CameraHost` APIs, or by ensuring that
+developers can configure those features independently without causing
+problems for things like the camera preview.
+
+Demo
+----
+In the `demo/` sub-project you will find a sample project demonstrating the use
+of `CameraFragment` for the native API Level 11 implementation of fragments. The
+`demo-v9/` sub-project has a similar sample for the `CameraFragment` that works
+with ActionBarSherlock.
+
+License
+-------
+The code in this project is licensed under the Apache
+Software License 2.0, per the terms of the included LICENSE
+file.
+
+Questions
+---------
+If you have questions regarding the use of this code, please post a question
+on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with `commonsware` and `android`. Be sure to indicate
+what CWAC module you are having issues with, and be sure to include source code 
+and stack traces if you are encountering crashes.
+
+If you have encountered what is clearly a bug, or if you have a feature request,
+please post an [issue](https://github.com/commonsguy/cwac-presentation/issues).
+Be certain to include complete steps for reproducing the issue.
+
+Do not ask for help via Twitter.
+
+Also, if you plan on hacking
+on the code with an eye for contributing something back,
+please open an issue that we can use for discussing
+implementation details. Just lobbing a pull request over
+the fence may work, but it may not.
+
+Release Notes
+-------------
+- v0.0.1: initial release
+
+Who Made This?
+--------------
+<a href="http://commonsware.com">![CommonsWare](http://commonsware.com/images/logo.png)</a>
+
