@@ -21,7 +21,8 @@ public class DeviceProfile {
 
   synchronized public static DeviceProfile getInstance() {
     if (SINGLETON == null) {
-      if ("samsung".equalsIgnoreCase(Build.MANUFACTURER)) {
+      if ("samsung".equalsIgnoreCase(Build.MANUFACTURER)
+          && !("crespo".equals(Build.DEVICE))) {
         SINGLETON=new SamsungDeviceProfile();
       }
       else if ("motorola".equalsIgnoreCase(Build.MANUFACTURER)) {
@@ -45,14 +46,14 @@ public class DeviceProfile {
   public boolean encodesRotationToExif() {
     return(false);
   }
-  
+
   private static class SamsungDeviceProfile extends DeviceProfile {
     @Override
     public boolean encodesRotationToExif() {
       return(true);
     }
   }
-  
+
   private static class MotorolaDeviceProfile extends DeviceProfile {
     @Override
     public boolean encodesRotationToExif() {
