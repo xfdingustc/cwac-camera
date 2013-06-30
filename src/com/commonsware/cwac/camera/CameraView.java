@@ -23,7 +23,6 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -78,9 +77,8 @@ public class CameraView extends ViewGroup implements
       if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
         onOrientationChange.enable();
       }
-      else {
-        setCameraDisplayOrientation(cameraId, camera);
-      }
+      
+      setCameraDisplayOrientation(cameraId, camera);
     }
   }
 
@@ -295,42 +293,44 @@ public class CameraView extends ViewGroup implements
     getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
 
     // if the device's natural orientation is portrait...
-//    if ((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180)
-//        && height > width
-//        || (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270)
-//        && width > height) {
-      switch (rotation) {
-        case Surface.ROTATION_0:
-          degrees=0;
-          break;
-        case Surface.ROTATION_90:
-          degrees=90;
-          break;
-        case Surface.ROTATION_180:
-          degrees=180;
-          break;
-        case Surface.ROTATION_270:
-          degrees=270;
-          break;
-      }
-//    }
+    // if ((rotation == Surface.ROTATION_0 || rotation ==
+    // Surface.ROTATION_180)
+    // && height > width
+    // || (rotation == Surface.ROTATION_90 || rotation ==
+    // Surface.ROTATION_270)
+    // && width > height) {
+    switch (rotation) {
+      case Surface.ROTATION_0:
+        degrees=0;
+        break;
+      case Surface.ROTATION_90:
+        degrees=90;
+        break;
+      case Surface.ROTATION_180:
+        degrees=180;
+        break;
+      case Surface.ROTATION_270:
+        degrees=270;
+        break;
+    }
+    // }
     // if the device's natural orientation is landscape...
-//    else {
-//      switch (rotation) {
-//        case Surface.ROTATION_0:
-//          degrees=90;
-//          break;
-//        case Surface.ROTATION_90:
-//          degrees=0;
-//          break;
-//        case Surface.ROTATION_180:
-//          degrees=270;
-//          break;
-//        case Surface.ROTATION_270:
-//          degrees=180;
-//          break;
-//      }
-//    }
+    // else {
+    // switch (rotation) {
+    // case Surface.ROTATION_0:
+    // degrees=90;
+    // break;
+    // case Surface.ROTATION_90:
+    // degrees=0;
+    // break;
+    // case Surface.ROTATION_180:
+    // degrees=270;
+    // break;
+    // case Surface.ROTATION_270:
+    // degrees=180;
+    // break;
+    // }
+    // }
 
     if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
       displayOrientation=(info.orientation + degrees) % 360;
