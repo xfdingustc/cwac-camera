@@ -68,7 +68,7 @@ public class CameraFragment extends Fragment {
   }
 
   public boolean isRecording() {
-    return(cameraView.isRecording());
+    return(cameraView==null ? false : cameraView.isRecording());
   }
 
   public void record() throws Exception {

@@ -36,8 +36,8 @@ public class DemoCameraFragment extends CameraFragment {
   }
 
   @Override
-  public void onActivityCreated(Bundle state) {
-    super.onActivityCreated(state);
+  public void onCreate(Bundle state) {
+    super.onCreate(state);
 
     setHasOptionsMenu(true);
     setHost(new DemoCameraHost());

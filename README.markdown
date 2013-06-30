@@ -100,7 +100,8 @@ from the default.
 
 Given a customized `CameraHost` implementation, you can pass an instance
 of that to `setHost()` on your `CameraFragment`, to replace the default.
-**Do this shortly after constructing the fragment**, to ensure that the
+**Do this in `onCreate()` of a `CameraFragment` subclass** (or, if practical,
+just after instantiating your fragment) to ensure that the
 right `CameraHost` is used everywhere.
 
 ### Controlling the Names and Locations of Output Files
