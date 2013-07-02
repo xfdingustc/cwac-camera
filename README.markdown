@@ -321,15 +321,19 @@ ratio of the preview gets messed up. The aspect ratio is corrected by `CWAC-Came
 once the picture or video is completed, but more work is needed to try to prevent
 this in the first place, or at least mask it a bit better for photos.
 
+6. Switching between cameras (e.g., rear-facing to front-facing) on the Nexus S
+("crespo") does not work, resulting in a crash.
+
 Tested Devices
 --------------
 - Galaxy Nexus
 - Nexus 4
 - Nexus 7
-- Nexus One
 - Nexus 10
-- Samsung Galaxy S3
+- Nexus One
+- Nexus S
 - Motorola RAZR i
+- Samsung Galaxy S3
 
 Dependencies
 ------------
@@ -341,7 +345,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.0.1 of this module, meaning it is very much a proof of
+This is version v0.0.2 of this module, meaning it is very much a proof of
 concept. Much more testing is required on a wider array of devices, and
 more camera-related features need to be exposed, either through wrapper logic
 on the existing `CameraFragment` or `CameraHost` APIs, or by ensuring that
@@ -382,6 +386,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.0.2: bug fixes
 - v0.0.1: initial release
 
 Who Made This?
