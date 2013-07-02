@@ -23,6 +23,7 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -72,12 +73,13 @@ public class CameraView extends ViewGroup implements
 
     if (camera == null) {
       cameraId=getHost().getCameraId();
+      Log.d(getClass().getSimpleName(), "opening camera");
       camera=Camera.open(cameraId);
 
       if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
         onOrientationChange.enable();
       }
-      
+
       setCameraDisplayOrientation(cameraId, camera);
     }
   }
@@ -247,6 +249,7 @@ public class CameraView extends ViewGroup implements
   void previewDestroyed() {
     if (camera != null) {
       previewStopped();
+      Log.d(getClass().getSimpleName(), "releasing camera");
       camera.release();
       camera=null;
     }
@@ -259,12 +262,17 @@ public class CameraView extends ViewGroup implements
 
   private void previewStopped() {
     if (inPreview) {
+      Log.d(getClass().getSimpleName(), "stopping preview");
       camera.stopPreview();
       inPreview=false;
     }
   }
 
   public void initPreview(int w, int h) {
+    Log.d(getClass().getSimpleName(),
+          String.format("initPreview() called, setting up %d x %d",
+                        previewSize.width, previewSize.height));
+
     Camera.Parameters parameters=camera.getParameters();
 
     parameters.setPreviewSize(previewSize.width, previewSize.height);
