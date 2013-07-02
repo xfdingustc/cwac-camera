@@ -334,6 +334,7 @@ Tested Devices
 - Nexus S
 - Motorola RAZR i
 - Samsung Galaxy S3
+- Samsung Galaxy S4 (GT-I9500)
 
 Dependencies
 ------------
