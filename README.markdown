@@ -287,6 +287,10 @@ You are welcome to override `saveImage()` and do something else with the `byte[]
 such as send it over the Internet. `saveImage()` is called on a background thread,
 so you do not have to do your own asynchronous work.
 
+Another use for this is to find out when the saving is complete, so that you can
+use the resulting image. Just override `saveImage()`, chain to the superclass
+implementation, and when that returns, the image is ready for use.
+
 ### Choosing a DeviceProfile
 
 TBD
