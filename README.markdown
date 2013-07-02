@@ -331,6 +331,7 @@ this in the first place, or at least mask it a bit better for photos.
 Tested Devices
 --------------
 - Galaxy Nexus
+- HTC One S
 - Nexus 4
 - Nexus 7
 - Nexus 10
