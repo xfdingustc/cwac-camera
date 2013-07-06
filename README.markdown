@@ -340,6 +340,7 @@ Tested Devices
 - Motorola RAZR i
 - Samsung Galaxy S3
 - Samsung Galaxy S4 (GT-I9500)
+- Samsung Galaxy Tab 2
 
 Dependencies
 ------------
