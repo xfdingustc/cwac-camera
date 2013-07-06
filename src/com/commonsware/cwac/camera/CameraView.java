@@ -129,7 +129,7 @@ public class CameraView extends ViewGroup implements
       pictureParams.setPictureFormat(ImageFormat.JPEG);
       camera.setParameters(getHost().adjustPictureParameters(pictureParams));
 
-      camera.takePicture(null, null, this);
+      camera.takePicture(getHost().getShutterCallback(), null, this);
       inPreview=false;
     }
   }
@@ -406,11 +406,16 @@ public class CameraView extends ViewGroup implements
     @Override
     public void onOrientationChanged(int orientation) {
       if (camera != null) {
-        Camera.Parameters params=camera.getParameters();
+        int newOutputOrientation=getCameraPictureRotation(orientation);
 
-        outputOrientation=getCameraPictureRotation(orientation);
-        params.setRotation(outputOrientation);
-        camera.setParameters(params);
+        if (newOutputOrientation != outputOrientation) {
+          outputOrientation=newOutputOrientation;
+
+          Camera.Parameters params=camera.getParameters();
+
+          params.setRotation(outputOrientation);
+          camera.setParameters(params);
+        }
       }
     }
   }
