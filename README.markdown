@@ -18,7 +18,7 @@ behind a scalable API. Here, "scalable" means "simple things are simple,
 but complex things may be a bit complex".
 
 This Android library project (also
-[available as a JAR](https://github.com/commonsguy/downloads))
+[available as a JAR](https://github.com/commonsguy/cwac-camera/releases))
 
 Basic Usage
 -----------
