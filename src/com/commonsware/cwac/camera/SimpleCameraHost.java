@@ -108,6 +108,11 @@ public class SimpleCameraHost implements CameraHost {
 
     return(result);
   }
+  
+  @Override
+  public Camera.ShutterCallback getShutterCallback() {
+    return(null);
+  }
 
   @Override
   public void handleException(Exception e) {

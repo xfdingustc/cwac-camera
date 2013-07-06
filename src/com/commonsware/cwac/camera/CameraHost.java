@@ -31,6 +31,8 @@ public interface CameraHost {
   int getCameraId();
 
   DeviceProfile getDeviceProfile();
+  
+  Camera.ShutterCallback getShutterCallback();
 
   Camera.Size getPictureSize(Camera.Parameters parameters);
 
