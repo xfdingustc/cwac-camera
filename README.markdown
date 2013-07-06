@@ -291,6 +291,14 @@ Another use for this is to find out when the saving is complete, so that you can
 use the resulting image. Just override `saveImage()`, chain to the superclass
 implementation, and when that returns, the image is ready for use.
 
+### Controlling the Shutter Callback
+
+Your `CameraHost` implementation can return a `Camera.ShutterCallback` object
+via `getShutterCallback()`,
+which will be used in the underlying `takePicture()` call on the Android `Camera`,
+giving you control to play a "shutter click" sound. `SimpleCameraHost` returns `null`
+from `getShutterCallback()`, to give you the device default behavior.
+
 ### Choosing a DeviceProfile
 
 TBD
@@ -352,7 +360,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.0.2 of this module, meaning it is very much a proof of
+This is version v0.0.3 of this module, meaning it is very much a proof of
 concept. Much more testing is required on a wider array of devices, and
 more camera-related features need to be exposed, either through wrapper logic
 on the existing `CameraFragment` or `CameraHost` APIs, or by ensuring that
@@ -393,6 +401,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.0.3: shutter callback support, bug fixes
 - v0.0.2: bug fixes
 - v0.0.1: initial release
 
