@@ -67,7 +67,11 @@ public class CameraFragment extends SherlockFragment {
   }
 
   public void takePicture() {
-    cameraView.takePicture();
+    takePicture(false, true);
+  }
+  
+  public void takePicture(boolean needBitmap, boolean needByteArray) {
+    cameraView.takePicture(needBitmap, needByteArray);
   }
 
   public boolean isRecording() {

@@ -44,6 +44,8 @@ public class CameraView extends ViewGroup implements
   private int cameraId=-1;
   private MediaRecorder recorder=null;
   private Camera.Parameters previewParams=null;
+  private boolean needBitmap=false;
+  private boolean needByteArray=false;
 
   public CameraView(Context context) {
     super(context);
@@ -111,14 +113,18 @@ public class CameraView extends ViewGroup implements
     camera.setParameters(previewParams);
 
     new ImageCleanupTask(data, cameraId, getHost(),
-                         getContext().getCacheDir()).start();
+                         getContext().getCacheDir(), 
+                         needBitmap, needByteArray).start();
 
     camera.startPreview();
     inPreview=true;
   }
 
-  public void takePicture() {
+  public void takePicture(boolean needBitmap, boolean needByteArray) {
     if (inPreview) {
+      this.needBitmap=needBitmap;
+      this.needByteArray=needByteArray;
+      
       previewParams=camera.getParameters();
 
       Camera.Parameters pictureParams=camera.getParameters();

@@ -14,6 +14,7 @@
 
 package com.commonsware.cwac.camera;
 
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 
@@ -31,7 +32,7 @@ public interface CameraHost {
   int getCameraId();
 
   DeviceProfile getDeviceProfile();
-  
+
   Camera.ShutterCallback getShutterCallback();
 
   Camera.Size getPictureSize(Camera.Parameters parameters);
@@ -40,8 +41,10 @@ public interface CameraHost {
                              int height, Camera.Parameters parameters);
 
   void handleException(Exception e);
-  
+
   boolean mirrorFFC();
-  
+
+  void saveImage(Bitmap bitmap);
+
   void saveImage(byte[] image);
 }

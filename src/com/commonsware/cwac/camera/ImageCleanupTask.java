@@ -18,13 +18,18 @@ public class ImageCleanupTask extends Thread {
   private int cameraId;
   private CameraHost host;
   private File cacheDir=null;
+  private boolean needBitmap=false;
+  private boolean needByteArray=false;
 
   ImageCleanupTask(byte[] data, int cameraId, CameraHost host,
-                   File cacheDir) {
+                   File cacheDir, boolean needBitmap,
+                   boolean needByteArray) {
     this.data=data;
     this.cameraId=cameraId;
     this.host=host;
     this.cacheDir=cacheDir;
+    this.needBitmap=needBitmap;
+    this.needByteArray=needByteArray;
   }
 
   @Override
@@ -42,18 +47,24 @@ public class ImageCleanupTask extends Thread {
       rotateForRealz();
     }
 
-    synchronizeModels(true, false);
-    host.saveImage(data);
+    synchronizeModels(needBitmap, needByteArray);
 
-    if (workingCopy != null) {
+    if (needBitmap) {
+      host.saveImage(workingCopy);
+    }
+    else if (workingCopy != null) {
       workingCopy.recycle();
+    }
+
+    if (needByteArray) {
+      host.saveImage(data);
     }
   }
 
   void applyMirror() {
     Log.i(CameraView.TAG, "begin applyMirror()");
 
-    synchronizeModels(false, true);
+    synchronizeModels(true, false);
 
     // from http://stackoverflow.com/a/8347956/115145
 
@@ -145,8 +156,9 @@ public class ImageCleanupTask extends Thread {
                                bitmap.getHeight(), mtx, true));
   }
 
-  private void synchronizeModels(boolean needData, boolean needBitmap) {
-    if (data == null && needData) {
+  private void synchronizeModels(boolean needBitmap,
+                                 boolean needByteArray) {
+    if (data == null && needByteArray) {
       ByteArrayOutputStream out=
           new ByteArrayOutputStream(workingCopy.getWidth()
               * workingCopy.getHeight());

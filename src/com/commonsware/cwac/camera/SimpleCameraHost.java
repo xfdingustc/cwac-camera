@@ -14,6 +14,7 @@
 
 package com.commonsware.cwac.camera;
 
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -123,6 +124,11 @@ public class SimpleCameraHost implements CameraHost {
   @Override
   public boolean mirrorFFC() {
     return(false);
+  }
+  
+  @Override
+  public void saveImage(Bitmap bitmap) {
+    // no-op
   }
 
   @Override
