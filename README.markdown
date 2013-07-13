@@ -279,17 +279,28 @@ implementations to do something else.
 
 The default `SimpleCameraHost` logic for saving photos uses the `getPhotoPath()` 
 and related methods discussed above. Actually saving the photo is done in
-`saveImage()`, called on your `CameraHost`, where `SimpleCameraHost` has a
-`saveImage()` implementation that writes the supplied `byte[]` out to the desired
+`saveImage(byte[])`, called on your `CameraHost`, where `SimpleCameraHost` has a
+`saveImage(byte[])` implementation that writes the supplied `byte[]` out to the desired
 location.
 
-You are welcome to override `saveImage()` and do something else with the `byte[]`, 
-such as send it over the Internet. `saveImage()` is called on a background thread,
+You are welcome to override `saveImage(byte[])` and do something else with the `byte[]`, 
+such as send it over the Internet. `saveImage(byte[])` is called on a background thread,
 so you do not have to do your own asynchronous work.
 
 Another use for this is to find out when the saving is complete, so that you can
-use the resulting image. Just override `saveImage()`, chain to the superclass
+use the resulting image. Just override `saveImage(byte[])`, chain to the superclass
 implementation, and when that returns, the image is ready for use.
+
+There is also a `saveImage(Bitmap)` callback, giving you a decoded `Bitmap`
+instead of a `byte[]`. To use this, there is a second version of `takePicture()`
+that you can call that takes two `boolean` parameters, indicating whether or
+not you want the `saveImage(Bitmap)` callback called and/or the
+`saveImage(byte[])` callback called. The zero-argument `takePicture()` indicates
+that you only want `saveImage(byte[])` called. If you pass `true` as the
+first parameter to the two-parameter `takePicture()` method, then your host
+will be called with `saveImage(Bitmap)`. Note that if you do this, you are
+responsible for the `Bitmap` (e.g., calling `recycle()` on it) once it is handed
+to your host.
 
 ### Controlling the Shutter Callback
 
@@ -361,7 +372,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.0.3 of this module, meaning it is very much a proof of
+This is version v0.0.4 of this module, meaning it is very much a proof of
 concept. Much more testing is required on a wider array of devices, and
 more camera-related features need to be exposed, either through wrapper logic
 on the existing `CameraFragment` or `CameraHost` APIs, or by ensuring that
@@ -402,6 +413,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.0.4: Nexus S EXIF issue fixed, added `saveImage(Bitmap)` callback 
 - v0.0.3: shutter callback support, bug fixes
 - v0.0.2: bug fixes
 - v0.0.1: initial release
