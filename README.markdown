@@ -17,8 +17,8 @@ required to successfully show a preview, take a picture, and take a video.
 behind a scalable API. Here, "scalable" means "simple things are simple,
 but complex things may be a bit complex".
 
-This Android library project is (also
-[available as a JAR](https://github.com/commonsguy/cwac-camera/releases)).
+This Android library project is also
+[available as a JAR](https://github.com/commonsguy/cwac-camera/releases).
 
 Basic Usage
 -----------
