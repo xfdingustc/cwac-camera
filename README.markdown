@@ -346,6 +346,7 @@ Tested Devices
 - Nexus One
 - Nexus S
 - Motorola RAZR i
+- Samsung Galaxy Note 2
 - Samsung Galaxy S3
 - Samsung Galaxy S4 (GT-I9500)
 - Samsung Galaxy Tab 2
