@@ -128,6 +128,11 @@ overriding `getPhotoPath()` replaces all of that)
 There are equivalent `getVideoFilename()`, `getVideoDirectory()`, and
 `getVideoPath()` for controlling the output of the next video to be taken.
 
+By default, if you are using `SimpleCameraHost`, your image will be indexed
+by the `MediaStore`. If you do not want this, override `scanSavedImage()`
+to return `false` in your `SimpleCameraHost` subclass. This is called on a
+per-image basis.
+
 ### Controlling Which Camera is Used
 
 If you override `useFrontFacingCamera()` on `SimpleCameraHost` to return
@@ -320,6 +325,8 @@ TBD
 
 Known Limitations
 -----------------
+These are above and beyond [the bugs filed for this project](https://github.com/commonsguy/cwac-camera/issues):
+
 1. Taking videos in portrait mode will result in the video files still being
 stored as landscape, but with a bit in the MPEG-4 header indicating that the
 output should be rotated. Unfortunately, many video players ignore this header.
@@ -334,18 +341,10 @@ much memory at present, which is why Step #4 above calls for you to add
 `android:largeHeap="true"`. This will hopefully be rectified in a future
 version of this component.
 
-3. The front-facing camera on the Nexus 4 does not work with the chosen camera
-settings.
-
-4. The Galaxy Nexus portrait-mode preview images are lower resolution than expected.
-
-5. While a picture or video is being taken, on some devices, the aspect
+3. While a picture or video is being taken, on some devices, the aspect
 ratio of the preview gets messed up. The aspect ratio is corrected by `CWAC-Camera`
 once the picture or video is completed, but more work is needed to try to prevent
 this in the first place, or at least mask it a bit better for photos.
-
-6. Switching between cameras (e.g., rear-facing to front-facing) on the Nexus S
-("crespo") does not work, resulting in a crash.
 
 Tested Devices
 --------------
@@ -361,6 +360,7 @@ Tested Devices
 - Samsung Galaxy S3
 - Samsung Galaxy S4 (GT-I9500)
 - Samsung Galaxy Tab 2
+- SONY Xperia Z
 
 Dependencies
 ------------
@@ -372,12 +372,14 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.0.4 of this module, meaning it is very much a proof of
-concept. Much more testing is required on a wider array of devices, and
-more camera-related features need to be exposed, either through wrapper logic
-on the existing `CameraFragment` or `CameraHost` APIs, or by ensuring that
-developers can configure those features independently without causing
-problems for things like the camera preview.
+This is version v0.1.0 of this module, meaning it is rather new.
+
+Upgrade Notes
+-------------
+Developers moving from v0.0.x to v0.1.0 should note that you now need to pass
+a `Context` into the constructor of `SimpleCameraHost`. This can be any `Context`,
+as `SimpleCameraHost` retrieves the `Application` singleton from it, so you do not
+have to worry about memory leaks.
 
 Demo
 ----
@@ -413,6 +415,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.1.0: Nexus S crash fixed, added support for indexing images to `MediaStore`
 - v0.0.4: Nexus S EXIF issue fixed, added `saveImage(Bitmap)` callback 
 - v0.0.3: shutter callback support, bug fixes
 - v0.0.2: bug fixes
