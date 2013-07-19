@@ -14,6 +14,7 @@
 
 package com.commonsware.cwac.camera.acl.demo;
 
+import android.content.Context;
 import android.os.Bundle;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -40,7 +41,7 @@ public class DemoCameraFragment extends CameraFragment {
     super.onCreate(state);
 
     setHasOptionsMenu(true);
-    setHost(new DemoCameraHost());
+    setHost(new DemoCameraHost(getActivity()));
   }
 
   @Override
@@ -60,6 +61,10 @@ public class DemoCameraFragment extends CameraFragment {
   }
 
   class DemoCameraHost extends SimpleCameraHost {
+    public DemoCameraHost(Context _ctxt) {
+      super(_ctxt);
+    }
+
     @Override
     public boolean useFrontFacingCamera() {
       return(getArguments().getBoolean(KEY_USE_FFC));

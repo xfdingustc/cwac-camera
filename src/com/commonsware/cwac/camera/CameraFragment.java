@@ -53,7 +53,7 @@ public class CameraFragment extends Fragment {
   
   public CameraHost getHost() {
     if (host==null) {
-      host=new SimpleCameraHost();
+      host=new SimpleCameraHost(getActivity());
     }
     
     return(host);

@@ -14,10 +14,12 @@
 
 package com.commonsware.cwac.camera;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -29,6 +31,13 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SimpleCameraHost implements CameraHost {
+  private static final String[] SCAN_TYPES= { "image/jpeg" };
+  private Context ctxt=null;
+
+  public SimpleCameraHost(Context _ctxt) {
+    this.ctxt=_ctxt.getApplicationContext();
+  }
+
   @Override
   public Camera.Parameters adjustPictureParameters(Camera.Parameters parameters) {
     return(parameters);
@@ -109,7 +118,7 @@ public class SimpleCameraHost implements CameraHost {
 
     return(result);
   }
-  
+
   @Override
   public Camera.ShutterCallback getShutterCallback() {
     return(null);
@@ -125,7 +134,7 @@ public class SimpleCameraHost implements CameraHost {
   public boolean mirrorFFC() {
     return(false);
   }
-  
+
   @Override
   public void saveImage(Bitmap bitmap) {
     // no-op
@@ -147,6 +156,12 @@ public class SimpleCameraHost implements CameraHost {
       bos.flush();
       fos.getFD().sync();
       bos.close();
+
+      if (scanSavedImage()) {
+        MediaScannerConnection.scanFile(ctxt,
+                                        new String[] { photo.getPath() },
+                                        SCAN_TYPES, null);
+      }
     }
     catch (java.io.IOException e) {
       handleException(e);
@@ -197,5 +212,9 @@ public class SimpleCameraHost implements CameraHost {
 
   protected boolean useFrontFacingCamera() {
     return(false);
+  }
+
+  protected boolean scanSavedImage() {
+    return(true);
   }
 }

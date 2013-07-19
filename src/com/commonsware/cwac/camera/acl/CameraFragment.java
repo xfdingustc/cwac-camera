@@ -56,7 +56,7 @@ public class CameraFragment extends SherlockFragment {
   
   public CameraHost getHost() {
     if (host==null) {
-      host=new SimpleCameraHost();
+      host=new SimpleCameraHost(getActivity());
     }
     
     return(host);
