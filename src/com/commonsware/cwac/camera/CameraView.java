@@ -113,8 +113,8 @@ public class CameraView extends ViewGroup implements
     camera.setParameters(previewParams);
 
     new ImageCleanupTask(data, cameraId, getHost(),
-                         getContext().getCacheDir(), 
-                         needBitmap, needByteArray).start();
+                         getContext().getCacheDir(), needBitmap,
+                         needByteArray).start();
 
     camera.startPreview();
     inPreview=true;
@@ -124,7 +124,7 @@ public class CameraView extends ViewGroup implements
     if (inPreview) {
       this.needBitmap=needBitmap;
       this.needByteArray=needByteArray;
-      
+
       previewParams=camera.getParameters();
 
       Camera.Parameters pictureParams=camera.getParameters();
@@ -354,11 +354,19 @@ public class CameraView extends ViewGroup implements
       displayOrientation=(info.orientation - degrees + 360) % 360;
     }
 
-    camera.stopPreview();
-    inPreview=false;
+    boolean wasInPreview=inPreview;
+
+    if (inPreview) {
+      camera.stopPreview();
+      inPreview=false;
+    }
+
     camera.setDisplayOrientation(displayOrientation);
-    camera.startPreview();
-    inPreview=true;
+
+    if (wasInPreview) {
+      camera.startPreview();
+      inPreview=true;
+    }
 
     if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
       outputOrientation=
