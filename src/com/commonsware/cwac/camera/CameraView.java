@@ -75,7 +75,6 @@ public class CameraView extends ViewGroup implements
 
     if (camera == null) {
       cameraId=getHost().getCameraId();
-      Log.d(getClass().getSimpleName(), "opening camera");
       camera=Camera.open(cameraId);
 
       if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
