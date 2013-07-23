@@ -63,8 +63,19 @@ public class SimpleCameraHost implements CameraHost {
   @Override
   public void configureRecorderProfile(int cameraId,
                                        MediaRecorder recorder) {
-    recorder.setProfile(CamcorderProfile.get(cameraId,
-                                             CamcorderProfile.QUALITY_HIGH));
+    if (CamcorderProfile.hasProfile(cameraId,
+                                    CamcorderProfile.QUALITY_HIGH)) {
+      recorder.setProfile(CamcorderProfile.get(cameraId,
+                                               CamcorderProfile.QUALITY_HIGH));
+    }
+    else if (CamcorderProfile.hasProfile(cameraId,
+                                        CamcorderProfile.QUALITY_LOW)) {
+      recorder.setProfile(CamcorderProfile.get(cameraId,
+                                               CamcorderProfile.QUALITY_LOW));
+    }
+    else {
+      throw new IllegalStateException("cannot find valid CamcorderProfile");
+    }
   }
 
   @Override
