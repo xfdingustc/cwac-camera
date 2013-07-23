@@ -95,15 +95,18 @@ public class CameraUtils {
     Camera.Size result=null;
 
     for (Camera.Size size : parameters.getSupportedPictureSizes()) {
-      if (result == null) {
-        result=size;
-      }
-      else {
-        int resultArea=result.width * result.height;
-        int newArea=size.width * size.height;
-
-        if (newArea > resultArea) {
+      if (size.height <= DeviceProfile.getInstance()
+                                      .getMaxPictureHeight()) {
+        if (result == null) {
           result=size;
+        }
+        else {
+          int resultArea=result.width * result.height;
+          int newArea=size.width * size.height;
+
+          if (newArea > resultArea) {
+            result=size;
+          }
         }
       }
     }
