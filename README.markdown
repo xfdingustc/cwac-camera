@@ -91,7 +91,7 @@ about the process of taking photos and videos. There are many hooks in `CWAC-Cam
 to allow you to do just that.
 
 Much of this configuration involves creating a custom `CameraHost`. `CameraHost`
-is your primary interface with the `CWAC-Camera` classes for configurating
+is your primary interface with the `CWAC-Camera` classes for configuring
 the behavior of the camera. `CameraHost` is an interface, one that you are
 welcome to implement in full. Most times, though, you will be better served
 extending `SimpleCameraHost`, the default implementation of `CameraHost`,
@@ -107,10 +107,10 @@ right `CameraHost` is used everywhere.
 ### Controlling the Names and Locations of Output Files
 
 There are a series of methods that you can override on `SimpleCameraHost`
-to control where photos and videoes
+to control where photos and videos
 are stored once taken. These methods will be called for each `takePicture()`
 or `startRecording()` call, so you can create customized results for each
-distint photo or video.
+distinct photo or video.
 
 Specifically:
 
@@ -209,6 +209,13 @@ aspect ratio of our available space
 of `getPreviewSize()`. You can override `getPreviewSize()` and substitute in your
 own selection algorithm. Just make sure that the returned size is one of the ones
 returned by `getSupportedPreviewSizes()`.
+
+However, `SimpleCameraHost` also calls `mayUseForVideo()` on your subclass.
+If this returns `true` (the default), `SimpleCameraHost` calls
+`getPreferredPreviewSizeForVideo()` on `Camera.Parameters`, to get a preview size
+that will work for both still images and video. If you know that you will not
+be recording any video, you can override `mayUseForVideo()` to return `false`,
+and you may get a better preview size as a result.
 
 ### Controlling Picture Sizes
 
@@ -317,11 +324,60 @@ from `getShutterCallback()`, to give you the device default behavior.
 
 ### Choosing a DeviceProfile
 
-TBD
+`CameraHost` exists to provide a hook for you to determine how your app
+should handle taking pictures and videos. `DeviceProfile`, on the other hand,
+provides information about how the *device* handles taking pictures and videos.
+Different devices do slightly different things when working with the camera.
+Sometimes this is based on API level, sometimes it is based on how the device
+manufacturer tinkered with Android, and sometimes it is based on the underlying
+camera hardware. `DeviceProfile` provides a place for the CWAC-Camera project
+to isolate these differences.
+
+`CameraHost` has a `getDeviceProfile()` method that should return an instance
+of the `DeviceProfile` to use for the device that is running the app.
+The implementation of `getDeviceProfile()` on `SimpleCameraHost`
+calls the static `getInstance()` method on `DeviceProfile`, which chooses
+a `DeviceProfile` based on internal heuristics. If you encounter problems
+with certain devices, you can detect those in your `getDeviceProfile()` method
+and return a `DeviceProfile` that addresses your needs, otherwise settling for
+using the library's own choice of `DeviceProfile`.
+
+At present, there are four methods on `DeviceProfile` that you can tailor
+in your subclasses:
+
+- `useTextureView()` should return `true` if `CameraView` should use a
+`TextureView` for rendering the preview frames, or `false` if a `SurfaceView`
+should be used instead
+
+- `encodesRotationToExif()` indicates if the device puts information about
+the device orientation into EXIF headers of the JPEG image
+
+- `rotateBasedOnExif()` should return `true` if the library should attempt to
+physically change the orientation of the image if the EXIF orientation header
+indicates that the image should be changed, `false` otherwise
+
+- `getMaxPictureHeight()` returns the maximum image height to be selected
+by `CameraUtils.getLargestPictureSize()`, to work around devices that report
+invalid large `Camera.Size` values
 
 ### Working Directly with CameraView
 
-TBD
+If you wish to eschew fragments, you are welcome to work with `CameraView`
+directly. To do this:
+
+- Add it in Java code by calling its one-parameter constructor, taking
+your `Activity` as a parameter. At the present time, `CameraView` does not
+support being placed in a layout resource.
+
+- Call `setHost()` on the `CameraView` as early as possible, to make sure
+that the `CameraView` is working with the right `CameraHost` implementation.
+Alternatively, override `getHost()` and return the right `CameraHost`
+there.
+
+- Forward the `onResume()` and `onPause()` lifecycle events from your
+activity or fragment to the `CameraView`.
+
+Otherwise, `CameraView` should work as a regular `View`.
 
 Known Limitations
 -----------------
@@ -372,11 +428,11 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.1.0 of this module, meaning it is rather new.
+This is version v0.1.1 of this module, meaning it is rather new.
 
 Upgrade Notes
 -------------
-Developers moving from v0.0.x to v0.1.0 should note that you now need to pass
+Developers moving from v0.0.x to v0.1.x should note that you now need to pass
 a `Context` into the constructor of `SimpleCameraHost`. This can be any `Context`,
 as `SimpleCameraHost` retrieves the `Application` singleton from it, so you do not
 have to worry about memory leaks.
@@ -415,6 +471,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.1.1: improved support for Nexus 4 and Galaxy Tab 2
 - v0.1.0: Nexus S crash fixed, added support for indexing images to `MediaStore`
 - v0.0.4: Nexus S EXIF issue fixed, added `saveImage(Bitmap)` callback 
 - v0.0.3: shutter callback support, bug fixes
