@@ -407,7 +407,8 @@ Tested Devices
 - Galaxy Nexus
 - HTC One S
 - Nexus 4
-- Nexus 7
+- Nexus 7 (1st generation, 2012)
+- Nexus 7 (2nd generation, 2013)
 - Nexus 10
 - Nexus One
 - Nexus S
