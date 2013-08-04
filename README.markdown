@@ -404,6 +404,7 @@ this in the first place, or at least mask it a bit better for photos.
 
 Tested Devices
 --------------
+- Amazon Kindle Fire HD
 - Galaxy Nexus
 - HTC One S
 - Nexus 4
