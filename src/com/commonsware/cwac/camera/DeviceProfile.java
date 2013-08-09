@@ -44,7 +44,7 @@ public class DeviceProfile {
     return(SINGLETON);
   }
 
-  private DeviceProfile() {
+  public DeviceProfile() {
   }
 
   public boolean useTextureView() {
