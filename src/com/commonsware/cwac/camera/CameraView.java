@@ -113,7 +113,7 @@ public class CameraView extends ViewGroup implements
 
     new ImageCleanupTask(data, cameraId, getHost(),
                          getContext().getCacheDir(), needBitmap,
-                         needByteArray).start();
+                         needByteArray, displayOrientation).start();
 
     camera.startPreview();
     inPreview=true;
@@ -305,13 +305,6 @@ public class CameraView extends ViewGroup implements
     Camera.getCameraInfo(cameraId, info);
     getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-    // if the device's natural orientation is portrait...
-    // if ((rotation == Surface.ROTATION_0 || rotation ==
-    // Surface.ROTATION_180)
-    // && height > width
-    // || (rotation == Surface.ROTATION_90 || rotation ==
-    // Surface.ROTATION_270)
-    // && width > height) {
     switch (rotation) {
       case Surface.ROTATION_0:
         degrees=0;
@@ -326,24 +319,6 @@ public class CameraView extends ViewGroup implements
         degrees=270;
         break;
     }
-    // }
-    // if the device's natural orientation is landscape...
-    // else {
-    // switch (rotation) {
-    // case Surface.ROTATION_0:
-    // degrees=90;
-    // break;
-    // case Surface.ROTATION_90:
-    // degrees=0;
-    // break;
-    // case Surface.ROTATION_180:
-    // degrees=270;
-    // break;
-    // case Surface.ROTATION_270:
-    // degrees=180;
-    // break;
-    // }
-    // }
 
     if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
       displayOrientation=(info.orientation + degrees) % 360;

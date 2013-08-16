@@ -20,16 +20,18 @@ public class ImageCleanupTask extends Thread {
   private File cacheDir=null;
   private boolean needBitmap=false;
   private boolean needByteArray=false;
+  private int displayOrientation;
 
   ImageCleanupTask(byte[] data, int cameraId, CameraHost host,
                    File cacheDir, boolean needBitmap,
-                   boolean needByteArray) {
+                   boolean needByteArray, int displayOrientation) {
     this.data=data;
     this.cameraId=cameraId;
     this.host=host;
     this.cacheDir=cacheDir;
     this.needBitmap=needBitmap;
     this.needByteArray=needByteArray;
+    this.displayOrientation=displayOrientation;
   }
 
   @Override
@@ -38,9 +40,14 @@ public class ImageCleanupTask extends Thread {
 
     Camera.getCameraInfo(cameraId, info);
 
-    if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT
-        && host.mirrorFFC()) {
-      applyMirror();
+    if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+      if (host.getDeviceProfile().portraitFFCFlipped()
+          && (displayOrientation == 90 || displayOrientation == 270)) {
+        applyFlip();
+      }
+      else if (host.mirrorFFC()) {
+        applyMirror();
+      }
     }
 
     if (host.getDeviceProfile().encodesRotationToExif()) {
@@ -62,7 +69,7 @@ public class ImageCleanupTask extends Thread {
   }
 
   void applyMirror() {
-    Log.i(CameraView.TAG, "begin applyMirror()");
+    // Log.i(CameraView.TAG, "begin applyMirror()");
 
     synchronizeModels(true, false);
 
@@ -83,7 +90,31 @@ public class ImageCleanupTask extends Thread {
     workingCopy=mirrored;
     data=null;
 
-    Log.i(CameraView.TAG, "end applyMirror()");
+    // Log.i(CameraView.TAG, "end applyMirror()");
+  }
+
+  void applyFlip() {
+    Log.i(CameraView.TAG, "begin applyFlip()");
+
+    synchronizeModels(true, false);
+
+    float[] mirrorY= { -1, 0, 0, 0, 1, 0, 0, 0, 1 };
+    Matrix matrix=new Matrix();
+    Matrix matrixMirrorY=new Matrix();
+
+    matrixMirrorY.setValues(mirrorY);
+    matrix.preScale(1.0f, -1.0f);
+    matrix.postConcat(matrixMirrorY);
+
+    Bitmap flipped=
+        Bitmap.createBitmap(workingCopy, 0, 0, workingCopy.getWidth(),
+                            workingCopy.getHeight(), matrix, true);
+
+    workingCopy.recycle();
+    workingCopy=flipped;
+    data=null;
+
+    Log.i(CameraView.TAG, "end applyFlip()");
   }
 
   void rotateForRealz() {

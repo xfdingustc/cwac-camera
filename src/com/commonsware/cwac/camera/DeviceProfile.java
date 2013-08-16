@@ -15,13 +15,12 @@
 package com.commonsware.cwac.camera;
 
 import android.os.Build;
-import android.util.Log;
 
 public class DeviceProfile {
   private static volatile DeviceProfile SINGLETON=null;
 
   synchronized public static DeviceProfile getInstance() {
-    Log.d("DeviceProfile", Build.PRODUCT);
+//    Log.d("DeviceProfile", Build.PRODUCT);
     
     if (SINGLETON == null) {
       if ("occam".equals(Build.PRODUCT)) {
@@ -35,6 +34,9 @@ public class DeviceProfile {
       }
       else if ("motorola".equalsIgnoreCase(Build.MANUFACTURER)) {
         SINGLETON=new MotorolaDeviceProfile();
+      }
+      else if ("htc_vivow".equalsIgnoreCase(Build.PRODUCT)) {
+        SINGLETON=new DroidIncredible2Profile();
       }
       else {
         SINGLETON=new DeviceProfile();
@@ -56,6 +58,10 @@ public class DeviceProfile {
   }
 
   public boolean rotateBasedOnExif() {
+    return(false);
+  }
+  
+  public boolean portraitFFCFlipped() {
     return(false);
   }
 
@@ -93,5 +99,11 @@ public class DeviceProfile {
 
   private static class MotorolaDeviceProfile extends
       FullExifFixupDeviceProfile {
+  }
+
+  private static class DroidIncredible2Profile extends DeviceProfile {
+    public boolean portraitFFCFlipped() {
+      return(true);
+    }
   }
 }
