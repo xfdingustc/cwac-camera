@@ -462,6 +462,7 @@ have to worry about memory leaks.
 
 Tested Devices
 --------------
+- Acer Iconia Tab A700
 - Amazon Kindle Fire HD
 - ASUS Transformer Infinity (1st generation)
 - Galaxy Nexus
