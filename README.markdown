@@ -20,6 +20,10 @@ but complex things may be a bit complex".
 This Android library project is also
 [available as a JAR](https://github.com/commonsguy/cwac-camera/releases).
 
+If you are upgrading a project using CWAC-Camera to a new edition of the
+library, please see
+[the "Upgrading" section below](https://github.com/commonsguy/cwac-camera#upgrading).
+
 Basic Usage
 -----------
 
@@ -84,8 +88,8 @@ is not in the foreground
 
 - And more!
 
-Simple Configuration
---------------------
+Simple Configuration and Usage
+------------------------------
 Of course, there are probably plenty of things that you will want to configure
 about the process of taking photos and videos. There are many hooks in `CWAC-Camera`
 to allow you to do just that.
@@ -177,6 +181,42 @@ bar items, as the demo apps do.
 2. You can subclass `CameraFragment` and override `onCreateView()`. Chain to the
 superclass to get the `CameraFragment`'s own UI, then wrap that in your own
 container with additional widgets, and return the combined UI from your `onCreateView()`. 
+
+### Auto-Focus
+
+You can call `autoFocus()` on `CameraFragment` or `CameraView` to trigger
+auto-focus behavior. Usually, this will complete on its own, or you can call
+`cancelAutoFocus()` on `CameraFragment` or `CameraView` to ensure that auto-focus
+mode has been canceled.
+
+`CameraHost` will need to implement an `onAutoFocus()` method, coming
+from
+[the `Camera.AutoFocusCallback` interface](https://developer.android.com/reference/android/hardware/Camera.AutoFocusCallback.html)
+that `CameraHost` extends.
+`SimpleCameraHost` has a default implementation of `onAutoFocus()` that
+plays a
+device-standard sound upon completion (API Level 16+ only).
+
+### Single-Shot Mode
+
+By default, the result of taking a picture is to return the `CameraFragment`
+to preview mode, ready to take the next picture. If, instead, you only need
+the one picture, or you want to send the user to some other bit of UI first
+and do not want preview to start up again right away, override
+`useSingleShotMode()` in your `CameraHost` to return `false`.
+
+You will then
+probably want to use your own `saveImage()` implementation in your
+`CameraHost` to do whatever you want instead of restarting the preview.
+For example, you could start another activity to do something with the
+image. However, bear in mind that an `Intent` is limited to ~1MB, and so
+passing an image to another activity via a `Intent` extra is likely to be
+unreliable. You will need to do something else, such as (carefully) use a
+static data member.
+
+Preview mode will re-enable automatically after an `onPause()`/`onResume()`
+cycle of your `CameraFragment`, or you can call `restartPreview()` on your
+`CameraFragment` (or `CameraView`).
 
 Advanced Configuration
 ----------------------
@@ -402,10 +442,29 @@ ratio of the preview gets messed up. The aspect ratio is corrected by `CWAC-Came
 once the picture or video is completed, but more work is needed to try to prevent
 this in the first place, or at least mask it a bit better for photos.
 
+Upgrading
+---------
+If you are moving from an older to a newer edition of CWAC-Camera, here are some
+upgrade notes which may help.
+
+### From 0.1.x to 0.2.0 and Higher
+
+`CameraHost` now extends `Camera.AutoFocusCallback`, requiring an implementation
+of `onAutoFocus()`. `SimpleCameraHost` shows a basic implementation that, on
+API Level 16+, plays the device-standard "hey! you're focused now!" sound.
+
+### From 0.0.x to 0.1.0 and Higher
+
+Developers moving from v0.0.x to v0.1.x should note that you now need to pass
+a `Context` into the constructor of `SimpleCameraHost`. This can be any `Context`,
+as `SimpleCameraHost` retrieves the `Application` singleton from it, so you do not
+have to worry about memory leaks.
+
 Tested Devices
 --------------
 - Amazon Kindle Fire HD
 - Galaxy Nexus
+- HTC Droid Incredible 2
 - HTC One S
 - Nexus 4
 - Nexus 7 (1st generation, 2012)
@@ -430,14 +489,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.1.1 of this module, meaning it is rather new.
-
-Upgrade Notes
--------------
-Developers moving from v0.0.x to v0.1.x should note that you now need to pass
-a `Context` into the constructor of `SimpleCameraHost`. This can be any `Context`,
-as `SimpleCameraHost` retrieves the `Application` singleton from it, so you do not
-have to worry about memory leaks.
+This is version v0.2.0 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -473,6 +525,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.2.0: auto-focus support, single-shot mode, Droid Incredible 2 fixes
 - v0.1.1: improved support for Nexus 4 and Galaxy Tab 2
 - v0.1.0: Nexus S crash fixed, added support for indexing images to `MediaStore`
 - v0.0.4: Nexus S EXIF issue fixed, added `saveImage(Bitmap)` callback 
