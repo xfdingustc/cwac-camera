@@ -98,4 +98,8 @@ public class CameraFragment extends Fragment {
   public void cancelAutoFocus() {
     cameraView.cancelAutoFocus();
   }
+  
+  public void restartPreview() {
+    cameraView.restartPreview();
+  }
 }

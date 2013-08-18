@@ -15,6 +15,7 @@
 package com.commonsware.cwac.camera.acl.demo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.commonsware.cwac.camera.acl.CameraFragment;
 public class DemoCameraFragment extends CameraFragment {
   private static final String KEY_USE_FFC=
       "com.commonsware.cwac.camera.demo.USE_FFC";
+  private MenuItem singleShotItem=null;
 
   static DemoCameraFragment newInstance(boolean useFFC) {
     DemoCameraFragment f=new DemoCameraFragment();
@@ -47,6 +49,7 @@ public class DemoCameraFragment extends CameraFragment {
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.camera, menu);
+    singleShotItem=menu.findItem(R.id.single_shot);
   }
 
   @Override
@@ -59,6 +62,11 @@ public class DemoCameraFragment extends CameraFragment {
         
       case R.id.autofocus:
         autoFocus();
+
+        return(true);
+
+      case R.id.single_shot:
+        item.setChecked(!item.isChecked());
 
         return(true);
     }
@@ -74,6 +82,22 @@ public class DemoCameraFragment extends CameraFragment {
     @Override
     public boolean useFrontFacingCamera() {
       return(getArguments().getBoolean(KEY_USE_FFC));
+    }
+
+    @Override
+    public boolean useSingleShotMode() {
+      return(singleShotItem.isChecked());
+    }
+
+    @Override
+    public void saveImage(byte[] image) {
+      if (useSingleShotMode()) {
+        DisplayActivity.imageToShow=image;
+        startActivity(new Intent(getActivity(), DisplayActivity.class));
+      }
+      else {
+        super.saveImage(image);
+      }
     }
   }
 }

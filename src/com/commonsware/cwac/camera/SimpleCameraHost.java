@@ -186,6 +186,20 @@ public class SimpleCameraHost implements CameraHost {
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+  @Override
+  public void onAutoFocus(boolean success, Camera camera) {
+    if (success
+        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      new MediaActionSound().play(MediaActionSound.FOCUS_COMPLETE);
+    }
+  }
+
+  @Override
+  public boolean useSingleShotMode() {
+    return(false);
+  }
+
   protected File getPhotoPath() {
     File dir=getPhotoDirectory();
 
@@ -234,14 +248,5 @@ public class SimpleCameraHost implements CameraHost {
 
   protected boolean scanSavedImage() {
     return(true);
-  }
-
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-  @Override
-  public void onAutoFocus(boolean success, Camera camera) {
-    if (success
-        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      new MediaActionSound().play(MediaActionSound.FOCUS_COMPLETE);
-    }
   }
 }

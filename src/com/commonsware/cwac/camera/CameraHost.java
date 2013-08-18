@@ -47,4 +47,6 @@ public interface CameraHost extends Camera.AutoFocusCallback {
   void saveImage(Bitmap bitmap);
 
   void saveImage(byte[] image);
+  
+  boolean useSingleShotMode();
 }

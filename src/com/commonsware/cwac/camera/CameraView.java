@@ -116,8 +116,17 @@ public class CameraView extends ViewGroup implements
                            needByteArray, displayOrientation).start();
     }
 
-    camera.startPreview();
-    inPreview=true;
+    if (!getHost().useSingleShotMode()) {
+      camera.startPreview();
+      inPreview=true;
+    }
+  }
+
+  public void restartPreview() {
+    if (!inPreview) {
+      camera.startPreview();
+      inPreview=true;
+    }
   }
 
   public void takePicture(boolean needBitmap, boolean needByteArray) {
@@ -134,7 +143,7 @@ public class CameraView extends ViewGroup implements
                                    pictureSize.height);
       pictureParams.setPictureFormat(ImageFormat.JPEG);
       camera.setParameters(getHost().adjustPictureParameters(pictureParams));
-      
+
       camera.takePicture(getHost().getShutterCallback(), null, this);
       inPreview=false;
     }

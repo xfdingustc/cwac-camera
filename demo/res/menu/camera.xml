@@ -24,5 +24,12 @@
     android:showAsAction="never"
     android:title="@string/auto_focus">
   </item>
-	
+  <item
+    android:id="@+id/single_shot"
+    android:checkable="true"
+    android:checked="false"
+    android:showAsAction="never"
+    android:title="@string/single_shot_mode">
+  </item>
+  	
 </menu>

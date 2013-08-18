@@ -9,5 +9,7 @@
   <string name="lock_to_landscape">Lock to Landscape</string>
   <string name="launch_camera_app">Launch Camera App</string>
   <string name="auto_focus">Auto-focus</string>
+  <string name="single_shot_mode">Single-Shot Mode</string>
+  <string name="no_image">There is no image to display!</string>
 	
 </resources>
