@@ -51,10 +51,16 @@ public class DemoCameraFragment extends CameraFragment {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.camera) {
-      takePicture();
+    switch (item.getItemId()) {
+      case R.id.camera:
+        takePicture();
+  
+        return(true);
+        
+      case R.id.autofocus:
+        autoFocus();
 
-      return(true);
+        return(true);
     }
 
     return(super.onOptionsItemSelected(item));

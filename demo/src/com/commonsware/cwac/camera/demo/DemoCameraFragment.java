@@ -1,5 +1,5 @@
 /***
-  Copyright (c) 2013 CommonsWare, LLC
+7  Copyright (c) 2013 CommonsWare, LLC
   
   Licensed under the Apache License, Version 2.0 (the "License"); you may
   not use this file except in compliance with the License. You may obtain
@@ -58,43 +58,49 @@ public class DemoCameraFragment extends CameraFragment {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getItemId() == R.id.camera) {
-      takePicture();
+    switch (item.getItemId()) {
+      case R.id.camera:
+        takePicture();
 
-      return(true);
-    }
-    else if (item.getItemId() == R.id.record) {
-      try {
-        record();
-        getActivity().invalidateOptionsMenu();
-      }
-      catch (Exception e) {
-        Log.e(getClass().getSimpleName(), "Exception trying to record",
-              e);
-        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
-             .show();
-      }
+        return(true);
 
-      return(true);
-    }
-    else if (item.getItemId() == R.id.stop) {
-      try {
-        stopRecording();
-        getActivity().invalidateOptionsMenu();
-      }
-      catch (Exception e) {
-        Log.e(getClass().getSimpleName(),
-              "Exception trying to stop recording", e);
-        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
-             .show();
-      }
+      case R.id.record:
+        try {
+          record();
+          getActivity().invalidateOptionsMenu();
+        }
+        catch (Exception e) {
+          Log.e(getClass().getSimpleName(),
+                "Exception trying to record", e);
+          Toast.makeText(getActivity(), e.getMessage(),
+                         Toast.LENGTH_LONG).show();
+        }
 
-      return(true);
+        return(true);
+
+      case R.id.stop:
+        try {
+          stopRecording();
+          getActivity().invalidateOptionsMenu();
+        }
+        catch (Exception e) {
+          Log.e(getClass().getSimpleName(),
+                "Exception trying to stop recording", e);
+          Toast.makeText(getActivity(), e.getMessage(),
+                         Toast.LENGTH_LONG).show();
+        }
+
+        return(true);
+
+      case R.id.autofocus:
+        autoFocus();
+
+        return(true);
     }
 
     return(super.onOptionsItemSelected(item));
   }
-  
+
   class DemoCameraHost extends SimpleCameraHost {
     public DemoCameraHost(Context _ctxt) {
       super(_ctxt);

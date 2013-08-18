@@ -183,6 +183,14 @@ public class CameraView extends ViewGroup implements
     tempRecorder.release();
     camera.reconnect();
   }
+  
+  public void autoFocus() {
+    camera.autoFocus(getHost());
+  }
+  
+  public void cancelAutoFocus() {
+    camera.cancelAutoFocus();
+  }
 
   // based on CameraPreview.java from ApiDemos
 

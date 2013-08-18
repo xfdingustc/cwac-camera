@@ -14,10 +14,12 @@
 
 package com.commonsware.cwac.camera;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
+import android.media.MediaActionSound;
 import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.os.Build;
@@ -60,21 +62,25 @@ public class SimpleCameraHost implements CameraHost {
     recorder.setOutputFile(getVideoPath().getAbsolutePath());
   }
 
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public void configureRecorderProfile(int cameraId,
                                        MediaRecorder recorder) {
-    if (CamcorderProfile.hasProfile(cameraId,
-                                    CamcorderProfile.QUALITY_HIGH)) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+        || CamcorderProfile.hasProfile(cameraId,
+                                       CamcorderProfile.QUALITY_HIGH)) {
       recorder.setProfile(CamcorderProfile.get(cameraId,
                                                CamcorderProfile.QUALITY_HIGH));
     }
-    else if (CamcorderProfile.hasProfile(cameraId,
-                                        CamcorderProfile.QUALITY_LOW)) {
+    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+        && CamcorderProfile.hasProfile(cameraId,
+                                       CamcorderProfile.QUALITY_LOW)) {
       recorder.setProfile(CamcorderProfile.get(cameraId,
                                                CamcorderProfile.QUALITY_LOW));
     }
     else {
-      throw new IllegalStateException("cannot find valid CamcorderProfile");
+      throw new IllegalStateException(
+                                      "cannot find valid CamcorderProfile");
     }
   }
 
@@ -109,6 +115,7 @@ public class SimpleCameraHost implements CameraHost {
     return(CameraUtils.getLargestPictureSize(parameters));
   }
 
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public Camera.Size getPreviewSize(int displayOrientation, int width,
                                     int height,
@@ -227,5 +234,14 @@ public class SimpleCameraHost implements CameraHost {
 
   protected boolean scanSavedImage() {
     return(true);
+  }
+
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+  @Override
+  public void onAutoFocus(boolean success, Camera camera) {
+    if (success
+        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      new MediaActionSound().play(MediaActionSound.FOCUS_COMPLETE);
+    }
   }
 }

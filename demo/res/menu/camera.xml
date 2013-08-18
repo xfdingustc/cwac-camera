@@ -19,5 +19,10 @@
 		android:title="@string/stop"
 		android:visible="false">
 	</item>
-
+  <item
+    android:id="@+id/autofocus"
+    android:showAsAction="never"
+    android:title="@string/auto_focus">
+  </item>
+	
 </menu>

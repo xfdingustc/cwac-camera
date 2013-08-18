@@ -18,7 +18,7 @@ import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 
-public interface CameraHost {
+public interface CameraHost extends Camera.AutoFocusCallback {
   Camera.Parameters adjustPictureParameters(Camera.Parameters parameters);
 
   Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters);

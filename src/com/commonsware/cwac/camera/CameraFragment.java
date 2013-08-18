@@ -90,4 +90,12 @@ public class CameraFragment extends Fragment {
   public void lockToLandscape(boolean enable) {
     cameraView.lockToLandscape(enable);
   }
+  
+  public void autoFocus() {
+    cameraView.autoFocus();
+  }
+  
+  public void cancelAutoFocus() {
+    cameraView.cancelAutoFocus();
+  }
 }
