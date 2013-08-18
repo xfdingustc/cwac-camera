@@ -23,7 +23,6 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -111,9 +110,11 @@ public class CameraView extends ViewGroup implements
   public void onPictureTaken(byte[] data, Camera camera) {
     camera.setParameters(previewParams);
 
-    new ImageCleanupTask(data, cameraId, getHost(),
-                         getContext().getCacheDir(), needBitmap,
-                         needByteArray, displayOrientation).start();
+    if (data != null) {
+      new ImageCleanupTask(data, cameraId, getHost(),
+                           getContext().getCacheDir(), needBitmap,
+                           needByteArray, displayOrientation).start();
+    }
 
     camera.startPreview();
     inPreview=true;
@@ -133,7 +134,7 @@ public class CameraView extends ViewGroup implements
                                    pictureSize.height);
       pictureParams.setPictureFormat(ImageFormat.JPEG);
       camera.setParameters(getHost().adjustPictureParameters(pictureParams));
-
+      
       camera.takePicture(getHost().getShutterCallback(), null, this);
       inPreview=false;
     }
@@ -183,11 +184,11 @@ public class CameraView extends ViewGroup implements
     tempRecorder.release();
     camera.reconnect();
   }
-  
+
   public void autoFocus() {
     camera.autoFocus(getHost());
   }
-  
+
   public void cancelAutoFocus() {
     camera.cancelAutoFocus();
   }
@@ -262,7 +263,6 @@ public class CameraView extends ViewGroup implements
   void previewDestroyed() {
     if (camera != null) {
       previewStopped();
-      Log.d(getClass().getSimpleName(), "releasing camera");
       camera.release();
       camera=null;
     }
@@ -275,17 +275,12 @@ public class CameraView extends ViewGroup implements
 
   private void previewStopped() {
     if (inPreview) {
-      Log.d(getClass().getSimpleName(), "stopping preview");
       camera.stopPreview();
       inPreview=false;
     }
   }
 
   public void initPreview(int w, int h) {
-    Log.d(getClass().getSimpleName(),
-          String.format("initPreview() called, setting up %d x %d",
-                        previewSize.width, previewSize.height));
-
     Camera.Parameters parameters=camera.getParameters();
 
     parameters.setPreviewSize(previewSize.width, previewSize.height);

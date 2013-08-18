@@ -69,8 +69,6 @@ public class ImageCleanupTask extends Thread {
   }
 
   void applyMirror() {
-    // Log.i(CameraView.TAG, "begin applyMirror()");
-
     synchronizeModels(true, false);
 
     // from http://stackoverflow.com/a/8347956/115145
@@ -89,13 +87,9 @@ public class ImageCleanupTask extends Thread {
     workingCopy.recycle();
     workingCopy=mirrored;
     data=null;
-
-    // Log.i(CameraView.TAG, "end applyMirror()");
   }
 
   void applyFlip() {
-    Log.i(CameraView.TAG, "begin applyFlip()");
-
     synchronizeModels(true, false);
 
     float[] mirrorY= { -1, 0, 0, 0, 1, 0, 0, 0, 1 };
@@ -113,13 +107,9 @@ public class ImageCleanupTask extends Thread {
     workingCopy.recycle();
     workingCopy=flipped;
     data=null;
-
-    Log.i(CameraView.TAG, "end applyFlip()");
   }
 
   void rotateForRealz() {
-    Log.i(CameraView.TAG, "begin rotateForRealz()");
-
     try {
       synchronizeModels(true, true);
 
@@ -174,8 +164,6 @@ public class ImageCleanupTask extends Thread {
     catch (OutOfMemoryError e) {
       Log.e(CameraView.TAG, "OOM in synchronizeModels() call", e);
     }
-
-    Log.i(CameraView.TAG, "end rotateForRealz()");
   }
 
   private static Bitmap rotate(Bitmap bitmap, int degree) {
