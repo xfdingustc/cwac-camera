@@ -463,6 +463,7 @@ have to worry about memory leaks.
 Tested Devices
 --------------
 - Amazon Kindle Fire HD
+- ASUS Transformer Infinity (1st generation)
 - Galaxy Nexus
 - HTC Droid Incredible 2
 - HTC One S
