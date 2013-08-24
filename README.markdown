@@ -203,7 +203,7 @@ By default, the result of taking a picture is to return the `CameraFragment`
 to preview mode, ready to take the next picture. If, instead, you only need
 the one picture, or you want to send the user to some other bit of UI first
 and do not want preview to start up again right away, override
-`useSingleShotMode()` in your `CameraHost` to return `false`.
+`useSingleShotMode()` in your `CameraHost` to return `true`.
 
 You will then
 probably want to use your own `saveImage()` implementation in your
