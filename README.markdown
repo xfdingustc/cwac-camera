@@ -203,7 +203,7 @@ By default, the result of taking a picture is to return the `CameraFragment`
 to preview mode, ready to take the next picture. If, instead, you only need
 the one picture, or you want to send the user to some other bit of UI first
 and do not want preview to start up again right away, override
-`useSingleShotMode()` in your `CameraHost` to return `false`.
+`useSingleShotMode()` in your `CameraHost` to return `true`.
 
 You will then
 probably want to use your own `saveImage()` implementation in your
@@ -462,10 +462,13 @@ have to worry about memory leaks.
 
 Tested Devices
 --------------
+- Acer Iconia Tab A700
 - Amazon Kindle Fire HD
+- ASUS Transformer Infinity (1st generation)
 - Galaxy Nexus
 - HTC Droid Incredible 2
 - HTC One S
+- Lenovo ThinkPad Tablet
 - Nexus 4
 - Nexus 7 (1st generation, 2012)
 - Nexus 7 (2nd generation, 2013)
@@ -477,6 +480,7 @@ Tested Devices
 - Samsung Galaxy S3
 - Samsung Galaxy S4 (GT-I9500)
 - Samsung Galaxy Tab 2
+- SONY Ericsson Xperia Play
 - SONY Xperia Z
 
 Dependencies
