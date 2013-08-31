@@ -38,6 +38,9 @@ public class DeviceProfile {
       else if ("htc_vivow".equalsIgnoreCase(Build.PRODUCT)) {
         SINGLETON=new DroidIncredible2Profile();
       }
+      else if ("C1505_1271-7585".equalsIgnoreCase(Build.PRODUCT)) {
+        SINGLETON=new SonyXperiaEProfile();
+      }
       else {
         SINGLETON=new DeviceProfile();
       }
@@ -81,7 +84,7 @@ public class DeviceProfile {
     }
   }
 
-  private static class FullExifFixupDeviceProfile extends DeviceProfile {
+  public static class FullExifFixupDeviceProfile extends DeviceProfile {
     @Override
     public boolean encodesRotationToExif() {
       return(true);
@@ -105,5 +108,9 @@ public class DeviceProfile {
     public boolean portraitFFCFlipped() {
       return(true);
     }
+  }
+
+  private static class SonyXperiaEProfile extends
+      FullExifFixupDeviceProfile {
   }
 }
