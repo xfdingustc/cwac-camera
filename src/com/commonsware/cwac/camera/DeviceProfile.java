@@ -20,8 +20,8 @@ public class DeviceProfile {
   private static volatile DeviceProfile SINGLETON=null;
 
   synchronized public static DeviceProfile getInstance() {
-//    Log.d("DeviceProfile", Build.PRODUCT);
-    
+    // Log.d("DeviceProfile", Build.PRODUCT);
+
     if (SINGLETON == null) {
       if ("occam".equals(Build.PRODUCT)) {
         SINGLETON=new Nexus4DeviceProfile();
@@ -53,7 +53,7 @@ public class DeviceProfile {
   }
 
   public boolean useTextureView() {
-    return(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN);
+    return(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && !isCyanogenMod());
   }
 
   public boolean encodesRotationToExif() {
@@ -63,13 +63,21 @@ public class DeviceProfile {
   public boolean rotateBasedOnExif() {
     return(false);
   }
-  
+
   public boolean portraitFFCFlipped() {
     return(false);
   }
 
   public int getMaxPictureHeight() {
     return(Integer.MAX_VALUE);
+  }
+
+  // based on http://stackoverflow.com/a/9801191/115145
+  // and
+  // https://github.com/commonsguy/cwac-camera/issues/43#issuecomment-23791446
+
+  private boolean isCyanogenMod() {
+    return(System.getProperty("os.version").contains("cyanogenmod") || Build.HOST.contains("cyanogenmod"));
   }
 
   private static class Nexus4DeviceProfile extends DeviceProfile {
