@@ -481,6 +481,7 @@ Tested Devices
 - Samsung Galaxy S4 (GT-I9500)
 - Samsung Galaxy Tab 2
 - SONY Ericsson Xperia Play
+- SONY Xperia E
 - SONY Xperia Z
 
 Dependencies
