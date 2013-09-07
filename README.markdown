@@ -495,7 +495,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.2.0 of this module, meaning it is rather new.
+This is version v0.2.1 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -531,6 +531,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.2.1: CyanogenMod devices will now use `SurfaceView` regardless of API level
 - v0.2.0: auto-focus support, single-shot mode, Droid Incredible 2 fixes
 - v0.1.1: improved support for Nexus 4 and Galaxy Tab 2
 - v0.1.0: Nexus S crash fixed, added support for indexing images to `MediaStore`
