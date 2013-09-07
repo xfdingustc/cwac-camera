@@ -23,7 +23,8 @@ public interface CameraHost extends Camera.AutoFocusCallback {
 
   Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters);
 
-  void configureRecorderAudio(int cameraId, MediaRecorder recorder);
+  void configureRecorderAudio(int cameraId,
+                              MediaRecorder recorder);
 
   void configureRecorderOutput(int cameraId, MediaRecorder recorder);
 
@@ -47,6 +48,6 @@ public interface CameraHost extends Camera.AutoFocusCallback {
   void saveImage(Bitmap bitmap);
 
   void saveImage(byte[] image);
-  
+
   boolean useSingleShotMode();
 }
