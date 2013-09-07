@@ -159,6 +159,7 @@ public class CameraView extends ViewGroup implements
                                               "Video recording supported only on API Level 11+");
     }
 
+    camera.stopPreview();
     camera.unlock();
 
     try {
