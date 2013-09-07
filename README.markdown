@@ -482,6 +482,7 @@ Tested Devices
 - Samsung Galaxy Tab 2
 - SONY Ericsson Xperia Play
 - SONY Xperia E
+- Sony Xperia S LT26i
 - SONY Xperia Z
 
 Dependencies
