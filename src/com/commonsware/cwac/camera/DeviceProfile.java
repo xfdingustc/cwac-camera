@@ -26,6 +26,9 @@ public class DeviceProfile {
       if ("occam".equals(Build.PRODUCT)) {
         SINGLETON=new Nexus4DeviceProfile();
       }
+      else if ("gd1wifiue".equals(Build.PRODUCT)) {
+        SINGLETON=new SamsungGalaxyCameraDeviceProfile();
+      }
       else if ("espressowifiue".equals(Build.PRODUCT)) {
         SINGLETON=new SamsungGalaxyTab2Profile();
       }
@@ -106,6 +109,13 @@ public class DeviceProfile {
 
   private static class SamsungDeviceProfile extends
       FullExifFixupDeviceProfile {
+  }
+
+  private static class SamsungGalaxyCameraDeviceProfile extends
+      SamsungDeviceProfile {
+    public int getMaxPictureHeight() {
+      return(3072);
+    }
   }
 
   private static class MotorolaDeviceProfile extends
