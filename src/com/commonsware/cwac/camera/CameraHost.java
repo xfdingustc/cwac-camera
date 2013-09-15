@@ -23,6 +23,10 @@ public interface CameraHost extends Camera.AutoFocusCallback {
 
   Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters);
 
+  void autoFocusAvailable();
+
+  void autoFocusUnavailable();
+
   void configureRecorderAudio(int cameraId,
                               MediaRecorder recorder);
 
@@ -34,24 +38,22 @@ public interface CameraHost extends Camera.AutoFocusCallback {
 
   DeviceProfile getDeviceProfile();
 
-  Camera.ShutterCallback getShutterCallback();
-
   Camera.Size getPictureSize(Camera.Parameters parameters);
 
   Camera.Size getPreviewSize(int displayOrientation, int width,
                              int height, Camera.Parameters parameters);
 
+  Camera.ShutterCallback getShutterCallback();
+
   void handleException(Exception e);
 
   boolean mirrorFFC();
+  
+  boolean rotateBasedOnExif();
 
   void saveImage(Bitmap bitmap);
-
+  
   void saveImage(byte[] image);
-
+  
   boolean useSingleShotMode();
-  
-  void autoFocusAvailable();
-  
-  void autoFocusUnavailable();
 }

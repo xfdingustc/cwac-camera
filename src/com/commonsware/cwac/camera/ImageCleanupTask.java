@@ -50,7 +50,8 @@ public class ImageCleanupTask extends Thread {
       }
     }
 
-    if (host.getDeviceProfile().encodesRotationToExif()) {
+    if (host.rotateBasedOnExif()
+        && host.getDeviceProfile().encodesRotationToExif()) {
       rotateForRealz();
     }
 

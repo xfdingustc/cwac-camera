@@ -210,6 +210,11 @@ public class SimpleCameraHost implements CameraHost {
     // no-op
   }
 
+  @Override
+  public boolean rotateBasedOnExif() {
+    return(true);
+  }
+
   protected File getPhotoPath() {
     File dir=getPhotoDirectory();
 
