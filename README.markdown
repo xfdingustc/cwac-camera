@@ -184,18 +184,29 @@ container with additional widgets, and return the combined UI from your `onCreat
 
 ### Auto-Focus
 
-You can call `autoFocus()` on `CameraFragment` or `CameraView` to trigger
-auto-focus behavior. Usually, this will complete on its own, or you can call
+You can call `autoFocus()` on `CameraFragment` or `CameraView` to trigger any
+auto-focus behavior that you have configured via `setFocusMode()` on `Camera.Parameters`.
+You can call
 `cancelAutoFocus()` on `CameraFragment` or `CameraView` to ensure that auto-focus
 mode has been canceled.
 
-`CameraHost` will need to implement an `onAutoFocus()` method, coming
+Note that auto-focus is only available in certain conditions, notably when
+the preview mode is enabled. You can call `isAutoFocusAvailable()` on `CameraFragment`
+or `CameraView` to determine if auto-focus is presently available for use. Calling
+`autoFocus()` when auto-focus is not available will have no effect.
+
+`CameraHost` implementations will need to implement an `onAutoFocus()` method, coming
 from
 [the `Camera.AutoFocusCallback` interface](https://developer.android.com/reference/android/hardware/Camera.AutoFocusCallback.html)
 that `CameraHost` extends.
 `SimpleCameraHost` has a default implementation of `onAutoFocus()` that
 plays a
 device-standard sound upon completion (API Level 16+ only).
+
+`CameraHost` implementations will also need `autoFocusAvailable()` and
+`autoFocusUnavailable()` methods, to be notified when auto-focus is available or
+not. This can be used to trigger whether action bar items are enabled, etc.
+`SimpleCameraHost` has no-op implementations of these callbacks.
 
 ### Single-Shot Mode
 
@@ -362,6 +373,29 @@ which will be used in the underlying `takePicture()` call on the Android `Camera
 giving you control to play a "shutter click" sound. `SimpleCameraHost` returns `null`
 from `getShutterCallback()`, to give you the device default behavior.
 
+### Controlling EXIF Rotation Behavior
+
+Device cameras are generally set up to take landscape pictures. If you try to use
+a camera to take a picture in portrait mode, one of three things will happen:
+
+1. Everything works fine, with the device capturing a portrait image
+
+2. The device crashes (this scenario CWAC-Camera aims to handle)
+
+3. The device captures a landscape image, but sets an EXIF header to indicate
+that an image viewer should rotate the image to portrait when displaying it
+
+The problem with the last scenario is that not all image viewers will honor
+this EXIF header.
+
+Your `CameraHost` will need to implement `rotateBasedOnExif()` to indicate
+if you want the library to rotate the image automatically. If you return
+`true`, you will get a portrait image from all devices, for all three
+of the above scenarios. If you return `false`, the last scenario will
+be ignored, and you may get a portrait or a landscape image.
+
+`SimpleCameraHost` returns `true` for `rotateBasedOnExif()`.
+
 ### Choosing a DeviceProfile
 
 `CameraHost` exists to provide a hook for you to determine how your app
@@ -441,6 +475,10 @@ version of this component.
 ratio of the preview gets messed up. The aspect ratio is corrected by `CWAC-Camera`
 once the picture or video is completed, but more work is needed to try to prevent
 this in the first place, or at least mask it a bit better for photos.
+
+4. The Samsung Galaxy Ace refuses to honor a portrait preview in an activity
+that itself supports portrait or landscape. If you lock your activity to only
+display in landscape, the Galaxy Ace will work probably.
 
 Upgrading
 ---------
@@ -531,6 +569,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.3.0: improved support for auto-focus, Samsung Galaxy Camera, etc.
 - v0.2.1: CyanogenMod devices will now use `SurfaceView` regardless of API level
 - v0.2.0: auto-focus support, single-shot mode, Droid Incredible 2 fixes
 - v0.1.1: improved support for Nexus 4 and Galaxy Tab 2
