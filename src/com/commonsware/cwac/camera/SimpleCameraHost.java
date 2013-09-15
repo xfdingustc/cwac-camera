@@ -200,6 +200,16 @@ public class SimpleCameraHost implements CameraHost {
     return(false);
   }
 
+  @Override
+  public void autoFocusAvailable() {
+    // no-op
+  }
+
+  @Override
+  public void autoFocusUnavailable() {
+    // no-op
+  }
+
   protected File getPhotoPath() {
     File dir=getPhotoDirectory();
 

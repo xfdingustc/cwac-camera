@@ -117,15 +117,13 @@ public class CameraView extends ViewGroup implements
     }
 
     if (!getHost().useSingleShotMode()) {
-      camera.startPreview();
-      inPreview=true;
+      startPreview();
     }
   }
 
   public void restartPreview() {
     if (!inPreview) {
-      camera.startPreview();
-      inPreview=true;
+      startPreview();
     }
   }
 
@@ -159,7 +157,7 @@ public class CameraView extends ViewGroup implements
                                               "Video recording supported only on API Level 11+");
     }
 
-    camera.stopPreview();
+    stopPreview();
     camera.unlock();
 
     try {
@@ -196,11 +194,17 @@ public class CameraView extends ViewGroup implements
   }
 
   public void autoFocus() {
-    camera.autoFocus(getHost());
+    if (inPreview) {
+      camera.autoFocus(getHost());
+    }
   }
 
   public void cancelAutoFocus() {
     camera.cancelAutoFocus();
+  }
+
+  public boolean isAutoFocusAvailable() {
+    return(inPreview);
   }
 
   // based on CameraPreview.java from ApiDemos
@@ -285,8 +289,7 @@ public class CameraView extends ViewGroup implements
 
   private void previewStopped() {
     if (inPreview) {
-      camera.stopPreview();
-      inPreview=false;
+      stopPreview();
     }
   }
 
@@ -298,8 +301,19 @@ public class CameraView extends ViewGroup implements
     requestLayout();
 
     camera.setParameters(getHost().adjustPreviewParameters(parameters));
+    startPreview();
+  }
+
+  private void startPreview() {
     camera.startPreview();
     inPreview=true;
+    getHost().autoFocusAvailable();
+  }
+
+  private void stopPreview() {
+    inPreview=false;
+    getHost().autoFocusUnavailable();
+    camera.stopPreview();
   }
 
   // based on
@@ -344,15 +358,13 @@ public class CameraView extends ViewGroup implements
     boolean wasInPreview=inPreview;
 
     if (inPreview) {
-      camera.stopPreview();
-      inPreview=false;
+      stopPreview();
     }
 
     camera.setDisplayOrientation(displayOrientation);
 
     if (wasInPreview) {
-      camera.startPreview();
-      inPreview=true;
+      startPreview();
     }
 
     if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {

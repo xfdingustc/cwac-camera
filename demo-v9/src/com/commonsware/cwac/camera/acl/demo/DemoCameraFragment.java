@@ -27,6 +27,7 @@ public class DemoCameraFragment extends CameraFragment {
   private static final String KEY_USE_FFC=
       "com.commonsware.cwac.camera.demo.USE_FFC";
   private MenuItem singleShotItem=null;
+  private MenuItem autoFocusItem=null;
 
   static DemoCameraFragment newInstance(boolean useFFC) {
     DemoCameraFragment f=new DemoCameraFragment();
@@ -50,6 +51,7 @@ public class DemoCameraFragment extends CameraFragment {
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.camera, menu);
     singleShotItem=menu.findItem(R.id.single_shot);
+    autoFocusItem=menu.findItem(R.id.autofocus);
   }
 
   @Override
@@ -98,6 +100,16 @@ public class DemoCameraFragment extends CameraFragment {
       else {
         super.saveImage(image);
       }
+    }
+
+    @Override
+    public void autoFocusAvailable() {
+      autoFocusItem.setEnabled(true);
+    }
+
+    @Override
+    public void autoFocusUnavailable() {
+      autoFocusItem.setEnabled(false);
     }
   }
 }

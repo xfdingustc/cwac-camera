@@ -99,6 +99,10 @@ public class CameraFragment extends Fragment {
     cameraView.cancelAutoFocus();
   }
   
+  public boolean isAutoFocusAvailable() {
+    return(cameraView.isAutoFocusAvailable());
+  }
+  
   public void restartPreview() {
     cameraView.restartPreview();
   }
