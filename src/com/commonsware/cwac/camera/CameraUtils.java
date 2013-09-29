@@ -71,6 +71,15 @@ public class CameraUtils {
                                                      int width,
                                                      int height,
                                                      Camera.Parameters parameters) {
+    return(getBestAspectPreviewSize(displayOrientation, width, height,
+                                    parameters, 0.0d));
+  }
+
+  public static Camera.Size getBestAspectPreviewSize(int displayOrientation,
+                                                     int width,
+                                                     int height,
+                                                     Camera.Parameters parameters,
+                                                     double closeEnough) {
     double targetRatio=(double)width / height;
     Camera.Size optimalSize=null;
     double minDiff=Double.MAX_VALUE;
@@ -82,9 +91,13 @@ public class CameraUtils {
     for (Size size : parameters.getSupportedPreviewSizes()) {
       double ratio=(double)size.width / size.height;
 
-      if (Math.abs(ratio - targetRatio) <= minDiff) {
+      if (Math.abs(ratio - targetRatio) < minDiff) {
         optimalSize=size;
         minDiff=Math.abs(ratio - targetRatio);
+
+        if (minDiff <= closeEnough) {
+          break;
+        }
       }
     }
 
