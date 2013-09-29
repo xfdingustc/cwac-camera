@@ -26,6 +26,9 @@ public class DeviceProfile {
       if ("occam".equals(Build.PRODUCT)) {
         SINGLETON=new Nexus4DeviceProfile();
       }
+      else if ("m7".equals(Build.PRODUCT) && "HTC".equalsIgnoreCase(Build.MANUFACTURER)) {
+        SINGLETON=new HtcOneDeviceProfile();
+      }
       else if ("gd1wifiue".equals(Build.PRODUCT)) {
         SINGLETON=new SamsungGalaxyCameraDeviceProfile();
       }
@@ -81,6 +84,12 @@ public class DeviceProfile {
 
   private boolean isCyanogenMod() {
     return(System.getProperty("os.version").contains("cyanogenmod") || Build.HOST.contains("cyanogenmod"));
+  }
+
+  private static class HtcOneDeviceProfile extends DeviceProfile {
+    public int getMaxPictureHeight() {
+      return(1400);
+    }
   }
 
   private static class Nexus4DeviceProfile extends DeviceProfile {
