@@ -236,7 +236,11 @@ to tailor how photos and videos are taken.
 
 ### Controlling Preview Sizes
 
-Your `CameraHost` will be called with `getPreviewSize()`, where you need to return
+Your `CameraHost` will be called with `mayUseForVideo()`, to determine if the preview
+should be optimized for possible video recording, or not (i.e., only still images will
+be taken).
+
+In the latter case, your `CameraHost` will be called with `getPreviewSize()`, where you need to return
 a valid `Camera.Size` indicating the desired size of the preview frames. `getPreviewSize()`
 is passed:
 
@@ -261,12 +265,13 @@ of `getPreviewSize()`. You can override `getPreviewSize()` and substitute in you
 own selection algorithm. Just make sure that the returned size is one of the ones
 returned by `getSupportedPreviewSizes()`.
 
-However, `SimpleCameraHost` also calls `mayUseForVideo()` on your subclass.
-If this returns `true` (the default), `SimpleCameraHost` calls
-`getPreferredPreviewSizeForVideo()` on `Camera.Parameters`, to get a preview size
-that will work for both still images and video. If you know that you will not
-be recording any video, you can override `mayUseForVideo()` to return `false`,
-and you may get a better preview size as a result.
+If `mayUseForVideo()` returns `true`, though, `CameraHost` supplies the preview
+size via `getPreferredPreviewSizeForVideo()` instead of `getPreviewSize()`. If you
+wish to use a different preview size for video, return it, otherwise return `null`
+and we will use the results from `getPreviewSize()` instead. `getPreferredPreviewSizeForVideo()`
+is passed a `Camera.Size` as a hint from the device for a value to use, instead of
+anything you might get yourself from `Camera.Parameters` -- while using the hinted
+value is probably a good idea (if it is not `null`), it is not required.
 
 ### Controlling Picture Sizes
 
@@ -478,12 +483,21 @@ this in the first place, or at least mask it a bit better for photos.
 
 4. The Samsung Galaxy Ace refuses to honor a portrait preview in an activity
 that itself supports portrait or landscape. If you lock your activity to only
-display in landscape, the Galaxy Ace will work probably.
+display in landscape, the Galaxy Ace will probably work.
 
 Upgrading
 ---------
 If you are moving from an older to a newer edition of CWAC-Camera, here are some
 upgrade notes which may help.
+
+### From 0.2.x/0.3.0 to 0.4.0 and Higher
+
+`CameraHost` now requires implementers supply `mayUseForVideo()` (`true` if the
+preview should be optimized for possible use in video recording) and
+`getPreferredPreviewSizeForVideo()` (returns the preview size to use in case
+`mayUseForVideo()` returns `true`). `SimpleCameraHost` provides stock implementations
+of these, but if you created your own `CameraHost` from scratch, you will need
+to add your own versions of these methods.
 
 ### From 0.1.x to 0.2.0 and Higher
 
@@ -533,7 +547,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.2.1 of this module, meaning it is rather new.
+This is version v0.4.0 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -569,6 +583,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.4.0: fixed bug in `getBestAspectPreviewSize()`, added hooks for device overrides for video preview sizes, improved support for HTC One
 - v0.3.0: improved support for auto-focus, Samsung Galaxy Camera, etc.
 - v0.2.1: CyanogenMod devices will now use `SurfaceView` regardless of API level
 - v0.2.0: auto-focus support, single-shot mode, Droid Incredible 2 fixes
