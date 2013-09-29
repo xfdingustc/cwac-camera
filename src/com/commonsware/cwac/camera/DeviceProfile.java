@@ -14,6 +14,7 @@
 
 package com.commonsware.cwac.camera;
 
+import android.hardware.Camera;
 import android.os.Build;
 
 public class DeviceProfile {
@@ -26,7 +27,8 @@ public class DeviceProfile {
       if ("occam".equals(Build.PRODUCT)) {
         SINGLETON=new Nexus4DeviceProfile();
       }
-      else if ("m7".equals(Build.PRODUCT) && "HTC".equalsIgnoreCase(Build.MANUFACTURER)) {
+      else if ("m7".equals(Build.PRODUCT)
+          && "HTC".equalsIgnoreCase(Build.MANUFACTURER)) {
         SINGLETON=new HtcOneDeviceProfile();
       }
       else if ("gd1wifiue".equals(Build.PRODUCT)) {
@@ -76,6 +78,13 @@ public class DeviceProfile {
 
   public int getMaxPictureHeight() {
     return(Integer.MAX_VALUE);
+  }
+
+  public Camera.Size getPreferredPreviewSizeForVideo(int displayOrientation,
+                                                     int width,
+                                                     int height,
+                                                     Camera.Parameters parameters) {
+    return(null);
   }
 
   // based on http://stackoverflow.com/a/9801191/115145

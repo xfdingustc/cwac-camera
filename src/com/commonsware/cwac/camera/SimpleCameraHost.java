@@ -115,26 +115,31 @@ public class SimpleCameraHost implements CameraHost {
     return(CameraUtils.getLargestPictureSize(parameters));
   }
 
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public Camera.Size getPreviewSize(int displayOrientation, int width,
                                     int height,
                                     Camera.Parameters parameters) {
-    Camera.Size result=null;
+    return(CameraUtils.getBestAspectPreviewSize(displayOrientation,
+                                                width, height,
+                                                parameters));
+  }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-        && mayUseForVideo()) {
-      result=parameters.getPreferredPreviewSizeForVideo();
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+  @Override
+  public Camera.Size getPreferredPreviewSizeForVideo(int displayOrientation,
+                                                     int width,
+                                                     int height,
+                                                     Camera.Parameters parameters,
+                                                     Camera.Size deviceHint) {
+    if (deviceHint != null) {
+      return(deviceHint);
     }
 
-    if (result == null) {
-      result=
-          CameraUtils.getBestAspectPreviewSize(displayOrientation,
-                                               width, height,
-                                               parameters);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      return(parameters.getPreferredPreviewSizeForVideo());
     }
 
-    return(result);
+    return(null);
   }
 
   @Override
@@ -215,6 +220,11 @@ public class SimpleCameraHost implements CameraHost {
     return(true);
   }
 
+  @Override
+  public boolean mayUseForVideo() {
+    return(true);
+  }
+
   protected File getPhotoPath() {
     File dir=getPhotoDirectory();
 
@@ -251,10 +261,6 @@ public class SimpleCameraHost implements CameraHost {
         new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
     return("Video_" + ts + ".mp4");
-  }
-
-  protected boolean mayUseForVideo() {
-    return(true);
   }
 
   protected boolean useFrontFacingCamera() {

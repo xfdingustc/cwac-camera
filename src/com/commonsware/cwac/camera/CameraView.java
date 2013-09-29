@@ -218,9 +218,32 @@ public class CameraView extends ViewGroup implements
     setMeasuredDimension(width, height);
 
     if (previewSize == null && camera != null) {
-      previewSize=
-          getHost().getPreviewSize(getDisplayOrientation(), width,
-                                   height, camera.getParameters());
+      if (getHost().mayUseForVideo()) {
+        Camera.Size deviceHint=
+            DeviceProfile.getInstance()
+                         .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                          width,
+                                                          height,
+                                                          camera.getParameters());
+
+        previewSize=
+            getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                      width,
+                                                      height,
+                                                      camera.getParameters(),
+                                                      deviceHint);
+      }
+
+      if (previewSize == null) {
+        previewSize=
+            getHost().getPreviewSize(getDisplayOrientation(), width,
+                                     height, camera.getParameters());
+      }
+
+      android.util.Log.d(getClass().getSimpleName(),
+                         String.format("preview size: %d x %d",
+                                       previewSize.width,
+                                       previewSize.height));
     }
   }
 
