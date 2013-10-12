@@ -211,10 +211,6 @@ public class CameraView extends ViewGroup implements
     return(camera.getParameters().getFlashMode());
   }
   
-  public void setFlashMode(String mode) {
-    camera.getParameters().setFlashMode(mode);
-  }
-  
   // based on CameraPreview.java from ApiDemos
 
   @Override

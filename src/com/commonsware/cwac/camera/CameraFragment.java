@@ -110,8 +110,4 @@ public class CameraFragment extends Fragment {
   public String getFlashMode() {
     return(cameraView.getFlashMode());
   }
-  
-  public void setFlashMode(String mode) {
-    cameraView.setFlashMode(mode);
-  }
 }
