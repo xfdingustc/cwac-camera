@@ -96,7 +96,9 @@ public class CameraUtils {
 
     for (Camera.Size size : parameters.getSupportedPictureSizes()) {
       if (size.height <= DeviceProfile.getInstance()
-                                      .getMaxPictureHeight()) {
+                                      .getMaxPictureHeight()
+          && size.height >= DeviceProfile.getInstance()
+                                         .getMinPictureHeight()) {
         if (result == null) {
           result=size;
         }

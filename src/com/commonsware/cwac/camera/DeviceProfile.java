@@ -21,7 +21,7 @@ public class DeviceProfile {
   private static volatile DeviceProfile SINGLETON=null;
 
   synchronized public static DeviceProfile getInstance() {
-    // Log.d("DeviceProfile", Build.PRODUCT);
+//    android.util.Log.d("DeviceProfile", Build.PRODUCT);
 
     if (SINGLETON == null) {
       if ("occam".equals(Build.PRODUCT)) {
@@ -30,6 +30,10 @@ public class DeviceProfile {
       else if ("m7".equals(Build.PRODUCT)
           && "HTC".equalsIgnoreCase(Build.MANUFACTURER)) {
         SINGLETON=new HtcOneDeviceProfile();
+      }
+      else if (("d2att".equals(Build.PRODUCT) || "d2spr".equals(Build.PRODUCT))
+          && "samsung".equalsIgnoreCase(Build.MANUFACTURER)) {
+        SINGLETON=new SamsungGalaxyS3DeviceProfile();
       }
       else if ("gd1wifiue".equals(Build.PRODUCT)) {
         SINGLETON=new SamsungGalaxyCameraDeviceProfile();
@@ -74,6 +78,10 @@ public class DeviceProfile {
 
   public boolean portraitFFCFlipped() {
     return(false);
+  }
+
+  public int getMinPictureHeight() {
+    return(0);
   }
 
   public int getMaxPictureHeight() {
@@ -127,6 +135,13 @@ public class DeviceProfile {
 
   private static class SamsungDeviceProfile extends
       FullExifFixupDeviceProfile {
+  }
+
+  private static class SamsungGalaxyS3DeviceProfile extends
+      SamsungDeviceProfile {
+    public int getMinPictureHeight() {
+      return(1836);
+    }
   }
 
   private static class SamsungGalaxyCameraDeviceProfile extends
