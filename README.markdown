@@ -458,6 +458,13 @@ activity or fragment to the `CameraView`.
 
 Otherwise, `CameraView` should work as a regular `View`.
 
+## Miscellaneous
+
+`CameraView`, as well as `CameraFragment`, has a `getFlashMode()` which
+returns the flash mode from `Camera.Parameters`. If you wish to change
+the flash mode, please do so in `adjustPictureParameters()` and/or
+`adjustPreviewParameters()`.
+
 Known Limitations
 -----------------
 These are above and beyond [the bugs filed for this project](https://github.com/commonsguy/cwac-camera/issues):
@@ -547,7 +554,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.4.0 of this module, meaning it is rather new.
+This is version v0.4.1 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -583,6 +590,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.4.1: added `getFlashMode()`, added `DeviceProfile` control over minimum picture height
 - v0.4.0: fixed bug in `getBestAspectPreviewSize()`, added hooks for device overrides for video preview sizes, improved support for HTC One
 - v0.3.0: improved support for auto-focus, Samsung Galaxy Camera, etc.
 - v0.2.1: CyanogenMod devices will now use `SurfaceView` regardless of API level
