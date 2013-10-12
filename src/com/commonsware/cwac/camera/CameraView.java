@@ -206,7 +206,15 @@ public class CameraView extends ViewGroup implements
   public boolean isAutoFocusAvailable() {
     return(inPreview);
   }
-
+  
+  public String getFlashMode() {
+    return(camera.getParameters().getFlashMode());
+  }
+  
+  public void setFlashMode(String mode) {
+    camera.getParameters().setFlashMode(mode);
+  }
+  
   // based on CameraPreview.java from ApiDemos
 
   @Override

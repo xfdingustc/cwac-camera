@@ -97,4 +97,12 @@ public class CameraFragment extends SherlockFragment {
   public void restartPreview() {
     cameraView.restartPreview();
   }
+  
+  public String getFlashMode() {
+    return(cameraView.getFlashMode());
+  }
+  
+  public void setFlashMode(String mode) {
+    cameraView.setFlashMode(mode);
+  }
 }
