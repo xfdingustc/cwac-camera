@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import java.io.File;
 import com.actionbarsherlock.app.ActionBar;
@@ -147,6 +148,17 @@ public class MainActivity extends SherlockFragmentActivity implements
         // do nothing
       }
     }
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_CAMERA && current != null) {
+      current.takePicture();
+
+      return(true);
+    }
+
+    return(super.onKeyDown(keyCode, event));
   }
 
   @Override

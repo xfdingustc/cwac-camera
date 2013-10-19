@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -147,6 +148,17 @@ public class MainActivity extends Activity implements
         // do nothing
       }
     }
+  }
+
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_CAMERA && current != null) {
+      current.takePicture();
+
+      return(true);
+    }
+
+    return(super.onKeyDown(keyCode, event));
   }
 
   @Override
