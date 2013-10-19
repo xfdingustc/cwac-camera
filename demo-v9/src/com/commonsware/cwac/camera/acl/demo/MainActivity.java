@@ -27,7 +27,6 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.commonsware.cwac.camera.acl.CameraFragment;
 
 public class MainActivity extends SherlockFragmentActivity implements
     ActionBar.OnNavigationListener, DemoCameraFragment.Contract {
@@ -35,9 +34,9 @@ public class MainActivity extends SherlockFragmentActivity implements
       "selected_navigation_item";
   private static final int CONTENT_REQUEST=1337;
   private static final String STATE_SINGLE_SHOT="single_shot";
-  private CameraFragment std=null;
-  private CameraFragment ffc=null;
-  private CameraFragment current=null;
+  private DemoCameraFragment std=null;
+  private DemoCameraFragment ffc=null;
+  private DemoCameraFragment current=null;
   private boolean hasTwoCameras=(Camera.getNumberOfCameras() > 1);
   private boolean singleShot=false;
 
@@ -152,7 +151,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_CAMERA && current != null) {
+    if (keyCode == KeyEvent.KEYCODE_CAMERA && current != null
+        && !current.isSingleShotProcessing()) {
       current.takePicture();
 
       return(true);

@@ -28,6 +28,8 @@ public class DemoCameraFragment extends CameraFragment {
       "com.commonsware.cwac.camera.demo.USE_FFC";
   private MenuItem singleShotItem=null;
   private MenuItem autoFocusItem=null;
+  private MenuItem takePictureItem=null;
+  private boolean singleShotProcessing=false;
 
   static DemoCameraFragment newInstance(boolean useFFC) {
     DemoCameraFragment f=new DemoCameraFragment();
@@ -50,6 +52,7 @@ public class DemoCameraFragment extends CameraFragment {
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.camera, menu);
+    takePictureItem=menu.findItem(R.id.camera);
     singleShotItem=menu.findItem(R.id.single_shot);
     singleShotItem.setChecked(getContract().isSingleShotMode());
     autoFocusItem=menu.findItem(R.id.autofocus);
@@ -59,10 +62,15 @@ public class DemoCameraFragment extends CameraFragment {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.camera:
+        if (singleShotItem.isChecked()) {
+          singleShotProcessing=true;
+          takePictureItem.setEnabled(false);
+        }
+
         takePicture();
-  
+
         return(true);
-        
+
       case R.id.autofocus:
         autoFocus();
 
@@ -76,6 +84,10 @@ public class DemoCameraFragment extends CameraFragment {
     }
 
     return(super.onOptionsItemSelected(item));
+  }
+
+  boolean isSingleShotProcessing() {
+    return(singleShotProcessing);
   }
 
   Contract getContract() {
@@ -106,6 +118,15 @@ public class DemoCameraFragment extends CameraFragment {
     @Override
     public void saveImage(byte[] image) {
       if (useSingleShotMode()) {
+        singleShotProcessing=false;
+
+        getActivity().runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            takePictureItem.setEnabled(true);
+          }
+        });
+
         DisplayActivity.imageToShow=image;
         startActivity(new Intent(getActivity(), DisplayActivity.class));
       }
