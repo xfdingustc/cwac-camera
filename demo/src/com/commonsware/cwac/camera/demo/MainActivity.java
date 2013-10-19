@@ -30,14 +30,16 @@ import java.io.File;
 import com.commonsware.cwac.camera.CameraFragment;
 
 public class MainActivity extends Activity implements
-    ActionBar.OnNavigationListener {
+    ActionBar.OnNavigationListener, DemoCameraFragment.Contract {
   private static final String STATE_SELECTED_NAVIGATION_ITEM=
       "selected_navigation_item";
+  private static final String STATE_SINGLE_SHOT="single_shot";
   private static final int CONTENT_REQUEST=1337;
   private CameraFragment std=null;
   private CameraFragment ffc=null;
   private CameraFragment current=null;
   private boolean hasTwoCameras=(Camera.getNumberOfCameras() > 1);
+  private boolean singleShot=false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class MainActivity extends Activity implements
         getActionBar().setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
       }
     }
+
+    setSingleShotMode(savedInstanceState.getBoolean(STATE_SINGLE_SHOT));
   }
 
   @Override
@@ -81,6 +85,8 @@ public class MainActivity extends Activity implements
       outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
                       getActionBar().getSelectedNavigationIndex());
     }
+
+    outState.putBoolean(STATE_SINGLE_SHOT, isSingleShotMode());
   }
 
   @Override
@@ -141,5 +147,15 @@ public class MainActivity extends Activity implements
         // do nothing
       }
     }
+  }
+
+  @Override
+  public boolean isSingleShotMode() {
+    return(singleShot);
+  }
+
+  @Override
+  public void setSingleShotMode(boolean mode) {
+    singleShot=mode;
   }
 }

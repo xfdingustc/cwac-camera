@@ -59,6 +59,7 @@ public class DemoCameraFragment extends CameraFragment {
     }
 
     singleShotItem=menu.findItem(R.id.single_shot);
+    singleShotItem.setChecked(getContract().isSingleShotMode());
     autoFocusItem=menu.findItem(R.id.autofocus);
   }
 
@@ -105,11 +106,22 @@ public class DemoCameraFragment extends CameraFragment {
 
       case R.id.single_shot:
         item.setChecked(!item.isChecked());
+        getContract().setSingleShotMode(item.isChecked());
 
         return(true);
     }
 
     return(super.onOptionsItemSelected(item));
+  }
+
+  Contract getContract() {
+    return((Contract)getActivity());
+  }
+
+  interface Contract {
+    boolean isSingleShotMode();
+
+    void setSingleShotMode(boolean mode);
   }
 
   class DemoCameraHost extends SimpleCameraHost {

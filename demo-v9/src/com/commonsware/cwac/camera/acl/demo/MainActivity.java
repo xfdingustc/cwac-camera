@@ -29,14 +29,16 @@ import com.actionbarsherlock.view.MenuItem;
 import com.commonsware.cwac.camera.acl.CameraFragment;
 
 public class MainActivity extends SherlockFragmentActivity implements
-    ActionBar.OnNavigationListener {
+    ActionBar.OnNavigationListener, DemoCameraFragment.Contract {
   private static final String STATE_SELECTED_NAVIGATION_ITEM=
       "selected_navigation_item";
   private static final int CONTENT_REQUEST=1337;
+  private static final String STATE_SINGLE_SHOT="single_shot";
   private CameraFragment std=null;
   private CameraFragment ffc=null;
   private CameraFragment current=null;
   private boolean hasTwoCameras=(Camera.getNumberOfCameras() > 1);
+  private boolean singleShot=false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class MainActivity extends SherlockFragmentActivity implements
         getSupportActionBar().setSelectedNavigationItem(savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
       }
     }
+
+    setSingleShotMode(savedInstanceState.getBoolean(STATE_SINGLE_SHOT));
   }
 
   @Override
@@ -80,6 +84,8 @@ public class MainActivity extends SherlockFragmentActivity implements
       outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
                       getSupportActionBar().getSelectedNavigationIndex());
     }
+
+    outState.putBoolean(STATE_SINGLE_SHOT, isSingleShotMode());
   }
 
   @Override
@@ -141,5 +147,15 @@ public class MainActivity extends SherlockFragmentActivity implements
         // do nothing
       }
     }
+  }
+
+  @Override
+  public boolean isSingleShotMode() {
+    return(singleShot);
+  }
+
+  @Override
+  public void setSingleShotMode(boolean mode) {
+    singleShot=mode;
   }
 }
