@@ -243,11 +243,6 @@ public class CameraView extends ViewGroup implements
             getHost().getPreviewSize(getDisplayOrientation(), width,
                                      height, camera.getParameters());
       }
-
-      android.util.Log.d(getClass().getSimpleName(),
-                         String.format("preview size: %d x %d",
-                                       previewSize.width,
-                                       previewSize.height));
     }
   }
 
