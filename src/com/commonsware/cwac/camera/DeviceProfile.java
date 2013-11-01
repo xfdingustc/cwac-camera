@@ -159,6 +159,10 @@ public class DeviceProfile {
     public boolean portraitFFCFlipped() {
       return(true);
     }
+    
+    public int getMaxPictureHeight() {
+      return(1952);
+    }
   }
 
   private static class SonyXperiaEProfile extends
