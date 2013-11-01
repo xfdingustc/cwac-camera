@@ -523,6 +523,7 @@ Tested Devices
 --------------
 - Acer Iconia Tab A700
 - Amazon Kindle Fire HD
+- ASUS MEMO Pad FHD 10
 - ASUS Transformer Infinity (1st generation)
 - Galaxy Nexus
 - HTC Droid Incredible 2
@@ -554,7 +555,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.4.1 of this module, meaning it is rather new.
+This is version v0.4.2 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -590,6 +591,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.4.2: fixed bug with Droid Incredible 2
 - v0.4.1: added `getFlashMode()`, added `DeviceProfile` control over minimum picture height
 - v0.4.0: fixed bug in `getBestAspectPreviewSize()`, added hooks for device overrides for video preview sizes, improved support for HTC One
 - v0.3.0: improved support for auto-focus, Samsung Galaxy Camera, etc.
