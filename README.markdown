@@ -530,6 +530,7 @@ Tested Devices
 - HTC One S
 - Lenovo ThinkPad Tablet
 - Nexus 4
+- Nexus 5
 - Nexus 7 (1st generation, 2012)
 - Nexus 7 (2nd generation, 2013)
 - Nexus 10
