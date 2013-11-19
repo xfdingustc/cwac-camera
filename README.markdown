@@ -537,9 +537,10 @@ Tested Devices
 - Nexus One
 - Nexus S
 - Motorola RAZR i
+- Samsung Galaxy Mega
 - Samsung Galaxy Note 2
 - Samsung Galaxy S3
-- Samsung Galaxy S4 (GT-I9500)
+- Samsung Galaxy S4 (GT-I9500 and SGH-I337)
 - Samsung Galaxy Tab 2
 - SONY Ericsson Xperia Play
 - SONY Xperia E
@@ -556,7 +557,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.4.2 of this module, meaning it is rather new.
+This is version v0.4.3 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -592,6 +593,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.4.3: override `getPreferredPreviewSizeForVideo()` &mdash; if too low, use `getPreviewSize()`
 - v0.4.2: fixed bug with Droid Incredible 2
 - v0.4.1: added `getFlashMode()`, added `DeviceProfile` control over minimum picture height
 - v0.4.0: fixed bug in `getBestAspectPreviewSize()`, added hooks for device overrides for video preview sizes, improved support for HTC One
