@@ -537,7 +537,7 @@ Tested Devices
 - Nexus One
 - Nexus S
 - Motorola RAZR i
-- Samsung Galaxy Mega
+- Samsung Galaxy Grand
 - Samsung Galaxy Note 2
 - Samsung Galaxy S3
 - Samsung Galaxy S4 (GT-I9500 and SGH-I337)
