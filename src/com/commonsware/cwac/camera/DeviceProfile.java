@@ -22,6 +22,7 @@ public class DeviceProfile {
 
   synchronized public static DeviceProfile getInstance() {
 //    android.util.Log.d("DeviceProfile", Build.PRODUCT);
+//    android.util.Log.d("DeviceProfile", Build.MANUFACTURER);
 
     if (SINGLETON == null) {
       if ("occam".equals(Build.PRODUCT)) {

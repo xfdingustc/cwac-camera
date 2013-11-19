@@ -206,11 +206,11 @@ public class CameraView extends ViewGroup implements
   public boolean isAutoFocusAvailable() {
     return(inPreview);
   }
-  
+
   public String getFlashMode() {
     return(camera.getParameters().getFlashMode());
   }
-  
+
   // based on CameraPreview.java from ApiDemos
 
   @Override
@@ -238,10 +238,17 @@ public class CameraView extends ViewGroup implements
                                                       deviceHint);
       }
 
-      if (previewSize == null) {
+      if (previewSize == null
+          || previewSize.width * previewSize.height < 65536) {
         previewSize=
             getHost().getPreviewSize(getDisplayOrientation(), width,
                                      height, camera.getParameters());
+      }
+
+      if (previewSize != null) {
+//        android.util.Log.e("CameraView",
+//                           String.format("%d x %d", previewSize.width,
+//                                         previewSize.height));
       }
     }
   }
