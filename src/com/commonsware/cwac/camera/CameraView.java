@@ -15,6 +15,7 @@
 
 package com.commonsware.cwac.camera;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -222,7 +223,7 @@ public class CameraView extends ViewGroup implements
     setMeasuredDimension(width, height);
 
     if (previewSize == null && camera != null) {
-      if (getHost().mayUseForVideo()) {
+      if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
         Camera.Size deviceHint=
             DeviceProfile.getInstance()
                          .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
@@ -246,9 +247,9 @@ public class CameraView extends ViewGroup implements
       }
 
       if (previewSize != null) {
-//        android.util.Log.e("CameraView",
-//                           String.format("%d x %d", previewSize.width,
-//                                         previewSize.height));
+        // android.util.Log.e("CameraView",
+        // String.format("%d x %d", previewSize.width,
+        // previewSize.height));
       }
     }
   }
@@ -322,10 +323,15 @@ public class CameraView extends ViewGroup implements
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   public void initPreview(int w, int h) {
     Camera.Parameters parameters=camera.getParameters();
 
     parameters.setPreviewSize(previewSize.width, previewSize.height);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      parameters.setRecordingHint(getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY);
+    }
 
     requestLayout();
 

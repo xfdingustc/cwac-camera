@@ -221,8 +221,8 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   @Override
-  public boolean mayUseForVideo() {
-    return(true);
+  public RecordingHint getRecordingHint() {
+    return(RecordingHint.ANY);
   }
 
   protected File getPhotoPath() {

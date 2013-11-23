@@ -19,6 +19,12 @@ import android.hardware.Camera;
 import android.media.MediaRecorder;
 
 public interface CameraHost extends Camera.AutoFocusCallback {
+  public enum RecordingHint {
+    STILL_ONLY,
+    VIDEO_ONLY,
+    ANY
+  }
+  
   Camera.Parameters adjustPictureParameters(Camera.Parameters parameters);
 
   Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters);
@@ -62,5 +68,5 @@ public interface CameraHost extends Camera.AutoFocusCallback {
 
   boolean useSingleShotMode();
   
-  boolean mayUseForVideo();
+  RecordingHint getRecordingHint();
 }

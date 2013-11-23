@@ -236,11 +236,12 @@ to tailor how photos and videos are taken.
 
 ### Controlling Preview Sizes
 
-Your `CameraHost` will be called with `mayUseForVideo()`, to determine if the preview
+Your `CameraHost` will be called with `getRecordingHint()`, to determine if the preview
 should be optimized for possible video recording, or not (i.e., only still images will
-be taken).
+be taken). You can return a `CameraHost.RecordingHint` enum: `STILL_ONLY`, `VIDEO_ONLY`,
+or `ANY`.
 
-In the latter case, your `CameraHost` will be called with `getPreviewSize()`, where you need to return
+Usually, your `CameraHost` will be called with `getPreviewSize()`, where you need to return
 a valid `Camera.Size` indicating the desired size of the preview frames. `getPreviewSize()`
 is passed:
 
@@ -265,7 +266,8 @@ of `getPreviewSize()`. You can override `getPreviewSize()` and substitute in you
 own selection algorithm. Just make sure that the returned size is one of the ones
 returned by `getSupportedPreviewSizes()`.
 
-If `mayUseForVideo()` returns `true`, though, `CameraHost` supplies the preview
+If `getRecordingHint()` returns `ANY` or `VIDEO_ONLY`, though,
+`CameraHost` supplies the preview
 size via `getPreferredPreviewSizeForVideo()` instead of `getPreviewSize()`. If you
 wish to use a different preview size for video, return it, otherwise return `null`
 and we will use the results from `getPreviewSize()` instead. `getPreferredPreviewSizeForVideo()`
@@ -496,6 +498,14 @@ Upgrading
 ---------
 If you are moving from an older to a newer edition of CWAC-Camera, here are some
 upgrade notes which may help.
+
+### From 0.4.x to 0.5.0 and Higher
+
+`CameraHost` used to have `mayUseForVideo()`, returning a boolean. That is
+now `getRecordingHint()`, returning a `CameraHost.RecordingHint` value: `STILL_ONLY`,
+`VIDEO_ONLY`, or `ANY`. `SimpleCameraHost` was modified to return `ANY`, so the
+default behavior should be the same as before. Hence, you should only need to worry
+about this if you overrode `mayUseForVideo()` or implemented your own `CameraHost`.
 
 ### From 0.2.x/0.3.0 to 0.4.0 and Higher
 
