@@ -33,7 +33,7 @@ public class CameraFragment extends Fragment {
                            Bundle savedInstanceState) {
     cameraView=new CameraView(getActivity());
     cameraView.setHost(getHost());
-    
+
     return(cameraView);
   }
 
@@ -50,29 +50,33 @@ public class CameraFragment extends Fragment {
 
     super.onPause();
   }
-  
+
+  protected void setCameraView(CameraView cameraView) {
+    this.cameraView=cameraView;
+  }
+
   public CameraHost getHost() {
-    if (host==null) {
+    if (host == null) {
       host=new SimpleCameraHost(getActivity());
     }
-    
+
     return(host);
   }
- 
+
   public void setHost(CameraHost host) {
     this.host=host;
   }
-  
+
   public void takePicture() {
     takePicture(false, true);
   }
-  
+
   public void takePicture(boolean needBitmap, boolean needByteArray) {
     cameraView.takePicture(needBitmap, needByteArray);
   }
 
   public boolean isRecording() {
-    return(cameraView==null ? false : cameraView.isRecording());
+    return(cameraView == null ? false : cameraView.isRecording());
   }
 
   public void record() throws Exception {
@@ -90,23 +94,23 @@ public class CameraFragment extends Fragment {
   public void lockToLandscape(boolean enable) {
     cameraView.lockToLandscape(enable);
   }
-  
+
   public void autoFocus() {
     cameraView.autoFocus();
   }
-  
+
   public void cancelAutoFocus() {
     cameraView.cancelAutoFocus();
   }
-  
+
   public boolean isAutoFocusAvailable() {
     return(cameraView.isAutoFocusAvailable());
   }
-  
+
   public void restartPreview() {
     cameraView.restartPreview();
   }
-  
+
   public String getFlashMode() {
     return(cameraView.getFlashMode());
   }
