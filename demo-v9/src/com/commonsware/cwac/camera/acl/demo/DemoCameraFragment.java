@@ -17,9 +17,11 @@ package com.commonsware.cwac.camera.acl.demo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 import com.commonsware.cwac.camera.acl.CameraFragment;
 
@@ -143,6 +145,15 @@ public class DemoCameraFragment extends CameraFragment {
     @Override
     public void autoFocusUnavailable() {
       autoFocusItem.setEnabled(false);
+    }
+
+    @Override
+    public void onCameraFail(CameraHost.FailureReason reason) {
+      super.onCameraFail(reason);
+
+      Toast.makeText(getActivity(),
+                     "Sorry, but you cannot use the camera now!",
+                     Toast.LENGTH_LONG).show();
     }
   }
 }

@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.commonsware.cwac.camera.CameraFragment;
+import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 
 public class DemoCameraFragment extends CameraFragment {
@@ -179,6 +180,15 @@ public class DemoCameraFragment extends CameraFragment {
     @Override
     public void autoFocusUnavailable() {
       autoFocusItem.setEnabled(false);
+    }
+
+    @Override
+    public void onCameraFail(CameraHost.FailureReason reason) {
+      super.onCameraFail(reason);
+
+      Toast.makeText(getActivity(),
+                     "Sorry, but you cannot use the camera now!",
+                     Toast.LENGTH_LONG).show();
     }
   }
 }

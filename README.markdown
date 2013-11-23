@@ -233,6 +233,22 @@ Preview mode will re-enable automatically after an `onPause()`/`onResume()`
 cycle of your `CameraFragment`, or you can call `restartPreview()` on your
 `CameraFragment` (or `CameraView`).
 
+### Camera? #FAIL
+
+If `getCameraId()` of your `CameraHost` returns a negative value, `CameraView`
+will assume that there are no valid cameras (e.g., your app is running on a
+game console). In addition to avoiding anything that tries to touch the camera,
+your `CameraHost` will be called with `onCameraFail()`, where you will be
+supplied with a `FailureReason` of `NO_CAMERAS_REPORTED`.
+
+If anything else goes wrong when trying to open the camera (e.g., a device admin
+policy has disabled the camera), your `onCameraFail()` method will be called
+with a `FailureReason` of `UNKNOWN`.
+
+While `SimpleCameraHost` has a trivial `onCameraFail()` implementation (just
+logging to LogCat), you are strongly encouraged to override this and inform
+your users of the problem.
+
 Advanced Configuration
 ----------------------
 In addition to the configuration hooks specified above, you can do more
@@ -528,6 +544,13 @@ now `getRecordingHint()`, returning a `CameraHost.RecordingHint` value: `STILL_O
 `VIDEO_ONLY`, or `ANY`. `SimpleCameraHost` was modified to return `ANY`, so the
 default behavior should be the same as before. Hence, you should only need to worry
 about this if you overrode `mayUseForVideo()` or implemented your own `CameraHost`.
+
+`CameraHost` now has an `onCameraFail()` method that takes a `FailureReason`
+parameter. `FailureReason` is an `enum`, with values of `NO_CAMERAS_REPORTED`
+and `UNKNOWN` at present. This will be called if `CameraView` could not access
+a camera. `SimpleCameraHost` has an implementation of `onCameraFail()` that
+just logs a message to LogCat, but you are encouraged to supply your own
+implementation that does something more.
 
 ### From 0.2.x/0.3.0 to 0.4.0 and Higher
 

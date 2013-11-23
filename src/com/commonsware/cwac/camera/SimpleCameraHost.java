@@ -87,22 +87,28 @@ public class SimpleCameraHost implements CameraHost {
   @Override
   public int getCameraId() {
     int count=Camera.getNumberOfCameras();
-    Camera.CameraInfo info=new Camera.CameraInfo();
+    int result=-1;
 
-    for (int i=0; i < count; i++) {
-      Camera.getCameraInfo(i, info);
+    if (count > 0) {
+      Camera.CameraInfo info=new Camera.CameraInfo();
 
-      if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK
-          && !useFrontFacingCamera()) {
-        return(i);
-      }
-      else if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT
-          && useFrontFacingCamera()) {
-        return(i);
+      for (int i=0; i < count; i++) {
+        Camera.getCameraInfo(i, info);
+
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK
+            && !useFrontFacingCamera()) {
+          result=i;
+          break;
+        }
+        else if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT
+            && useFrontFacingCamera()) {
+          result=i;
+          break;
+        }
       }
     }
 
-    return(0);
+    return(result);
   }
 
   @Override
@@ -223,6 +229,12 @@ public class SimpleCameraHost implements CameraHost {
   @Override
   public RecordingHint getRecordingHint() {
     return(RecordingHint.ANY);
+  }
+
+  @Override
+  public void onCameraFail(FailureReason reason) {
+    Log.e("CWAC-Camera",
+          String.format("Camera access failed: %d", reason.value));
   }
 
   protected File getPhotoPath() {

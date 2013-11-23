@@ -30,13 +30,14 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import java.io.IOException;
+import com.commonsware.cwac.camera.CameraHost.FailureReason;
 
 public class CameraView extends ViewGroup implements
     Camera.PictureCallback {
   static final String TAG="CWAC-Camera";
   private PreviewStrategy previewStrategy;
   private Camera.Size previewSize;
-  private Camera camera;
+  private Camera camera=null;
   private boolean inPreview=false;
   private CameraHost host=null;
   private OnOrientationChange onOrientationChange=null;
@@ -96,19 +97,32 @@ public class CameraView extends ViewGroup implements
 
     if (camera == null) {
       cameraId=getHost().getCameraId();
-      camera=Camera.open(cameraId);
 
-      if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
-        onOrientationChange.enable();
+      if (cameraId >= 0) {
+        try {
+          camera=Camera.open(cameraId);
+
+          if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+            onOrientationChange.enable();
+          }
+
+          setCameraDisplayOrientation(cameraId, camera);
+        }
+        catch (Exception e) {
+          getHost().onCameraFail(FailureReason.UNKNOWN);
+        }
       }
-
-      setCameraDisplayOrientation(cameraId, camera);
+      else {
+        getHost().onCameraFail(FailureReason.NO_CAMERAS_REPORTED);
+      }
     }
   }
 
   public void onPause() {
-    previewDestroyed();
-    removeView(previewStrategy.getWidget());
+    if (camera != null) {
+      previewDestroyed();
+      removeView(previewStrategy.getWidget());
+    }
   }
 
   // based on CameraPreview.java from ApiDemos
@@ -317,11 +331,13 @@ public class CameraView extends ViewGroup implements
   }
 
   void previewCreated() {
-    try {
-      previewStrategy.attach(camera);
-    }
-    catch (IOException e) {
-      getHost().handleException(e);
+    if (camera != null) {
+      try {
+        previewStrategy.attach(camera);
+      }
+      catch (IOException e) {
+        getHost().handleException(e);
+      }
     }
   }
 
@@ -346,18 +362,20 @@ public class CameraView extends ViewGroup implements
 
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   public void initPreview(int w, int h) {
-    Camera.Parameters parameters=camera.getParameters();
+    if (camera != null) {
+      Camera.Parameters parameters=camera.getParameters();
 
-    parameters.setPreviewSize(previewSize.width, previewSize.height);
+      parameters.setPreviewSize(previewSize.width, previewSize.height);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-      parameters.setRecordingHint(getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        parameters.setRecordingHint(getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY);
+      }
+
+      requestLayout();
+
+      camera.setParameters(getHost().adjustPreviewParameters(parameters));
+      startPreview();
     }
-
-    requestLayout();
-
-    camera.setParameters(getHost().adjustPreviewParameters(parameters));
-    startPreview();
   }
 
   private void startPreview() {

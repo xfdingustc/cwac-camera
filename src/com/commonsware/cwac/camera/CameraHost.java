@@ -20,11 +20,19 @@ import android.media.MediaRecorder;
 
 public interface CameraHost extends Camera.AutoFocusCallback {
   public enum RecordingHint {
-    STILL_ONLY,
-    VIDEO_ONLY,
-    ANY
+    STILL_ONLY, VIDEO_ONLY, ANY
   }
-  
+
+  public enum FailureReason {
+    NO_CAMERAS_REPORTED(1), UNKNOWN(2);
+
+    int value;
+
+    private FailureReason(int value) {
+      this.value=value;
+    }
+  }
+
   Camera.Parameters adjustPictureParameters(Camera.Parameters parameters);
 
   Camera.Parameters adjustPreviewParameters(Camera.Parameters parameters);
@@ -67,6 +75,8 @@ public interface CameraHost extends Camera.AutoFocusCallback {
   void saveImage(byte[] image);
 
   boolean useSingleShotMode();
-  
+
   RecordingHint getRecordingHint();
+
+  void onCameraFail(FailureReason reason);
 }
