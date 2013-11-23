@@ -111,6 +111,89 @@ public class CameraView extends ViewGroup implements
     removeView(previewStrategy.getWidget());
   }
 
+  // based on CameraPreview.java from ApiDemos
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    final int width=
+        resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+    final int height=
+        resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+    setMeasuredDimension(width, height);
+
+    if (previewSize == null && camera != null) {
+      if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
+        Camera.Size deviceHint=
+            DeviceProfile.getInstance()
+                         .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                          width,
+                                                          height,
+                                                          camera.getParameters());
+
+        previewSize=
+            getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                      width,
+                                                      height,
+                                                      camera.getParameters(),
+                                                      deviceHint);
+      }
+
+      if (previewSize == null
+          || previewSize.width * previewSize.height < 65536) {
+        previewSize=
+            getHost().getPreviewSize(getDisplayOrientation(), width,
+                                     height, camera.getParameters());
+      }
+
+      if (previewSize != null) {
+        // android.util.Log.e("CameraView",
+        // String.format("%d x %d", previewSize.width,
+        // previewSize.height));
+      }
+    }
+  }
+
+  // based on CameraPreview.java from ApiDemos
+
+  @Override
+  protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    if (changed && getChildCount() > 0) {
+      final View child=getChildAt(0);
+      final int width=r - l;
+      final int height=b - t;
+      int previewWidth=width;
+      int previewHeight=height;
+
+      // handle orientation
+
+      if (previewSize != null) {
+        if (getDisplayOrientation() == 90
+            || getDisplayOrientation() == 270) {
+          previewWidth=previewSize.height;
+          previewHeight=previewSize.width;
+        }
+        else {
+          previewWidth=previewSize.width;
+          previewHeight=previewSize.height;
+        }
+      }
+
+      // Center the child SurfaceView within the parent.
+      if (width * previewHeight > height * previewWidth) {
+        final int scaledChildWidth=
+            previewWidth * height / previewHeight;
+        child.layout((width - scaledChildWidth) / 2, 0,
+                     (width + scaledChildWidth) / 2, height);
+      }
+      else {
+        final int scaledChildHeight=
+            previewHeight * width / previewWidth;
+        child.layout(0, (height - scaledChildHeight) / 2, width,
+                     (height + scaledChildHeight) / 2);
+      }
+    }
+  }
+
   public int getDisplayOrientation() {
     return(displayOrientation);
   }
@@ -231,89 +314,6 @@ public class CameraView extends ViewGroup implements
 
   public String getFlashMode() {
     return(camera.getParameters().getFlashMode());
-  }
-
-  // based on CameraPreview.java from ApiDemos
-
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    final int width=
-        resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
-    final int height=
-        resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
-    setMeasuredDimension(width, height);
-
-    if (previewSize == null && camera != null) {
-      if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
-        Camera.Size deviceHint=
-            DeviceProfile.getInstance()
-                         .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                          width,
-                                                          height,
-                                                          camera.getParameters());
-
-        previewSize=
-            getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                      width,
-                                                      height,
-                                                      camera.getParameters(),
-                                                      deviceHint);
-      }
-
-      if (previewSize == null
-          || previewSize.width * previewSize.height < 65536) {
-        previewSize=
-            getHost().getPreviewSize(getDisplayOrientation(), width,
-                                     height, camera.getParameters());
-      }
-
-      if (previewSize != null) {
-        // android.util.Log.e("CameraView",
-        // String.format("%d x %d", previewSize.width,
-        // previewSize.height));
-      }
-    }
-  }
-
-  // based on CameraPreview.java from ApiDemos
-
-  @Override
-  protected void onLayout(boolean changed, int l, int t, int r, int b) {
-    if (changed && getChildCount() > 0) {
-      final View child=getChildAt(0);
-      final int width=r - l;
-      final int height=b - t;
-      int previewWidth=width;
-      int previewHeight=height;
-
-      // handle orientation
-
-      if (previewSize != null) {
-        if (getDisplayOrientation() == 90
-            || getDisplayOrientation() == 270) {
-          previewWidth=previewSize.height;
-          previewHeight=previewSize.width;
-        }
-        else {
-          previewWidth=previewSize.width;
-          previewHeight=previewSize.height;
-        }
-      }
-
-      // Center the child SurfaceView within the parent.
-      if (width * previewHeight > height * previewWidth) {
-        final int scaledChildWidth=
-            previewWidth * height / previewHeight;
-        child.layout((width - scaledChildWidth) / 2, 0,
-                     (width + scaledChildWidth) / 2, height);
-      }
-      else {
-        final int scaledChildHeight=
-            previewHeight * width / previewWidth;
-        child.layout(0, (height - scaledChildHeight) / 2, width,
-                     (height + scaledChildHeight) / 2);
-      }
-    }
   }
 
   void previewCreated() {
