@@ -23,6 +23,7 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -51,6 +52,26 @@ public class CameraView extends ViewGroup implements
     super(context);
 
     onOrientationChange=new OnOrientationChange(context);
+  }
+
+  public CameraView(Context context, AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  public CameraView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+
+    onOrientationChange=new OnOrientationChange(context);
+
+    if (context instanceof CameraHostProvider) {
+      setHost(((CameraHostProvider)context).getCameraHost());
+    }
+    else {
+      throw new IllegalArgumentException("To use the two- or "
+          + "three-parameter constructors on CameraView, "
+          + "your activity needs to implement the "
+          + "CameraHostProvider interface");
+    }
   }
 
   public CameraHost getHost() {

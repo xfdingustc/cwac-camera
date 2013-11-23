@@ -182,6 +182,10 @@ bar items, as the demo apps do.
 superclass to get the `CameraFragment`'s own UI, then wrap that in your own
 container with additional widgets, and return the combined UI from your `onCreateView()`. 
 
+It is also possible to replace `onCreateView()` completely with your own
+implementation, or otherwise use `CameraView` from a layout resource. This is
+covered later in this document.
+
 ### Auto-Focus
 
 You can call `autoFocus()` on `CameraFragment` or `CameraView` to trigger any
@@ -458,7 +462,25 @@ there.
 - Forward the `onResume()` and `onPause()` lifecycle events from your
 activity or fragment to the `CameraView`.
 
-Otherwise, `CameraView` should work as a regular `View`.
+Otherwise, `CameraView` should work as a regular `View`... so long as you do
+not try to use it in a layout resource.
+
+### Using CameraView in a Layout Resource
+
+If you want to use `CameraView` in a layout resource, you can, but your
+activity will need to implement the `CameraHostProvider` interface. This has
+one required method: `getCameraHost()`, which returns the `CameraHost` instance
+to be used with the `CameraView`. You would implement this in lieu of calling
+`setHost()` yourself.
+
+If you want to take advantage of this and use your own layout in a `CameraFragment`
+subclass, simply override `onCreateView()` and do what you want. The only
+requirement, other than the `CameraHostProvider` mentioned above, is that
+your `onCreateView()` needs to call the `setCameraView()` method, supplying
+the `CameraView` instance to the superclass.
+
+The `demo-layout/` directory contains a small sample project that demonstrates
+this technique.
 
 ## Miscellaneous
 
@@ -574,7 +596,9 @@ Demo
 In the `demo/` sub-project you will find a sample project demonstrating the use
 of `CameraFragment` for the native API Level 11 implementation of fragments. The
 `demo-v9/` sub-project has a similar sample for the `CameraFragment` that works
-with ActionBarSherlock.
+with ActionBarSherlock. The `demo-layout/` sub-project demonstrates using
+`CameraView` in your own layout resource, with the `CameraHostProvider`
+interface and the `setCameraView()` call on the `CameraFragment`.
 
 License
 -------
