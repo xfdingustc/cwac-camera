@@ -16,6 +16,8 @@ package com.commonsware.cwac.camera;
 
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CameraUtils {
@@ -71,6 +73,15 @@ public class CameraUtils {
                                                      int width,
                                                      int height,
                                                      Camera.Parameters parameters) {
+    return(getBestAspectPreviewSize(displayOrientation, width, height,
+                                    parameters, 0.0d));
+  }
+
+  public static Camera.Size getBestAspectPreviewSize(int displayOrientation,
+                                                     int width,
+                                                     int height,
+                                                     Camera.Parameters parameters,
+                                                     double closeEnough) {
     double targetRatio=(double)width / height;
     Camera.Size optimalSize=null;
     double minDiff=Double.MAX_VALUE;
@@ -79,12 +90,21 @@ public class CameraUtils {
       targetRatio=(double)height / width;
     }
 
-    for (Size size : parameters.getSupportedPreviewSizes()) {
+    List<Size> sizes=parameters.getSupportedPreviewSizes();
+
+    Collections.sort(sizes,
+                     Collections.reverseOrder(new SizeComparator()));
+
+    for (Size size : sizes) {
       double ratio=(double)size.width / size.height;
 
       if (Math.abs(ratio - targetRatio) < minDiff) {
         optimalSize=size;
         minDiff=Math.abs(ratio - targetRatio);
+      }
+
+      if (minDiff < closeEnough) {
+        break;
       }
     }
 
@@ -134,5 +154,23 @@ public class CameraUtils {
     }
 
     return(result);
+  }
+
+  private static class SizeComparator implements
+      Comparator<Camera.Size> {
+    @Override
+    public int compare(Size lhs, Size rhs) {
+      int left=lhs.width * lhs.height;
+      int right=rhs.width * rhs.height;
+
+      if (left < right) {
+        return(-1);
+      }
+      else if (left > right) {
+        return(1);
+      }
+
+      return(0);
+    }
   }
 }

@@ -273,13 +273,18 @@ portrait, etc.
 - the `Camera.Parameters` object, from which you can determine the valid preview sizes
 by calling `getSupportedPreviewSizes()`
 
-The `CameraUtils` class contains a pair of static methods with stock algorithms for
+The `CameraUtils` class contains three static methods with stock algorithms for
 choosing the preview size:
 
 1. `getOptimalPreviewSize()` uses the algorithm found in the SDK camera sample app
 
 2. `getBestAspectPreviewSize()` finds the preview size that most closely matches the
 aspect ratio of our available space
+
+3. `getBestAspectPreviewSize(double)` finds the preview size that offers the biggest
+preview size that only differs from the desired aspect ratio by the supplied
+`closeEnough` value (`closeEnough` of `0.0d` would give the same results as does
+`getBestAspectPreviewSize()`)
 
 `SimpleCameraHost` uses `getBestAspectPreviewSize()` for the default implementation
 of `getPreviewSize()`. You can override `getPreviewSize()` and substitute in your
