@@ -24,6 +24,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.CameraView;
 import com.commonsware.cwac.camera.SimpleCameraHost;
+import com.commonsware.cwac.camera.ZoomTransaction;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class CameraFragment extends SherlockFragment {
@@ -100,5 +101,9 @@ public class CameraFragment extends SherlockFragment {
   
   public String getFlashMode() {
     return(cameraView.getFlashMode());
+  }
+  
+  public ZoomTransaction zoomTo(int level) {
+    return(cameraView.zoomTo(level));
   }
 }

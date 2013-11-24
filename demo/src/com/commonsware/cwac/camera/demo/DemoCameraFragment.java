@@ -16,23 +16,31 @@ package com.commonsware.cwac.camera.demo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 import com.commonsware.cwac.camera.CameraFragment;
 import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 
-public class DemoCameraFragment extends CameraFragment {
+public class DemoCameraFragment extends CameraFragment implements
+    OnSeekBarChangeListener {
   private static final String KEY_USE_FFC=
       "com.commonsware.cwac.camera.demo.USE_FFC";
   private MenuItem singleShotItem=null;
   private MenuItem autoFocusItem=null;
   private MenuItem takePictureItem=null;
   private boolean singleShotProcessing=false;
+  private SeekBar zoom=null;
 
   static DemoCameraFragment newInstance(boolean useFFC) {
     DemoCameraFragment f=new DemoCameraFragment();
@@ -50,6 +58,20 @@ public class DemoCameraFragment extends CameraFragment {
 
     setHasOptionsMenu(true);
     setHost(new DemoCameraHost(getActivity()));
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater,
+                           ViewGroup container,
+                           Bundle savedInstanceState) {
+    View cameraView=
+        super.onCreateView(inflater, container, savedInstanceState);
+    View results=inflater.inflate(R.layout.fragment, container, false);
+
+    ((ViewGroup)results.findViewById(R.id.camera)).addView(cameraView);
+    zoom=(SeekBar)results.findViewById(R.id.zoom);
+
+    return(results);
   }
 
   @Override
@@ -127,6 +149,30 @@ public class DemoCameraFragment extends CameraFragment {
     return(singleShotProcessing);
   }
 
+  @Override
+  public void onProgressChanged(SeekBar seekBar, int progress,
+                                boolean fromUser) {
+    if (fromUser) {
+      zoom.setEnabled(false);
+      zoomTo(zoom.getProgress()).onComplete(new Runnable() {
+        @Override
+        public void run() {
+          zoom.setEnabled(true);
+        }
+      }).go();
+    }
+  }
+
+  @Override
+  public void onStartTrackingTouch(SeekBar seekBar) {
+    // ignore
+  }
+
+  @Override
+  public void onStopTrackingTouch(SeekBar seekBar) {
+    // ignore
+  }
+
   Contract getContract() {
     return((Contract)getActivity());
   }
@@ -189,6 +235,14 @@ public class DemoCameraFragment extends CameraFragment {
       Toast.makeText(getActivity(),
                      "Sorry, but you cannot use the camera now!",
                      Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public Parameters adjustPreviewParameters(Parameters parameters) {
+      zoom.setMax(parameters.getMaxZoom());
+      zoom.setOnSeekBarChangeListener(DemoCameraFragment.this);
+
+      return(super.adjustPreviewParameters(parameters));
     }
   }
 }

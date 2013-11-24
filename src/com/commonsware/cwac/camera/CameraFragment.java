@@ -114,4 +114,8 @@ public class CameraFragment extends Fragment {
   public String getFlashMode() {
     return(cameraView.getFlashMode());
   }
+  
+  public ZoomTransaction zoomTo(int level) {
+    return(cameraView.zoomTo(level));
+  }
 }

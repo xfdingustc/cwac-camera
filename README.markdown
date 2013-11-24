@@ -180,7 +180,9 @@ bar items, as the demo apps do.
 
 2. You can subclass `CameraFragment` and override `onCreateView()`. Chain to the
 superclass to get the `CameraFragment`'s own UI, then wrap that in your own
-container with additional widgets, and return the combined UI from your `onCreateView()`. 
+container with additional widgets, and return the combined UI from your `onCreateView()`.
+You can see this in the main demo app, which adds a `SeekBar` or `VerticalSeekBar`
+for zoom levels.
 
 It is also possible to replace `onCreateView()` completely with your own
 implementation, or otherwise use `CameraView` from a layout resource. This is
@@ -232,6 +234,39 @@ static data member.
 Preview mode will re-enable automatically after an `onPause()`/`onResume()`
 cycle of your `CameraFragment`, or you can call `restartPreview()` on your
 `CameraFragment` (or `CameraView`).
+
+### Zoom Support
+
+To zoom the camera, call `zoomTo()` on the `CameraView` or `CameraFragment`,
+supplying the integer zoom level that you want. This level must be between
+0 and what `Camera.Parameters` returns from `getMaxZoom()`. The
+`adjustPreviewParameters()` callback method in your `CameraHost` is a good
+time to get this value and configure your UI (e.g., `SeekBar`) to allow
+the user to zoom the camera.
+
+`zoomTo()` returns a `ZoomTransaction`. This has a series of builder-style
+methods (a.k.a., a fluent interface) that allow you to configure the
+transaction, where the methods return the transaction so you can chain on 
+the next call. The configuration methods are:
+
+- `onComplete()` to supply a `Runnable` to be executed when we have reached
+the zoom level
+
+- `onChange()` to supply a `Camera.OnZoomChangeListener` to be called as
+we progress to the desired zoom level
+
+Once configured, call `go()` to run the transaction.
+
+If the camera supports smooth zoom, the zoom transaction will take a few
+moments, and you can cancel the operation by calling `cancel()` on the
+`ZoomTransaction`. If the camera does not support smooth zoom, the zoom
+level is just immediately changed.
+
+Note that your `OnZoomChangeListener` supplied to `onChange()` will be
+called before the `onComplete()` `Runnable`, if you happen to supply both.
+
+The main demo app adds a `SeekBar` and `VerticalSeekBar` to control zoom
+levels, so you can see how this is used.
 
 ### Camera? #FAIL
 

@@ -330,6 +330,25 @@ public class CameraView extends ViewGroup implements
     return(camera.getParameters().getFlashMode());
   }
 
+  public ZoomTransaction zoomTo(int level) {
+    if (camera == null) {
+      throw new IllegalStateException(
+                                      "Yes, we have no camera, we have no camera today");
+    }
+    else {
+      Camera.Parameters params=camera.getParameters();
+
+      if (level >= 0 && level <= params.getMaxZoom()) {
+        return(new ZoomTransaction(camera, level));
+      }
+      else {
+        throw new IllegalArgumentException(
+                                           String.format("Invalid zoom level: %d",
+                                                         level));
+      }
+    }
+  }
+
   void previewCreated() {
     if (camera != null) {
       try {
