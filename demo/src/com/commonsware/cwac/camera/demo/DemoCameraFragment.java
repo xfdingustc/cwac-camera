@@ -239,9 +239,14 @@ public class DemoCameraFragment extends CameraFragment implements
 
     @Override
     public Parameters adjustPreviewParameters(Parameters parameters) {
-      zoom.setMax(parameters.getMaxZoom());
-      zoom.setOnSeekBarChangeListener(DemoCameraFragment.this);
-
+      if (parameters.getMaxZoom() == 0) {
+        zoom.setEnabled(false);
+      }
+      else {
+        zoom.setMax(parameters.getMaxZoom());
+        zoom.setOnSeekBarChangeListener(DemoCameraFragment.this);
+      }
+      
       return(super.adjustPreviewParameters(parameters));
     }
   }
