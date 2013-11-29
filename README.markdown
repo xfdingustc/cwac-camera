@@ -652,6 +652,7 @@ device was running (note: not shown for 0.4.x).
 | SONY Xperia E                       | X     | 4.1.1 | [45](https://github.com/commonsguy/cwac-camera/issues/45)     |
 | SONY Xperia S LT26i                 | X     | 4.1.2 |        |
 | SONY Xperia Z                       | X     | 4.2.2 |        |
+| SONY Xperia Z Ultra                 |       | 4.2.2 |        |
 
 Dependencies
 ------------
