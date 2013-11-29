@@ -19,6 +19,7 @@ but complex things may be a bit complex".
 
 This Android library project is also
 [available as a JAR](https://github.com/commonsguy/cwac-camera/releases).
+JavaDocs [are also available](http://javadocs.commonsware.com/cwac/camera/index.html).
 
 If you are upgrading a project using CWAC-Camera to a new edition of the
 library, please see
@@ -616,31 +617,42 @@ have to worry about memory leaks.
 
 Tested Devices
 --------------
-- Acer Iconia Tab A700
-- Amazon Kindle Fire HD
-- ASUS MEMO Pad FHD 10
-- ASUS Transformer Infinity (1st generation)
-- Galaxy Nexus
-- HTC Droid Incredible 2
-- HTC One S
-- Lenovo ThinkPad Tablet
-- Nexus 4
-- Nexus 5
-- Nexus 7 (1st generation, 2012)
-- Nexus 7 (2nd generation, 2013)
-- Nexus 10
-- Nexus One
-- Nexus S
-- Motorola RAZR i
-- Samsung Galaxy Mega
-- Samsung Galaxy Note 2
-- Samsung Galaxy S3
-- Samsung Galaxy S4 (GT-I9500 and SGH-I337)
-- Samsung Galaxy Tab 2
-- SONY Ericsson Xperia Play
-- SONY Xperia E
-- Sony Xperia S LT26i
-- SONY Xperia Z
+
+The columns indicate what version of the library that the various devices have
+been tested on. The numbers in the columns indicate the Android OS version the
+device was running (note: not shown for 0.4.x).
+
+| Device                              | 0.4.x | 0.5.0 | Issues |
+| ----------------------------------- |:-----:|:-----:|:------:|
+| Acer Iconia Tab A700                | X     | 4.1.1 |        |
+| Amazon Kindle Fire HD               | X     | 4.0.4 |        |
+| Amazon Kindle Fire HDX 8.9          |       | 4.2.2 | [75](https://github.com/commonsguy/cwac-camera/issues/75)     |
+| ASUS MEMO Pad FHD 10                | X     | 4.2.2 |        |
+| ASUS Transformer Infinity (TF700)   | X     | 4.2.1 |        |
+| Galaxy Nexus                        | X     | 4.3   |        |
+| HTC Droid Incredible 2              | X     | 2.3.4 |        |
+| HTC One S                           | X     | 4.1.1 | [76](https://github.com/commonsguy/cwac-camera/issues/76)    |
+| Lenovo ThinkPad Tablet              | X     | 4.0.3 | [38](https://github.com/commonsguy/cwac-camera/issues/38)    |
+| Nexus 4                             | X     | 4.4   |        |
+| Nexus 5                             | X     | 4.4   |        |
+| Nexus 7 (2012)                      | X     | 4.4   | [72](https://github.com/commonsguy/cwac-camera/issues/72) [73](https://github.com/commonsguy/cwac-camera/issues/73) |
+| Nexus 7 (2013)                      | X     | 4.4   | [70](https://github.com/commonsguy/cwac-camera/issues/70)     |
+| Nexus 10                            | X     | 4.4   |        |
+| Nexus One                           | X     | 2.3.6 |        |
+| Nexus S                             | X     | 4.1.2 |        |
+| Motorola RAZR i                     | X     | 4.1.2 | [78](https://github.com/commonsguy/cwac-camera/issues/78)     |
+| Samsung Galaxy Ace (GT-S5830M)      | X     | 2.3.6 |        |
+| Samsung Galaxy Grand (GT-I9090L)    | X     | 4.1.2 |        |
+| Samsung Galaxy Note 2 (GT-N7100)    | X     | 4.1.2 | [19](https://github.com/commonsguy/cwac-camera/issues/19)     |
+| Samsung Galaxy S3                   | X     | 4.1.2 | [77](https://github.com/commonsguy/cwac-camera/issues/77)     |
+| Samsung Galaxy S4 (GT-I9500)        | X     | 4.3   |        |
+| Samsung Galaxy S4 (SGH-I337)        | X     | 4.2.2 |        |
+| Samsung Galaxy Tab 2 7.0 (GT-P3113) | X     | 4.2.2 |        |
+| Samsung Galaxy Tab 10.1 (GT-P7510)  |       | 3.0.1 |        |
+| SONY Ericsson Xperia Play           | X     | 2.3.6 |        |
+| SONY Xperia E                       | X     | 4.1.1 | [45](https://github.com/commonsguy/cwac-camera/issues/45)     |
+| SONY Xperia S LT26i                 | X     | 4.1.2 |        |
+| SONY Xperia Z                       | X     | 4.2.2 |        |
 
 Dependencies
 ------------
