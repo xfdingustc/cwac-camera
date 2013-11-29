@@ -160,9 +160,9 @@ public class CameraView extends ViewGroup implements
       }
 
       if (previewSize != null) {
-        // android.util.Log.e("CameraView",
-        // String.format("%d x %d", previewSize.width,
-        // previewSize.height));
+//         android.util.Log.e("CameraView",
+//         String.format("%d x %d", previewSize.width,
+//         previewSize.height));
       }
     }
   }

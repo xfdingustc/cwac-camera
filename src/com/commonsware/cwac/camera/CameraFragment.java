@@ -51,6 +51,11 @@ public class CameraFragment extends Fragment {
     return(cameraView);
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see android.app.Fragment#onResume()
+   */
   @Override
   public void onResume() {
     super.onResume();
@@ -58,6 +63,11 @@ public class CameraFragment extends Fragment {
     cameraView.onResume();
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see android.app.Fragment#onPause()
+   */
   @Override
   public void onPause() {
     cameraView.onPause();
@@ -65,6 +75,17 @@ public class CameraFragment extends Fragment {
     super.onPause();
   }
 
+  /**
+   * Use this if you are overriding onCreateView() and are
+   * inflating a layout containing your CameraView, to tell
+   * the fragment the CameraView, so the fragment can help
+   * manage it. You do not need to call this if you are
+   * allowing the fragment to create its own CameraView
+   * instance.
+   * 
+   * @param cameraView
+   *          the CameraView from your inflated layout
+   */
   protected void setCameraView(CameraView cameraView) {
     this.cameraView=cameraView;
   }
@@ -82,14 +103,37 @@ public class CameraFragment extends Fragment {
     return(host);
   }
 
+  /**
+   * Call this (or override getHost()) to supply the
+   * CameraHost used for most of the detailed interaction
+   * with the camera.
+   * 
+   * @param host
+   *          a CameraHost instance, such as a subclass of
+   *          SimpleCameraHost
+   */
   public void setHost(CameraHost host) {
     this.host=host;
   }
 
+  /**
+   * Call this to take a picture and get access to a byte
+   * array of data as a result (e.g., to save or stream).
+   */
   public void takePicture() {
     takePicture(false, true);
   }
 
+  /**
+   * Call this to take a picture.
+   * 
+   * @param needBitmap
+   *          true if you need to be passed a Bitmap result,
+   *          false otherwise
+   * @param needByteArray
+   *          true if you need to be passed a byte array
+   *          result, false otherwise
+   */
   public void takePicture(boolean needBitmap, boolean needByteArray) {
     cameraView.takePicture(needBitmap, needByteArray);
   }
@@ -102,10 +146,23 @@ public class CameraFragment extends Fragment {
     return(cameraView == null ? false : cameraView.isRecording());
   }
 
+  /**
+   * Call this to begin recording video.
+   * 
+   * @throws Exception
+   *           all sorts of things could go wrong
+   */
   public void record() throws Exception {
     cameraView.record();
   }
 
+  /**
+   * Call this to stop the recording triggered earlier by a
+   * call to record()
+   * 
+   * @throws Exception
+   *           all sorts of things could go wrong
+   */
   public void stopRecording() throws Exception {
     cameraView.stopRecording();
   }
@@ -156,6 +213,11 @@ public class CameraFragment extends Fragment {
     return(cameraView.isAutoFocusAvailable());
   }
 
+  /**
+   * If you are in single-shot mode and are done processing
+   * a previous picture, call this to restart the camera
+   * preview.
+   */
   public void restartPreview() {
     cameraView.restartPreview();
   }
@@ -168,6 +230,17 @@ public class CameraFragment extends Fragment {
     return(cameraView.getFlashMode());
   }
 
+  /**
+   * Call this to begin populating a ZoomTransaction, with
+   * the eventual goal of changing the camera's zoom level.
+   * 
+   * @param level
+   *          a value from 0 to getMaxZoom() (called on
+   *          Camera.Parameters), to indicate how tight the
+   *          zoom should be (0 indicates no zoom)
+   * @return a ZoomTransaction to configure further and
+   *         eventually call go() to actually do the zooming
+   */
   public ZoomTransaction zoomTo(int level) {
     return(cameraView.zoomTo(level));
   }
