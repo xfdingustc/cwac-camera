@@ -90,6 +90,8 @@ public class SimpleCameraHost implements CameraHost {
     int result=-1;
 
     if (count > 0) {
+      result=0; // if we have a camera, default to this one
+
       Camera.CameraInfo info=new Camera.CameraInfo();
 
       for (int i=0; i < count; i++) {
