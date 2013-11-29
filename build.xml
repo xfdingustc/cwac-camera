@@ -89,6 +89,16 @@
     <!-- version-tag: custom -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
+<target name="doc"> 
+    <javadoc packagenames="com.commonsware.cwac.*"
+        sourcepath="src" 
+        destdir="javadoc" 
+        author="false" 
+        version="false"
+        windowtitle="CWAC-Camera JavaDocs"> 
+    </javadoc> 
+</target>
+
 	<target name="jar" depends="release">
 		<delete file="bin/CWAC-Camera.jar" />
     <jar destfile="bin/CWAC-Camera.jar">
