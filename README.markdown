@@ -617,7 +617,6 @@ have to worry about memory leaks.
 
 Tested Devices
 --------------
-
 The columns indicate what version of the library that the various devices have
 been tested on. The numbers in the columns indicate the Android OS version the
 device was running (note: not shown for 0.4.x).
@@ -664,7 +663,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.4.3 of this module, meaning it is rather new.
+This is version v0.5.0 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -702,6 +701,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.5.0: zoom support, layout resource support, JavaDocs, etc.
 - v0.4.3: override `getPreferredPreviewSizeForVideo()` &mdash; if too low, use `getPreviewSize()`
 - v0.4.2: fixed bug with Droid Incredible 2
 - v0.4.1: added `getFlashMode()`, added `DeviceProfile` control over minimum picture height
