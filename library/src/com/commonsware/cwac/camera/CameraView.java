@@ -92,6 +92,7 @@ public class CameraView extends ViewGroup implements
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   public void onResume() {
     addView(previewStrategy.getWidget());
 
@@ -107,6 +108,11 @@ public class CameraView extends ViewGroup implements
           }
 
           setCameraDisplayOrientation(cameraId, camera);
+
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
+              && getHost() instanceof Camera.FaceDetectionListener) {
+            camera.setFaceDetectionListener((Camera.FaceDetectionListener)getHost());
+          }
         }
         catch (Exception e) {
           getHost().onCameraFail(FailureReason.UNKNOWN);
@@ -160,9 +166,9 @@ public class CameraView extends ViewGroup implements
       }
 
       if (previewSize != null) {
-//         android.util.Log.e("CameraView",
-//         String.format("%d x %d", previewSize.width,
-//         previewSize.height));
+        // android.util.Log.e("CameraView",
+        // String.format("%d x %d", previewSize.width,
+        // previewSize.height));
       }
     }
   }
@@ -346,6 +352,20 @@ public class CameraView extends ViewGroup implements
                                            String.format("Invalid zoom level: %d",
                                                          level));
       }
+    }
+  }
+
+  public void startFaceDetection() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
+        && camera != null) {
+      camera.startFaceDetection();
+    }
+  }
+
+  public void stopFaceDetection() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
+        && camera != null) {
+      camera.stopFaceDetection();
     }
   }
 

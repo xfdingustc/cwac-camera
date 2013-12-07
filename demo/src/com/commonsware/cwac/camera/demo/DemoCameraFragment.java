@@ -16,6 +16,8 @@ package com.commonsware.cwac.camera.demo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
+import android.hardware.Camera.Face;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
 import android.util.Log;
@@ -183,7 +185,10 @@ public class DemoCameraFragment extends CameraFragment implements
     void setSingleShotMode(boolean mode);
   }
 
-  class DemoCameraHost extends SimpleCameraHost {
+  class DemoCameraHost extends SimpleCameraHost implements
+      Camera.FaceDetectionListener {
+    boolean supportsFaces=false;
+
     public DemoCameraHost(Context _ctxt) {
       super(_ctxt);
     }
@@ -221,11 +226,13 @@ public class DemoCameraFragment extends CameraFragment implements
     @Override
     public void autoFocusAvailable() {
       autoFocusItem.setEnabled(true);
+      if (supportsFaces) startFaceDetection();
     }
 
     @Override
     public void autoFocusUnavailable() {
-      autoFocusItem.setEnabled(false);
+      stopFaceDetection();
+      if (supportsFaces) autoFocusItem.setEnabled(false);
     }
 
     @Override
@@ -246,8 +253,23 @@ public class DemoCameraFragment extends CameraFragment implements
         zoom.setMax(parameters.getMaxZoom());
         zoom.setOnSeekBarChangeListener(DemoCameraFragment.this);
       }
-      
+
+      if (parameters.getMaxNumDetectedFaces() > 0) {
+        supportsFaces=true;
+      }
+      else {
+        Toast.makeText(getActivity(),
+                       "Face detection not available for this camera",
+                       Toast.LENGTH_LONG).show();
+      }
+
       return(super.adjustPreviewParameters(parameters));
+    }
+
+    @Override
+    public void onFaceDetection(Face[] faces, Camera camera) {
+      Toast.makeText(getActivity(), "I see your face!",
+                     Toast.LENGTH_LONG).show();
     }
   }
 }

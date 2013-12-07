@@ -464,6 +464,32 @@ be ignored, and you may get a portrait or a landscape image.
 
 `SimpleCameraHost` returns `true` for `rotateBasedOnExif()`.
 
+### Detecting Faces
+
+If you wish to use the face detection APIs available on API Level 14+, do the
+following:
+
+1. Have your `CameraHost` implementation also implement `Camera.FaceDetectionListener`.
+
+2. Override `adjustPreviewParameters()` in your `CameraHost` and take that opportunity
+to check the value of `getMaxNumDetectedFaces()`, a method on `Camera.Parameters`.
+If that returns 0, face detection is not supported by the device. **NOTE**: a better
+API for this may be added in the future.
+
+3. Override `autoFocusAvailable()` in your `CameraHost`, and if face detection is
+enabled, call `startFaceDetection()` on your `CameraFragment` or `CameraView`.
+**NOTE**: a dedicated callback for this may be added in the future &mdash; this is
+a stop-gap to allow this fix to go in a patch release
+
+4. Similarly, override `autoFocusUnavailable()` in your `CameraHost` and, if face
+detection is enabled, call `stopFaceDetection()` on your `CameraFragment` or `CameraView`.
+**NOTE**: a dedicated callback for this may be added in the future.
+
+Note that this capability was added to version 0.5.1 of this library. Also note
+that, while you can safely call `startFaceDetection()` and `stopFaceDetection()`
+regardless of API level, `getMaxNumDetectedFaces()` should only be called on API Level
+14+ devices, or you will be hit with a `VerifyError` or the equivalent.
+
 ### Choosing a DeviceProfile
 
 `CameraHost` exists to provide a hook for you to determine how your app

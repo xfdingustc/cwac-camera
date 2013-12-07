@@ -244,4 +244,22 @@ public class CameraFragment extends Fragment {
   public ZoomTransaction zoomTo(int level) {
     return(cameraView.zoomTo(level));
   }
+
+  /**
+   * Calls startFaceDetection() on the CameraView, which in
+   * turn calls startFaceDetection() on the underlying
+   * camera.
+   */
+  public void startFaceDetection() {
+    cameraView.startFaceDetection();
+  }
+
+  /**
+   * Calls stopFaceDetection() on the CameraView, which in
+   * turn calls startFaceDetection() on the underlying
+   * camera.
+   */
+  public void stopFaceDetection() {
+    cameraView.stopFaceDetection();
+  }
 }
