@@ -690,7 +690,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.5.0 of this module, meaning it is rather new.
+This is version v0.5.1 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -728,6 +728,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.5.1: added face detection support
 - v0.5.0: zoom support, layout resource support, JavaDocs, etc.
 - v0.4.3: override `getPreferredPreviewSizeForVideo()` &mdash; if too low, use `getPreviewSize()`
 - v0.4.2: fixed bug with Droid Incredible 2
