@@ -572,6 +572,14 @@ returns the flash mode from `Camera.Parameters`. If you wish to change
 the flash mode, please do so in `adjustPictureParameters()` and/or
 `adjustPreviewParameters()`.
 
+Third-Party Code
+----------------
+kenyee has
+[an implementation of `CameraFragment`](https://github.com/kenyee/cwac-camera/blob/master/library/src/com/commonsware/cwac/camera/asl/CameraFragment.java)
+that simply extends from the
+Android Support package's backport of fragments, for use with the AppCompat
+backport of the action bar.
+
 Known Limitations
 -----------------
 These are above and beyond [the bugs filed for this project](https://github.com/commonsguy/cwac-camera/issues):
