@@ -20,6 +20,7 @@ import android.hardware.Camera;
 import android.hardware.Camera.Face;
 import android.hardware.Camera.Parameters;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +44,7 @@ public class DemoCameraFragment extends CameraFragment implements
   private MenuItem takePictureItem=null;
   private boolean singleShotProcessing=false;
   private SeekBar zoom=null;
+  private long lastFaceToast=0L;
 
   static DemoCameraFragment newInstance(boolean useFFC) {
     DemoCameraFragment f=new DemoCameraFragment();
@@ -226,13 +228,15 @@ public class DemoCameraFragment extends CameraFragment implements
     @Override
     public void autoFocusAvailable() {
       autoFocusItem.setEnabled(true);
-      if (supportsFaces) startFaceDetection();
+      if (supportsFaces)
+        startFaceDetection();
     }
 
     @Override
     public void autoFocusUnavailable() {
       stopFaceDetection();
-      if (supportsFaces) autoFocusItem.setEnabled(false);
+      if (supportsFaces)
+        autoFocusItem.setEnabled(false);
     }
 
     @Override
@@ -268,8 +272,15 @@ public class DemoCameraFragment extends CameraFragment implements
 
     @Override
     public void onFaceDetection(Face[] faces, Camera camera) {
-      Toast.makeText(getActivity(), "I see your face!",
-                     Toast.LENGTH_LONG).show();
+      if (faces.length > 0) {
+        long now=SystemClock.elapsedRealtime();
+
+        if (now > lastFaceToast + 10000) {
+          Toast.makeText(getActivity(), "I see your face!",
+                         Toast.LENGTH_LONG).show();
+          lastFaceToast=now;
+        }
+      }
     }
   }
 }
