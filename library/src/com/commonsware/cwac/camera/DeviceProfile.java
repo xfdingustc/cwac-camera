@@ -21,8 +21,8 @@ public class DeviceProfile {
   private static volatile DeviceProfile SINGLETON=null;
 
   synchronized public static DeviceProfile getInstance() {
-    // android.util.Log.d("DeviceProfile", Build.PRODUCT);
-    // android.util.Log.d("DeviceProfile",
+    // android.util.Log.e("DeviceProfile", Build.PRODUCT);
+    // android.util.Log.e("DeviceProfile",
     // Build.MANUFACTURER);
 
     if (SINGLETON == null) {
@@ -50,7 +50,12 @@ public class DeviceProfile {
         SINGLETON=new SamsungDeviceProfile();
       }
       else if ("motorola".equalsIgnoreCase(Build.MANUFACTURER)) {
-        SINGLETON=new MotorolaDeviceProfile();
+        if ("XT890_rtgb".equals(Build.PRODUCT)) {
+          SINGLETON=new MotorolaRazrIProfile();
+        }
+        else {
+          SINGLETON=new MotorolaDeviceProfile();
+        }
       }
       else if ("htc_vivow".equalsIgnoreCase(Build.PRODUCT)) {
         SINGLETON=new DroidIncredible2Profile();
@@ -100,12 +105,23 @@ public class DeviceProfile {
     return(null);
   }
 
+  public boolean doesZoomActuallyWork(boolean isFFC) {
+    return(true);
+  }
+
   // based on http://stackoverflow.com/a/9801191/115145
   // and
   // https://github.com/commonsguy/cwac-camera/issues/43#issuecomment-23791446
 
   private boolean isCyanogenMod() {
     return(System.getProperty("os.version").contains("cyanogenmod") || Build.HOST.contains("cyanogenmod"));
+  }
+
+  private static class MotorolaRazrIProfile extends
+      MotorolaDeviceProfile {
+    public boolean doesZoomActuallyWork(boolean isFFC) {
+      return(!isFFC);
+    }
   }
 
   private static class HtcOneDeviceProfile extends DeviceProfile {

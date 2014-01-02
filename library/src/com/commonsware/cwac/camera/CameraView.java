@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -372,6 +373,13 @@ public class CameraView extends ViewGroup implements
       camera.stopFaceDetection();
       isDetectingFaces=false;
     }
+  }
+
+  public boolean doesZoomReallyWork() {
+    Camera.CameraInfo info=new Camera.CameraInfo();
+    Camera.getCameraInfo(getHost().getCameraId(), info);
+
+    return(getHost().getDeviceProfile().doesZoomActuallyWork(info.facing == CameraInfo.CAMERA_FACING_FRONT));
   }
 
   void previewCreated() {

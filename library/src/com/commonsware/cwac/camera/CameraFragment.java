@@ -262,4 +262,8 @@ public class CameraFragment extends Fragment {
   public void stopFaceDetection() {
     cameraView.stopFaceDetection();
   }
+  
+  public boolean doesZoomReallyWork() {
+    return(cameraView.doesZoomReallyWork());
+  }
 }

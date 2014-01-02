@@ -106,4 +106,8 @@ public class CameraFragment extends SherlockFragment {
   public ZoomTransaction zoomTo(int level) {
     return(cameraView.zoomTo(level));
   }
+  
+  public boolean doesZoomReallyWork() {
+    return(cameraView.doesZoomReallyWork());
+  }
 }
