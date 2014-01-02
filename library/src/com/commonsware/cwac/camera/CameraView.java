@@ -48,6 +48,7 @@ public class CameraView extends ViewGroup implements
   private Camera.Parameters previewParams=null;
   private boolean needBitmap=false;
   private boolean needByteArray=false;
+  private boolean isDetectingFaces=false;
 
   public CameraView(Context context) {
     super(context);
@@ -355,17 +356,21 @@ public class CameraView extends ViewGroup implements
     }
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   public void startFaceDetection() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
-        && camera != null) {
+        && camera != null && !isDetectingFaces
+        && camera.getParameters().getMaxNumDetectedFaces() > 0) {
       camera.startFaceDetection();
+      isDetectingFaces=true;
     }
   }
 
   public void stopFaceDetection() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
-        && camera != null) {
+        && camera != null && isDetectingFaces) {
       camera.stopFaceDetection();
+      isDetectingFaces=false;
     }
   }
 
