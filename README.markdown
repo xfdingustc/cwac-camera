@@ -269,6 +269,14 @@ called before the `onComplete()` `Runnable`, if you happen to supply both.
 The main demo app adds a `SeekBar` and `VerticalSeekBar` to control zoom
 levels, so you can see how this is used.
 
+Note that some devices lie about their zoom capabilities. For example,
+the Motorola RAZR i's front-facing camera apparently does not support
+zoom, where `getMaxZoom()` still returns a positive value.
+`doesZoomReallyWork()` on your `CameraFragment` or `CameraView` will
+return `false` if zoom is known to be broken for the current camera
+on the current device. In this case, do not zoom, or your code may
+go "boom".
+
 ### Camera? #FAIL
 
 If `getCameraId()` of your `CameraHost` returns a negative value, `CameraView`
@@ -673,7 +681,7 @@ device was running (note: not shown for 0.4.x).
 | Nexus 10                            | X     | 4.4   |        |
 | Nexus One                           | X     | 2.3.6 |        |
 | Nexus S                             | X     | 4.1.2 |        |
-| Motorola RAZR i                     | X     | 4.1.2 | [78](https://github.com/commonsguy/cwac-camera/issues/78)     |
+| Motorola RAZR i                     | X     | 4.1.2 |        |
 | Samsung Galaxy Ace (GT-S5830M)      | X     | 2.3.6 |        |
 | Samsung Galaxy Grand (GT-I9090L)    | X     | 4.1.2 |        |
 | Samsung Galaxy Note 2 (GT-N7100)    | X     | 4.1.2 | [19](https://github.com/commonsguy/cwac-camera/issues/19)     |
@@ -698,7 +706,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.5.1 of this module, meaning it is rather new.
+This is version v0.5.2 of this module, meaning it is rather new.
 
 Demo
 ----
@@ -736,6 +744,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.5.2: face detection, zoom, and demo bug fixes
 - v0.5.1: added face detection support
 - v0.5.0: zoom support, layout resource support, JavaDocs, etc.
 - v0.4.3: override `getPreferredPreviewSizeForVideo()` &mdash; if too low, use `getPreviewSize()`
