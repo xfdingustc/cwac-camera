@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.media.MediaRecorder;
 import android.os.Build;
@@ -34,7 +35,7 @@ import java.io.IOException;
 import com.commonsware.cwac.camera.CameraHost.FailureReason;
 
 public class CameraView extends ViewGroup implements
-    Camera.PictureCallback {
+    Camera.PictureCallback, AutoFocusCallback {
   static final String TAG="CWAC-Camera";
   private PreviewStrategy previewStrategy;
   private Camera.Size previewSize;
@@ -50,6 +51,7 @@ public class CameraView extends ViewGroup implements
   private boolean needBitmap=false;
   private boolean needByteArray=false;
   private boolean isDetectingFaces=false;
+  private boolean isAutoFocusing=false;
 
   public CameraView(Context context) {
     super(context);
@@ -168,9 +170,9 @@ public class CameraView extends ViewGroup implements
       }
 
       if (previewSize != null) {
-//         android.util.Log.e("CameraView",
-//         String.format("%d x %d", previewSize.width,
-//         previewSize.height));
+        // android.util.Log.e("CameraView",
+        // String.format("%d x %d", previewSize.width,
+        // previewSize.height));
       }
     }
   }
@@ -256,21 +258,31 @@ public class CameraView extends ViewGroup implements
 
   public void takePicture(boolean needBitmap, boolean needByteArray) {
     if (inPreview) {
-      this.needBitmap=needBitmap;
-      this.needByteArray=needByteArray;
+      if (isAutoFocusing) {
+        throw new IllegalStateException(
+                                        "Camera cannot take a picture while auto-focusing");
+      }
+      else {
+        this.needBitmap=needBitmap;
+        this.needByteArray=needByteArray;
 
-      previewParams=camera.getParameters();
+        previewParams=camera.getParameters();
 
-      Camera.Parameters pictureParams=camera.getParameters();
-      Camera.Size pictureSize=getHost().getPictureSize(pictureParams);
+        Camera.Parameters pictureParams=camera.getParameters();
+        Camera.Size pictureSize=getHost().getPictureSize(pictureParams);
 
-      pictureParams.setPictureSize(pictureSize.width,
-                                   pictureSize.height);
-      pictureParams.setPictureFormat(ImageFormat.JPEG);
-      camera.setParameters(getHost().adjustPictureParameters(pictureParams));
+        pictureParams.setPictureSize(pictureSize.width,
+                                     pictureSize.height);
+        pictureParams.setPictureFormat(ImageFormat.JPEG);
+        camera.setParameters(getHost().adjustPictureParameters(pictureParams));
 
-      camera.takePicture(getHost().getShutterCallback(), null, this);
-      inPreview=false;
+        camera.takePicture(getHost().getShutterCallback(), null, this);
+        inPreview=false;
+      }
+    }
+    else {
+      throw new IllegalStateException(
+                                      "Preview mode must have started before you can take a picture");
     }
   }
 
@@ -322,7 +334,8 @@ public class CameraView extends ViewGroup implements
 
   public void autoFocus() {
     if (inPreview) {
-      camera.autoFocus(getHost());
+      camera.autoFocus(this);
+      isAutoFocusing=true;
     }
   }
 
@@ -332,6 +345,15 @@ public class CameraView extends ViewGroup implements
 
   public boolean isAutoFocusAvailable() {
     return(inPreview);
+  }
+
+  @Override
+  public void onAutoFocus(boolean success, Camera camera) {
+    isAutoFocusing=false;
+
+    if (getHost() instanceof AutoFocusCallback) {
+      getHost().onAutoFocus(success, camera);
+    }
   }
 
   public String getFlashMode() {
