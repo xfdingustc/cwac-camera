@@ -146,6 +146,12 @@ public class DemoCameraFragment extends CameraFragment implements
         getContract().setSingleShotMode(item.isChecked());
 
         return(true);
+
+      case R.id.show_zoom:
+        item.setChecked(!item.isChecked());
+        zoom.setVisibility(item.isChecked() ? View.VISIBLE : View.GONE);
+
+        return(true);
     }
 
     return(super.onOptionsItemSelected(item));
@@ -289,7 +295,7 @@ public class DemoCameraFragment extends CameraFragment implements
     @TargetApi(16)
     public void onAutoFocus(boolean success, Camera camera) {
       super.onAutoFocus(success, camera);
-      
+
       takePictureItem.setEnabled(true);
     }
   }

@@ -145,34 +145,45 @@ public class CameraView extends ViewGroup implements
         resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
     setMeasuredDimension(width, height);
 
-    if (previewSize == null && camera != null) {
-      if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
-        Camera.Size deviceHint=
-            DeviceProfile.getInstance()
-                         .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                          width,
-                                                          height,
-                                                          camera.getParameters());
+    if (width > 0 && height > 0) {
+      if (camera != null) {
+        Camera.Size newSize=null;
 
-        previewSize=
-            getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                      width,
-                                                      height,
-                                                      camera.getParameters(),
-                                                      deviceHint);
-      }
+        if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
+          Camera.Size deviceHint=
+              DeviceProfile.getInstance()
+                           .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                            width,
+                                                            height,
+                                                            camera.getParameters());
 
-      if (previewSize == null
-          || previewSize.width * previewSize.height < 65536) {
-        previewSize=
-            getHost().getPreviewSize(getDisplayOrientation(), width,
-                                     height, camera.getParameters());
-      }
+          newSize=
+              getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                        width,
+                                                        height,
+                                                        camera.getParameters(),
+                                                        deviceHint);
+        }
 
-      if (previewSize != null) {
-        // android.util.Log.e("CameraView",
-        // String.format("%d x %d", previewSize.width,
-        // previewSize.height));
+        if (newSize == null || newSize.width * newSize.height < 65536) {
+          newSize=
+              getHost().getPreviewSize(getDisplayOrientation(), width,
+                                       height, camera.getParameters());
+        }
+
+        if (newSize != null) {
+          if (previewSize==null) {
+            previewSize=newSize;
+          }
+          else if (previewSize.width!=newSize.width || previewSize.height!=newSize.height) {
+            if (inPreview) {
+              stopPreview();
+            }
+            
+            previewSize=newSize;
+            initPreview(width, height, false);
+          }
+        }
       }
     }
   }
@@ -434,8 +445,12 @@ public class CameraView extends ViewGroup implements
     }
   }
 
-  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   public void initPreview(int w, int h) {
+    initPreview(w, h, true);
+  }
+  
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+  public void initPreview(int w, int h, boolean firstRun) {
     if (camera != null) {
       Camera.Parameters parameters=camera.getParameters();
 
