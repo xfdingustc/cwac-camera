@@ -52,6 +52,7 @@ public class CameraView extends ViewGroup implements
   private boolean needByteArray=false;
   private boolean isDetectingFaces=false;
   private boolean isAutoFocusing=false;
+  private int lastPictureOrientation=-1;
 
   public CameraView(Context context) {
     super(context);
@@ -149,26 +150,35 @@ public class CameraView extends ViewGroup implements
       if (camera != null) {
         Camera.Size newSize=null;
 
-        if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
-          Camera.Size deviceHint=
-              DeviceProfile.getInstance()
-                           .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                            width,
-                                                            height,
-                                                            camera.getParameters());
+        try {
+          if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
+            Camera.Size deviceHint=
+                DeviceProfile.getInstance()
+                             .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                              width,
+                                                              height,
+                                                              camera.getParameters());
 
-          newSize=
-              getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                        width,
-                                                        height,
-                                                        camera.getParameters(),
-                                                        deviceHint);
+            newSize=
+                getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+                                                          width,
+                                                          height,
+                                                          camera.getParameters(),
+                                                          deviceHint);
+          }
+
+          if (newSize == null || newSize.width * newSize.height < 65536) {
+            newSize=
+                getHost().getPreviewSize(getDisplayOrientation(),
+                                         width, height,
+                                         camera.getParameters());
+          }
         }
-
-        if (newSize == null || newSize.width * newSize.height < 65536) {
-          newSize=
-              getHost().getPreviewSize(getDisplayOrientation(), width,
-                                       height, camera.getParameters());
+        catch (Exception e) {
+          android.util.Log.e(getClass().getSimpleName(),
+                             "Could not work with camera parameters?",
+                             e);
+          // TODO get this out to library clients
         }
 
         if (newSize != null) {
@@ -248,7 +258,12 @@ public class CameraView extends ViewGroup implements
       onOrientationChange.disable();
     }
 
-    setCameraDisplayOrientation(cameraId, camera);
+    post(new Runnable() {
+      @Override
+      public void run() {
+        setCameraDisplayOrientation(cameraId, camera);        
+      }
+    });
   }
 
   @Override
@@ -292,6 +307,8 @@ public class CameraView extends ViewGroup implements
         pictureParams.setPictureFormat(ImageFormat.JPEG);
         camera.setParameters(getHost().adjustPictureParameters(pictureParams));
 
+        setCameraPictureOrientation();
+
         camera.takePicture(getHost().getShutterCallback(), null, this);
         inPreview=false;
       }
@@ -312,6 +329,7 @@ public class CameraView extends ViewGroup implements
                                               "Video recording supported only on API Level 11+");
     }
 
+    setCameraPictureOrientation();
     stopPreview();
     camera.unlock();
 
@@ -534,6 +552,12 @@ public class CameraView extends ViewGroup implements
     if (wasInPreview) {
       startPreview();
     }
+  }
+
+  private void setCameraPictureOrientation() {
+    Camera.CameraInfo info=new Camera.CameraInfo();
+
+    Camera.getCameraInfo(cameraId, info);
 
     if (getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
       outputOrientation=
@@ -548,10 +572,13 @@ public class CameraView extends ViewGroup implements
       outputOrientation=displayOrientation;
     }
 
-    Camera.Parameters params=camera.getParameters();
+    if (lastPictureOrientation != outputOrientation) {
+      Camera.Parameters params=camera.getParameters();
 
-    params.setRotation(outputOrientation);
-    camera.setParameters(params);
+      params.setRotation(outputOrientation);
+      camera.setParameters(params);
+      lastPictureOrientation=outputOrientation;
+    }
   }
 
   // based on:
@@ -586,7 +613,7 @@ public class CameraView extends ViewGroup implements
 
     @Override
     public void onOrientationChanged(int orientation) {
-      if (camera != null) {
+      if (camera != null && orientation != ORIENTATION_UNKNOWN) {
         int newOutputOrientation=getCameraPictureRotation(orientation);
 
         if (newOutputOrientation != outputOrientation) {
@@ -596,6 +623,7 @@ public class CameraView extends ViewGroup implements
 
           params.setRotation(outputOrientation);
           camera.setParameters(params);
+          lastPictureOrientation=outputOrientation;
         }
       }
     }
