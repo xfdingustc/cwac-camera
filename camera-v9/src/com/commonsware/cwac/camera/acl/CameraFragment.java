@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.CameraView;
+import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 import com.commonsware.cwac.camera.ZoomTransaction;
 
@@ -73,6 +74,17 @@ public class CameraFragment extends SherlockFragment {
 
   public void takePicture(boolean needBitmap, boolean needByteArray) {
     cameraView.takePicture(needBitmap, needByteArray);
+  }
+
+  /**
+   * Call this to take a picture.
+   * 
+   * @param xact
+   *          PictureTransaction with configuration data for
+   *          the picture to be taken
+   */
+  public void takePicture(PictureTransaction xact) {
+    cameraView.takePicture(xact);
   }
 
   public boolean isRecording() {

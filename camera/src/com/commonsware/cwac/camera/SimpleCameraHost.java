@@ -52,7 +52,8 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   @Override
-  public Camera.Parameters adjustPictureParameters(Camera.Parameters parameters) {
+  public Camera.Parameters adjustPictureParameters(PictureTransaction xact,
+                                                   Camera.Parameters parameters) {
     return(parameters);
   }
 
@@ -146,7 +147,8 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   @Override
-  public Camera.Size getPictureSize(Camera.Parameters parameters) {
+  public Camera.Size getPictureSize(PictureTransaction xact,
+                                    Camera.Parameters parameters) {
     return(CameraUtils.getLargestPictureSize(parameters));
   }
 
@@ -194,12 +196,12 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   @Override
-  public void saveImage(Bitmap bitmap) {
+  public void saveImage(PictureTransaction xact, Bitmap bitmap) {
     // no-op
   }
 
   @Override
-  public void saveImage(byte[] image) {
+  public void saveImage(PictureTransaction xact, byte[] image) {
     File photo=getPhotoPath();
 
     if (photo.exists()) {
@@ -296,7 +298,8 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   private void initPhotoDirectory() {
-    photoDirectory=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+    photoDirectory=
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
   }
 
   protected String getPhotoFilename() {
@@ -323,7 +326,8 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   private void initVideoDirectory() {
-    videoDirectory=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+    videoDirectory=
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
   }
 
   protected String getVideoFilename() {
@@ -340,14 +344,18 @@ public class SimpleCameraHost implements CameraHost {
   protected boolean scanSavedImage() {
     return(scanSavedImage);
   }
-  
+
   public static class Builder {
     private SimpleCameraHost host=null;
-    
+
     public Builder(Context ctxt) {
-      host=new SimpleCameraHost(ctxt);
+      this(new SimpleCameraHost(ctxt));
     }
-    
+
+    public Builder(SimpleCameraHost host) {
+      this.host=host;
+    }
+
     public SimpleCameraHost build() {
       return(host);
     }
