@@ -253,11 +253,6 @@ public class SimpleCameraHost implements CameraHost {
   }
 
   @Override
-  public boolean rotateBasedOnExif() {
-    return(rotateBasedOnExif);
-  }
-
-  @Override
   public RecordingHint getRecordingHint() {
     if (recordingHint == null) {
       initRecordingHint();
@@ -281,6 +276,11 @@ public class SimpleCameraHost implements CameraHost {
     return(useFullBleedPreview);
   }
 
+  @Override
+  public float maxPictureCleanupHeapUsage() {
+    return(1.0f);
+  }
+  
   protected File getPhotoPath() {
     File dir=getPhotoDirectory();
 

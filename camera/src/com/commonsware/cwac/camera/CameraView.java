@@ -631,9 +631,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
       camera.setParameters(previewParams);
 
       if (data != null) {
-        new ImageCleanupTask(data, cameraId,
-                             getContext().getCacheDir(), xact,
-                             displayOrientation).start();
+        new ImageCleanupTask(getContext(), data, cameraId, xact).start();
       }
 
       if (!xact.useSingleShotMode()) {

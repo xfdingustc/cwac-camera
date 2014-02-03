@@ -227,16 +227,6 @@ public interface CameraHost extends Camera.AutoFocusCallback {
   boolean mirrorFFC();
 
   /**
-   * @return true if you want the library to rotate the
-   *         image file to match what is in the EXIF
-   *         headers, which can be useful for devices that,
-   *         in portrait mode, take landscape pictures and
-   *         simply mark them via EXIF headers that picture
-   *         viewers should rotate the image
-   */
-  boolean rotateBasedOnExif();
-
-  /**
    * Called when a picture has been taken. This will be
    * called on a background thread.
    * 
@@ -280,4 +270,6 @@ public interface CameraHost extends Camera.AutoFocusCallback {
   void onCameraFail(FailureReason reason);
   
   boolean useFullBleedPreview();
+  
+  float maxPictureCleanupHeapUsage();
 }

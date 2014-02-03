@@ -20,8 +20,8 @@ public class PictureTransaction {
   boolean needByteArray=true;
   private Object tag=null;
   boolean mirrorFFC=false;
-  boolean rotateBasedOnExif=false;
   boolean useSingleShotMode=false;
+  int displayOrientation=0;
 
   public PictureTransaction(CameraHost host) {
     this.host=host;
@@ -57,10 +57,6 @@ public class PictureTransaction {
     return(mirrorFFC || host.mirrorFFC());
   }
 
-  boolean rotateBasedOnExif() {
-    return(rotateBasedOnExif || host.rotateBasedOnExif());
-  }
-
   public PictureTransaction useSingleShotMode(boolean useSingleShotMode) {
     this.useSingleShotMode=useSingleShotMode;
 
@@ -72,10 +68,10 @@ public class PictureTransaction {
 
     return(this);
   }
-
-  public PictureTransaction rotateBasedOnExif(boolean rotateBasedOnExif) {
-    this.rotateBasedOnExif=rotateBasedOnExif;
-
+  
+  PictureTransaction displayOrientation(int displayOrientation) {
+    this.displayOrientation=displayOrientation;
+    
     return(this);
   }
 }
