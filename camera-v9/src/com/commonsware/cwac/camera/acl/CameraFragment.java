@@ -122,4 +122,8 @@ public class CameraFragment extends SherlockFragment {
   public boolean doesZoomReallyWork() {
     return(cameraView.doesZoomReallyWork());
   }
+  
+  public void setFlashMode(String mode) {
+    cameraView.setFlashMode(mode);
+  }
 }
