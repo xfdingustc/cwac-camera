@@ -1,5 +1,5 @@
 /***
-  Copyright (c) 2013 CommonsWare, LLC
+  Copyright (c) 2013-2014 CommonsWare, LLC
   Portions Copyright (C) 2007 The Android Open Source Project
   
   Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -149,19 +149,19 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
 
         try {
           if (getHost().getRecordingHint() != CameraHost.RecordingHint.STILL_ONLY) {
-            Camera.Size deviceHint=
-                DeviceProfile.getInstance()
-                             .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
-                                                              width,
-                                                              height,
-                                                              camera.getParameters());
+            // Camera.Size deviceHint=
+            // host.getDeviceProfile()
+            // .getPreferredPreviewSizeForVideo(getDisplayOrientation(),
+            // width,
+            // height,
+            // camera.getParameters());
 
             newSize=
                 getHost().getPreferredPreviewSizeForVideo(getDisplayOrientation(),
                                                           width,
                                                           height,
                                                           camera.getParameters(),
-                                                          deviceHint);
+                                                          null);
           }
 
           if (newSize == null || newSize.width * newSize.height < 65536) {
@@ -308,7 +308,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
             camera.takePicture(xact, null,
                                new PictureTransactionCallback(xact));
           }
-        }, 250);
+        }, xact.host.getDeviceProfile().getPictureDelay());
 
         inPreview=false;
       }

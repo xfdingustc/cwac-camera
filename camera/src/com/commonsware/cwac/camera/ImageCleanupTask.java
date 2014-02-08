@@ -1,3 +1,17 @@
+/***
+  Copyright (c) 2013-2014 CommonsWare, LLC
+  
+  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  not use this file except in compliance with the License. You may obtain
+  a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ */
+
 package com.commonsware.cwac.camera;
 
 import android.annotation.TargetApi;
@@ -10,8 +24,6 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import com.android.mms.exif.ExifInterface;
@@ -55,7 +67,7 @@ public class ImageCleanupTask extends Thread {
       }
 
       try {
-        int imageOrientation;
+        int imageOrientation=0;
 
         if (xact.host.getDeviceProfile().useDeviceOrientation()) {
           imageOrientation=xact.displayOrientation;
@@ -80,12 +92,12 @@ public class ImageCleanupTask extends Thread {
             imageOrientation=0;
           }
           else {
-            imageOrientation=
-                xact.host.getDeviceProfile().getDefaultOrientation();
-
-            if (imageOrientation == -1) {
-              imageOrientation=xact.displayOrientation;
-            }
+//            imageOrientation=
+//                xact.host.getDeviceProfile().getDefaultOrientation();
+//
+//            if (imageOrientation == -1) {
+//              imageOrientation=xact.displayOrientation;
+//            }
           }
         }
 
@@ -123,20 +135,20 @@ public class ImageCleanupTask extends Thread {
       if (matrix != null) {
         ByteArrayOutputStream out=new ByteArrayOutputStream();
 
-        if (exif == null) {
+//        if (exif == null) {
           cleaned.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        }
-        else {
-          exif.deleteTag(ExifInterface.TAG_ORIENTATION);
-
-          try {
-            exif.writeExif(cleaned, out);
-          }
-          catch (IOException e) {
-            Log.e("CWAC-Camera", "Exception writing to JPEG", e);
-            // TODO: ripple to client
-          }
-        }
+//        }
+//        else {
+//          exif.deleteTag(ExifInterface.TAG_ORIENTATION);
+//
+//          try {
+//            exif.writeExif(cleaned, out);
+//          }
+//          catch (IOException e) {
+//            Log.e("CWAC-Camera", "Exception writing to JPEG", e);
+//            // TODO: ripple to client
+//          }
+//        }
 
         data=out.toByteArray();
 
