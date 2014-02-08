@@ -14,9 +14,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.exif.ExifIFD0Directory;
+import com.android.mms.exif.ExifInterface;
 
 public class ImageCleanupTask extends Thread {
   private byte[] data;
@@ -56,20 +54,11 @@ public class ImageCleanupTask extends Thread {
       }
 
       try {
-        Metadata md=
-            ImageMetadataReader.readMetadata(new BufferedInputStream(
-                                                                     new ByteArrayInputStream(
-                                                                                              data)),
-                                             true);
-        ExifIFD0Directory exifDir=
-            md.getDirectory(ExifIFD0Directory.class);
-        int exifOrientation=0;
-
-        if (exifDir.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
-          exifOrientation=
-              exifDir.getInt(ExifIFD0Directory.TAG_ORIENTATION);
-        }
-
+        ExifInterface exif=new ExifInterface();
+        
+        exif.readExif(data);
+        
+        int exifOrientation=exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
         int imageOrientation;
 
         if (exifOrientation == 6) {
