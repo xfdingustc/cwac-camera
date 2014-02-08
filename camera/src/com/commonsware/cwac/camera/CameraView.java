@@ -276,7 +276,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
                     .needByteArray(needByteArray));
   }
 
-  public void takePicture(PictureTransaction xact) {
+  public void takePicture(final PictureTransaction xact) {
     if (inPreview) {
       if (isAutoFocusing) {
         throw new IllegalStateException(
@@ -297,13 +297,19 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
           pictureParams.setFlashMode(xact.flashMode);
         }
 
+        setCameraPictureOrientation(pictureParams);
         camera.setParameters(xact.host.adjustPictureParameters(xact,
                                                                pictureParams));
-        setCameraPictureOrientation();
         xact.cameraView=this;
 
-        camera.takePicture(xact, null,
-                           new PictureTransactionCallback(xact));
+        postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            camera.takePicture(xact, null,
+                               new PictureTransactionCallback(xact));
+          }
+        }, 250);
+
         inPreview=false;
       }
     }
@@ -323,7 +329,11 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
                                               "Video recording supported only on API Level 11+");
     }
 
-    setCameraPictureOrientation();
+    Camera.Parameters pictureParams=camera.getParameters();
+
+    setCameraPictureOrientation(pictureParams);
+    camera.setParameters(pictureParams);
+
     stopPreview();
     camera.unlock();
 
@@ -557,7 +567,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
     }
   }
 
-  private void setCameraPictureOrientation() {
+  private void setCameraPictureOrientation(Camera.Parameters params) {
     Camera.CameraInfo info=new Camera.CameraInfo();
 
     Camera.getCameraInfo(cameraId, info);
@@ -576,10 +586,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
     }
 
     if (lastPictureOrientation != outputOrientation) {
-      Camera.Parameters params=camera.getParameters();
-
       params.setRotation(outputOrientation);
-      camera.setParameters(params);
       lastPictureOrientation=outputOrientation;
     }
   }
