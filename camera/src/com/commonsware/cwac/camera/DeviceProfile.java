@@ -114,7 +114,14 @@ public class DeviceProfile {
   // as on Nexus 7 (2012)
 
   public int getDefaultOrientation() {
-    return(0);
+    return(-1);
+  }
+  
+  // for devices like DROID Mini where setRotation()
+  // goes BOOM
+  
+  public boolean useDeviceOrientation() {
+    return(false);
   }
 
   // based on http://stackoverflow.com/a/9801191/115145

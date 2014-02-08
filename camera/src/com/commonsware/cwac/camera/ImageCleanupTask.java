@@ -55,28 +55,38 @@ public class ImageCleanupTask extends Thread {
       }
 
       try {
-        exif=new ExifInterface();
-        exif.readExif(data);
-
-        int exifOrientation=
-            exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
         int imageOrientation;
 
-        if (exifOrientation == 6) {
-          imageOrientation=90;
-        }
-        else if (exifOrientation == 8) {
-          imageOrientation=270;
-        }
-        else if (exifOrientation == 3) {
-          imageOrientation=180;
-        }
-        else if (exifOrientation == 1) {
-          imageOrientation=0;
+        if (xact.host.getDeviceProfile().useDeviceOrientation()) {
+          imageOrientation=xact.displayOrientation;
         }
         else {
-          imageOrientation=
-              xact.host.getDeviceProfile().getDefaultOrientation();
+          exif=new ExifInterface();
+          exif.readExif(data);
+
+          int exifOrientation=
+              exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
+
+          if (exifOrientation == 6) {
+            imageOrientation=90;
+          }
+          else if (exifOrientation == 8) {
+            imageOrientation=270;
+          }
+          else if (exifOrientation == 3) {
+            imageOrientation=180;
+          }
+          else if (exifOrientation == 1) {
+            imageOrientation=0;
+          }
+          else {
+            imageOrientation=
+                xact.host.getDeviceProfile().getDefaultOrientation();
+
+            if (imageOrientation == -1) {
+              imageOrientation=xact.displayOrientation;
+            }
+          }
         }
 
         if (imageOrientation != 0) {
