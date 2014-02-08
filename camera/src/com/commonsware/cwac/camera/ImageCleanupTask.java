@@ -41,6 +41,7 @@ public class ImageCleanupTask extends Thread {
 
     Matrix matrix=null;
     Bitmap cleaned=null;
+    ExifInterface exif=null;
 
     if (applyMatrix) {
       if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -54,11 +55,11 @@ public class ImageCleanupTask extends Thread {
       }
 
       try {
-        ExifInterface exif=new ExifInterface();
-        
+        exif=new ExifInterface();
         exif.readExif(data);
-        
-        int exifOrientation=exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
+
+        int exifOrientation=
+            exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
         int imageOrientation;
 
         if (exifOrientation == 6) {
@@ -84,9 +85,9 @@ public class ImageCleanupTask extends Thread {
                      imageOrientation);
         }
       }
-      catch (Exception e) {
-        Log.w(getClass().getSimpleName(),
-              "Exception parsing JPEG byte array", e);
+      catch (IOException e) {
+        Log.e("CWAC-Camera", "Exception parsing JPEG", e);
+        // TODO: ripple to client
       }
 
       if (matrix != null) {
@@ -110,11 +111,23 @@ public class ImageCleanupTask extends Thread {
 
     if (xact.needByteArray) {
       if (matrix != null) {
-        ByteArrayOutputStream out=
-            new ByteArrayOutputStream(cleaned.getWidth()
-                * cleaned.getHeight());
+        ByteArrayOutputStream out=new ByteArrayOutputStream();
 
-        cleaned.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        if (exif == null) {
+          cleaned.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        }
+        else {
+          exif.deleteTag(ExifInterface.TAG_ORIENTATION);
+
+          try {
+            exif.writeExif(cleaned, out);
+          }
+          catch (IOException e) {
+            Log.e("CWAC-Camera", "Exception writing to JPEG", e);
+            // TODO: ripple to client
+          }
+        }
+
         data=out.toByteArray();
 
         try {
