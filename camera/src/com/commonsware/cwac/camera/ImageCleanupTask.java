@@ -76,28 +76,30 @@ public class ImageCleanupTask extends Thread {
           exif=new ExifInterface();
           exif.readExif(data);
 
-          int exifOrientation=
+          Integer exifOrientation=
               exif.getTagIntValue(ExifInterface.TAG_ORIENTATION);
 
-          if (exifOrientation == 6) {
-            imageOrientation=90;
-          }
-          else if (exifOrientation == 8) {
-            imageOrientation=270;
-          }
-          else if (exifOrientation == 3) {
-            imageOrientation=180;
-          }
-          else if (exifOrientation == 1) {
-            imageOrientation=0;
-          }
-          else {
-//            imageOrientation=
-//                xact.host.getDeviceProfile().getDefaultOrientation();
-//
-//            if (imageOrientation == -1) {
-//              imageOrientation=xact.displayOrientation;
-//            }
+          if (exifOrientation != null) {
+            if (exifOrientation == 6) {
+              imageOrientation=90;
+            }
+            else if (exifOrientation == 8) {
+              imageOrientation=270;
+            }
+            else if (exifOrientation == 3) {
+              imageOrientation=180;
+            }
+            else if (exifOrientation == 1) {
+              imageOrientation=0;
+            }
+            else {
+              // imageOrientation=
+              // xact.host.getDeviceProfile().getDefaultOrientation();
+              //
+              // if (imageOrientation == -1) {
+              // imageOrientation=xact.displayOrientation;
+              // }
+            }
           }
         }
 
@@ -135,20 +137,21 @@ public class ImageCleanupTask extends Thread {
       if (matrix != null) {
         ByteArrayOutputStream out=new ByteArrayOutputStream();
 
-//        if (exif == null) {
-          cleaned.compress(Bitmap.CompressFormat.JPEG, 100, out);
-//        }
-//        else {
-//          exif.deleteTag(ExifInterface.TAG_ORIENTATION);
-//
-//          try {
-//            exif.writeExif(cleaned, out);
-//          }
-//          catch (IOException e) {
-//            Log.e("CWAC-Camera", "Exception writing to JPEG", e);
-//            // TODO: ripple to client
-//          }
-//        }
+        // if (exif == null) {
+        cleaned.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        // }
+        // else {
+        // exif.deleteTag(ExifInterface.TAG_ORIENTATION);
+        //
+        // try {
+        // exif.writeExif(cleaned, out);
+        // }
+        // catch (IOException e) {
+        // Log.e("CWAC-Camera", "Exception writing to JPEG",
+        // e);
+        // // TODO: ripple to client
+        // }
+        // }
 
         data=out.toByteArray();
 
