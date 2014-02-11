@@ -39,11 +39,11 @@ abstract public class DeviceProfile {
   private static volatile DeviceProfile SINGLETON=null;
 
   synchronized public static DeviceProfile getInstance(Context ctxt) {
-    // android.util.Log.e("DeviceProfile", Build.PRODUCT);
-    // android.util.Log.e("DeviceProfile",
-    // Build.MANUFACTURER);
-
     if (SINGLETON == null) {
+//      android.util.Log.wtf("DeviceProfile",
+//                           String.format("\"%s\" \"%s\"", Build.MANUFACTURER,
+//                                         Build.PRODUCT));
+
       if ("motorola".equalsIgnoreCase(Build.MANUFACTURER)) {
         if ("XT890_rtgb".equals(Build.PRODUCT)) {
           SINGLETON=new SimpleDeviceProfile.MotorolaRazrI();
