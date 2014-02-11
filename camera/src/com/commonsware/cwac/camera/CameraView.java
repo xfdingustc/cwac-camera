@@ -109,7 +109,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
             onOrientationChange.enable();
           }
 
-          setCameraDisplayOrientation(cameraId, camera);
+          setCameraDisplayOrientation();
 
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH
               && getHost() instanceof Camera.FaceDetectionListener) {
@@ -162,6 +162,13 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
                                                           height,
                                                           camera.getParameters(),
                                                           null);
+
+//            if (newSize != null) {
+//              android.util.Log.wtf("CameraView",
+//                                   String.format("getPreferredPreviewSizeForVideo: %d x %d",
+//                                                 newSize.width,
+//                                                 newSize.height));
+//            }
           }
 
           if (newSize == null || newSize.width * newSize.height < 65536) {
@@ -258,7 +265,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
     post(new Runnable() {
       @Override
       public void run() {
-        setCameraDisplayOrientation(cameraId, camera);
+        setCameraDisplayOrientation();
       }
     });
   }
@@ -519,8 +526,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
   // http://developer.android.com/reference/android/hardware/Camera.html#setDisplayOrientation(int)
   // and http://stackoverflow.com/a/10383164/115145
 
-  private void setCameraDisplayOrientation(int cameraId,
-                                           android.hardware.Camera camera) {
+  private void setCameraDisplayOrientation() {
     Camera.CameraInfo info=new Camera.CameraInfo();
     int rotation=
         getActivity().getWindowManager().getDefaultDisplay()
