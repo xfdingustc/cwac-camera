@@ -43,7 +43,7 @@ public class SimpleCameraHost implements CameraHost {
   private boolean mirrorFFC=false;
   private boolean useFrontFacingCamera=false;
   private boolean scanSavedImage=true;
-  private boolean useFullBleedPreview=false;
+  private boolean useFullBleedPreview=true;
   private boolean useSingleShotMode=false;
 
   public SimpleCameraHost(Context _ctxt) {
