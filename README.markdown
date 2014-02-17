@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:camera:0.5.4'
+    compile 'com.commonsware.cwac:camera:0.6.+'
 }
 ```
 
@@ -53,7 +53,7 @@ repositories {
 }
 
 dependencies {
-    compile('com.commonsware.cwac:camera-v9:0.5.4') {
+    compile('com.commonsware.cwac:camera-v9:0.6.+') {
       exclude module: 'support-v4'
     }
 
@@ -939,6 +939,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.6.1: fixed issue with Motorola device support
 - v0.6.0: full-bleed preview, faster image processing, `DeviceProfile` overhaul, added `PictureTransaction`, etc.
 - v0.5.4: refactored into two libraries, added Gradle support and AAR artifacts
 - v0.5.2: face detection, zoom, and demo bug fixes
