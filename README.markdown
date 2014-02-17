@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:camera:0.6.+'
+    compile 'com.commonsware.cwac:camera:0.6.1'
 }
 ```
 
@@ -53,7 +53,7 @@ repositories {
 }
 
 dependencies {
-    compile('com.commonsware.cwac:camera-v9:0.6.+') {
+    compile('com.commonsware.cwac:camera-v9:0.6.1') {
       exclude module: 'support-v4'
     }
 
