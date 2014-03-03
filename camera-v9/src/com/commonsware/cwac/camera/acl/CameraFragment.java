@@ -17,9 +17,11 @@ package com.commonsware.cwac.camera.acl;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import java.io.IOException;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.commonsware.cwac.camera.CameraHost;
 import com.commonsware.cwac.camera.CameraView;
@@ -68,6 +70,17 @@ public class CameraFragment extends SherlockFragment {
    */
   @Override
   public void onPause() {
+    if (isRecording()) {
+      try {
+        stopRecording();
+      }
+      catch (IOException e) {
+        // TODO: get to developers
+        Log.e(getClass().getSimpleName(),
+              "Exception stopping recording in onPause()", e);
+      }
+    }
+
     cameraView.onPause();
 
     super.onPause();
@@ -172,7 +185,7 @@ public class CameraFragment extends SherlockFragment {
    * @throws Exception
    *           all sorts of things could go wrong
    */
-  public void stopRecording() throws Exception {
+  public void stopRecording() throws IOException {
     cameraView.stopRecording();
   }
 
@@ -275,7 +288,7 @@ public class CameraFragment extends SherlockFragment {
   public boolean doesZoomReallyWork() {
     return(cameraView.doesZoomReallyWork());
   }
-  
+
   public void setFlashMode(String mode) {
     cameraView.setFlashMode(mode);
   }

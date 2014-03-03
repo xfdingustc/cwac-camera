@@ -79,7 +79,7 @@ public class CameraFragment extends Fragment {
       catch (IOException e) {
         // TODO: get to developers
         Log.e(getClass().getSimpleName(),
-              "Exception stopping recording in onStop()", e);
+              "Exception stopping recording in onPause()", e);
       }
     }
 
