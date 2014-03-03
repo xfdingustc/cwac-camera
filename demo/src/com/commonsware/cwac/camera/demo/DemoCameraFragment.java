@@ -46,6 +46,8 @@ public class DemoCameraFragment extends CameraFragment implements
   private MenuItem autoFocusItem=null;
   private MenuItem takePictureItem=null;
   private MenuItem flashItem=null;
+  private MenuItem recordItem=null;
+  private MenuItem stopRecordItem=null;
   private boolean singleShotProcessing=false;
   private SeekBar zoom=null;
   private long lastFaceToast=0L;
@@ -87,25 +89,34 @@ public class DemoCameraFragment extends CameraFragment implements
 
     return(results);
   }
+  
+  @Override
+  public void onPause() {
+    super.onPause();
+    
+    getActivity().invalidateOptionsMenu();
+  }
 
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.camera, menu);
-
-    if (isRecording()) {
-      menu.findItem(R.id.record).setVisible(false);
-      menu.findItem(R.id.stop).setVisible(true);
-    }
-
-    if (getDisplayOrientation() != 0 && getDisplayOrientation() != 180) {
-      menu.findItem(R.id.record).setVisible(false);
-    }
 
     takePictureItem=menu.findItem(R.id.camera);
     singleShotItem=menu.findItem(R.id.single_shot);
     singleShotItem.setChecked(getContract().isSingleShotMode());
     autoFocusItem=menu.findItem(R.id.autofocus);
     flashItem=menu.findItem(R.id.flash);
+    recordItem=menu.findItem(R.id.record);
+    stopRecordItem=menu.findItem(R.id.stop);
+
+    if (isRecording()) {
+      recordItem.setVisible(false);
+      stopRecordItem.setVisible(true);
+    }
+
+    if (getDisplayOrientation() != 0 && getDisplayOrientation() != 180) {
+      recordItem.setVisible(false);
+    }
   }
 
   @Override
