@@ -263,13 +263,6 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
       getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
       onOrientationChange.disable();
     }
-
-    post(new Runnable() {
-      @Override
-      public void run() {
-        setCameraDisplayOrientation();
-      }
-    });
   }
 
   public void restartPreview() {
