@@ -84,7 +84,7 @@ public class DemoCameraFragment extends CameraFragment implements
     ((ViewGroup)results.findViewById(R.id.camera)).addView(cameraView);
     zoom=(SeekBar)results.findViewById(R.id.zoom);
     zoom.setKeepScreenOn(true);
-    
+
     return(results);
   }
 
@@ -95,6 +95,10 @@ public class DemoCameraFragment extends CameraFragment implements
     if (isRecording()) {
       menu.findItem(R.id.record).setVisible(false);
       menu.findItem(R.id.stop).setVisible(true);
+    }
+
+    if (getDisplayOrientation() != 0 && getDisplayOrientation() != 180) {
+      menu.findItem(R.id.record).setVisible(false);
     }
 
     takePictureItem=menu.findItem(R.id.camera);

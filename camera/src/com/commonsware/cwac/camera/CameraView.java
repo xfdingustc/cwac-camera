@@ -163,12 +163,12 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
                                                           camera.getParameters(),
                                                           null);
 
-//            if (newSize != null) {
-//              android.util.Log.wtf("CameraView",
-//                                   String.format("getPreferredPreviewSizeForVideo: %d x %d",
-//                                                 newSize.width,
-//                                                 newSize.height));
-//            }
+            // if (newSize != null) {
+            // android.util.Log.wtf("CameraView",
+            // String.format("getPreferredPreviewSizeForVideo: %d x %d",
+            // newSize.width,
+            // newSize.height));
+            // }
           }
 
           if (newSize == null || newSize.width * newSize.height < 65536) {
@@ -334,6 +334,11 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
       throw new UnsupportedOperationException(
                                               "Video recording supported only on API Level 11+");
+    }
+
+    if (displayOrientation != 0 && displayOrientation != 180) {
+      throw new UnsupportedOperationException(
+                                              "Video recording supported only in landscape");
     }
 
     Camera.Parameters pictureParams=camera.getParameters();
