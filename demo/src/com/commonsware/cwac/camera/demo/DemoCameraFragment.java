@@ -112,6 +112,7 @@ public class DemoCameraFragment extends CameraFragment implements
     if (isRecording()) {
       recordItem.setVisible(false);
       stopRecordItem.setVisible(true);
+      takePictureItem.setVisible(false);
     }
 
     if (getDisplayOrientation() != 0 && getDisplayOrientation() != 180) {

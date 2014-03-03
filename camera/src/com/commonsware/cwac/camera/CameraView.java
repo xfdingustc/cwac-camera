@@ -375,6 +375,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
     tempRecorder.stop();
     tempRecorder.release();
     camera.reconnect();
+    startPreview();
   }
 
   public void autoFocus() {
