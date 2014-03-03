@@ -131,6 +131,8 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
       previewDestroyed();
       removeView(previewStrategy.getWidget());
     }
+
+    lastPictureOrientation=-1;
   }
 
   // based on CameraPreview.java from ApiDemos
