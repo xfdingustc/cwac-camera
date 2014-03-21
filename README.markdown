@@ -177,7 +177,7 @@ to `setHost()` on your `CameraFragment`, to replace the default.
 just after instantiating your fragment) to ensure that the
 right `CameraHost` is used everywhere.
 
-### PictureTransaction and VideoTransaction
+### PictureTransaction
 
 The `takePicture()` method has a zero-argument version that just takes a picture.
 It also has a one-argument version, where the argument is an instance of
