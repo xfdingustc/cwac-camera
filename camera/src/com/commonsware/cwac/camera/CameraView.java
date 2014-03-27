@@ -299,7 +299,10 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
           pictureParams.setFlashMode(xact.flashMode);
         }
 
-        setCameraPictureOrientation(pictureParams);
+        if (!onOrientationChange.isEnabled()) {
+          setCameraPictureOrientation(pictureParams);
+        }
+
         camera.setParameters(xact.host.adjustPictureParameters(xact,
                                                                pictureParams));
         xact.cameraView=this;
@@ -623,6 +626,8 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
   }
 
   private class OnOrientationChange extends OrientationEventListener {
+    private boolean isEnabled=false;
+    
     public OnOrientationChange(Context context) {
       super(context);
       disable();
@@ -643,6 +648,22 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
           lastPictureOrientation=outputOrientation;
         }
       }
+    }
+    
+    @Override
+    public void enable() {
+      isEnabled=true;
+      super.enable();
+    }
+    
+    @Override
+    public void disable() {
+      isEnabled=false;
+      super.disable();
+    }
+    
+    boolean isEnabled() {
+      return(isEnabled);
     }
   }
 
