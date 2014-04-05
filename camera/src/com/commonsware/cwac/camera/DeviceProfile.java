@@ -43,9 +43,9 @@ abstract public class DeviceProfile {
 
   synchronized public static DeviceProfile getInstance(Context ctxt) {
     if (SINGLETON == null) {
-       android.util.Log.wtf("DeviceProfile",
-       String.format("\"%s\" \"%s\"", Build.MANUFACTURER,
-       Build.PRODUCT));
+//       android.util.Log.wtf("DeviceProfile",
+//       String.format("\"%s\" \"%s\"", Build.MANUFACTURER,
+//       Build.PRODUCT));
 
       if ("motorola".equalsIgnoreCase(Build.MANUFACTURER)
           && "XT890_rtgb".equals(Build.PRODUCT)) {
