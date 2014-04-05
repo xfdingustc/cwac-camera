@@ -310,8 +310,15 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
         postDelayed(new Runnable() {
           @Override
           public void run() {
-            camera.takePicture(xact, null,
-                               new PictureTransactionCallback(xact));
+            try {
+              camera.takePicture(xact, null,
+                                 new PictureTransactionCallback(xact));
+            }
+            catch (Exception e) {
+              android.util.Log.e(getClass().getSimpleName(),
+                                 "Exception taking a picture", e);
+              // TODO get this out to library clients
+            }
           }
         }, xact.host.getDeviceProfile().getPictureDelay());
 
@@ -627,7 +634,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
 
   private class OnOrientationChange extends OrientationEventListener {
     private boolean isEnabled=false;
-    
+
     public OnOrientationChange(Context context) {
       super(context);
       disable();
@@ -649,19 +656,19 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
         }
       }
     }
-    
+
     @Override
     public void enable() {
       isEnabled=true;
       super.enable();
     }
-    
+
     @Override
     public void disable() {
       isEnabled=false;
       super.disable();
     }
-    
+
     boolean isEnabled() {
       return(isEnabled);
     }
