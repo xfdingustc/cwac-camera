@@ -897,6 +897,7 @@ and `Build.PRODUCT` values for the device.
 | SONY Xperia S LT26i                 |`Sony Ericsson`/`LT26i_1257-4921`| 4.1.2 |       |
 | SONY Xperia Z                       |`Sony`/`C6603_1270-7689`         | 4.2.2 | 4.3   ||
 | SONY Xperia Z Ultra                 |`Sony`/`C6802`                   | 4.2.2 | 4.3   ||
+| SONY Xperia Z2 Tablet               |`Sony`/`SGP521`                  |       | 4.4.2 ||
 
 Dependencies
 ------------
