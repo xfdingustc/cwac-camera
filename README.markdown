@@ -874,6 +874,7 @@ and `Build.PRODUCT` values for the device.
 | Google Nexus S                      |`samsung`/`soju`                 | 4.1.2 | 4.1.2 ||
 | HTC Droid Incredible 2              | ???                             | 2.3.4 | 2.3.4 ||
 | HTC One S                           |`HTC`/`ville`                    | 4.1.1 | 4.1.1 | [76](https://github.com/commonsguy/cwac-camera/issues/76)    |
+| HTC One M7 Google Play Edition      |`HTC`/`m7_google`                |       | 4.4.2 ||
 | HTC Thunderbolt                     |`HTC`/`htc_mecha`                |       | 4.0.4 ||
 | Lenovo ThinkPad Tablet              |`LENOVO`/`ThinkPadTablet`        | 4.0.3 | 4.0.3 | [38](https://github.com/commonsguy/cwac-camera/issues/38) [111](https://github.com/commonsguy/cwac-camera/issues/111) |
 | LG G2 (LG-D802)                     |`LGE`/`g2_open_com`              |       | 4.2.2 ||
