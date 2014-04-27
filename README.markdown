@@ -74,7 +74,7 @@ there are two JARs in
 - `camera-X.Y.Z.jar` represents the core classes, used in all environments
 - `camera-v9-X.Y.Z.jar` adds support for ActionBarSherlock
 
-(where `X.Y.Z` is the version number of the project, such as `0.6.2`)
+(where `X.Y.Z` is the version number of the project, such as `0.6.7`)
 
 Users of the JARs will also want to copy the contents of
 the `camera/res/xml/` directory into their project, as that directory
@@ -910,7 +910,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.6.6 of this module, meaning it is coming along nicely.
+This is version v0.6.7 of this module, meaning it is coming along nicely.
 
 Demo
 ----
@@ -948,6 +948,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.6.7: extended S3 bug fix to AT&T model
 - v0.6.6: fixed S3 bug, added sample full-screen activity
 - v0.6.5: yet more various bug fixes
 - v0.6.4: various bug fixes
