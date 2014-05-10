@@ -895,6 +895,7 @@ and `Build.PRODUCT` values for the device.
 | Samsung Galaxy S4 (GT-I9500)        |`samsung`/`ja3gxx`               | 4.3   | 4.3   ||
 | Samsung Galaxy S4 (SGH-I337)        |`samsung`/`jflteuc`              | 4.2.2 | 4.2.2 ||
 | Samsung Galaxy S4 Zoom (SM-C105A)   |`samsung`/`mprojectlteuc`        |       | 4.2.2 ||
+| Samsung Galaxy S5 (SM-G900H)				| ???															|       | 4.4 ||
 | Samsung Galaxy Tab 2 7.0 (GT-P3113) |`samsung`/`espressowifiue`       | 4.2.2 | 4.2.2 | [107](https://github.com/commonsguy/cwac-camera/issues/107)|
 | SONY Ericsson Xperia Play           | ???                             | 2.3.6 | 2.3.6 | [113](https://github.com/commonsguy/cwac-camera/issues/113) |
 | SONY Xperia E                       |`Sony`/`C1505_1270-4354`         | 4.1.1 | 4.1.1 | [45](https://github.com/commonsguy/cwac-camera/issues/45)     |
