@@ -913,7 +913,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.6.7 of this module, meaning it is coming along nicely.
+This is version v0.6.8 of this module, meaning it is coming along nicely.
 
 Demo
 ----
@@ -933,13 +933,13 @@ file.
 Questions
 ---------
 If you have questions regarding the use of this code, please post a question
-on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with `commonsware` and `android`. Be sure to indicate
+on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with `commonsware-cwac` and `android`. Be sure to indicate
 what CWAC module you are having issues with, and be sure to include source code 
 and stack traces if you are encountering crashes.
 
 If you have encountered what is clearly a bug, or if you have a feature request,
 please post an [issue](https://github.com/commonsguy/cwac-camera/issues).
-Be certain to include complete steps for reproducing the issue.
+**Be certain to include complete steps for reproducing the issue.**
 
 Do not ask for help via Twitter.
 
