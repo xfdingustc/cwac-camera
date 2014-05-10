@@ -71,10 +71,13 @@ If you are using Eclipse, Ant, or otherwise need JAR files,
 there are two JARs in
 [the releases area of the repo](https://github.com/commonsguy/cwac-camera/releases):
 
-- `camera-X.Y.Z.jar` represents the core classes, used in all environments
-- `camera-v9-X.Y.Z.jar` adds support for ActionBarSherlock
+- `cwac-camera-X.Y.Z.jar` represents the core classes, used in all environments
+- `cwac-camera-v9-X.Y.Z.jar` adds support for ActionBarSherlock
 
-(where `X.Y.Z` is the version number of the project, such as `0.6.7`)
+(where `X.Y.Z` is the version number of the project, such as `0.6.8`)
+
+**NOTE**: The JAR name, as of v0.6.8, has a `cwac-` prefix, to help distinguish
+it from other JARs.
 
 Users of the JARs will also want to copy the contents of
 the `camera/res/xml/` directory into their project, as that directory
@@ -948,6 +951,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.6.8: yet more bug fixes, added `cwac-` prefix to JAR
 - v0.6.7: extended S3 bug fix to AT&T model
 - v0.6.6: fixed S3 bug, added sample full-screen activity
 - v0.6.5: yet more various bug fixes
