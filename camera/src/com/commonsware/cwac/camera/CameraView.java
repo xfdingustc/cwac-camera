@@ -27,6 +27,7 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -144,7 +145,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
     final int height=
         resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
     setMeasuredDimension(width, height);
-
+    
     if (width > 0 && height > 0) {
       if (camera != null) {
         Camera.Size newSize=null;
@@ -657,8 +658,17 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
           Camera.Parameters params=camera.getParameters();
 
           params.setRotation(outputOrientation);
-          camera.setParameters(params);
-          lastPictureOrientation=outputOrientation;
+
+          try {
+            camera.setParameters(params);
+            lastPictureOrientation=outputOrientation;
+          }
+          catch (Exception e) {
+            Log.e(getClass().getSimpleName(),
+                  "Exception updating camera parameters in orientation change",
+                  e);
+            // TODO: get this info out to hosting app
+          }
         }
       }
     }
