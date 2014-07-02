@@ -914,7 +914,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.6.8 of this module, meaning it is coming along nicely.
+This is version v0.6.9 of this module, meaning it is coming along nicely.
 
 Demo
 ----
@@ -934,7 +934,8 @@ file.
 Questions
 ---------
 If you have questions regarding the use of this code, please post a question
-on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with `commonsware-cwac` and `android`. Be sure to indicate
+on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with
+`commonsware-cwac` and `android` after [searching to see if there already is an answer](https://stackoverflow.com/search?q=[commonsware-cwac]+camera). Be sure to indicate
 what CWAC module you are having issues with, and be sure to include source code 
 and stack traces if you are encountering crashes.
 
@@ -952,6 +953,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.6.9: updated Gradle, fixed `-v9` manifest for merging, "fixed" issue #176
 - v0.6.8: yet more bug fixes, added `cwac-` prefix to JAR
 - v0.6.7: extended S3 bug fix to AT&T model
 - v0.6.6: fixed S3 bug, added sample full-screen activity
