@@ -134,6 +134,8 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
 
     removeView(previewStrategy.getWidget());
 
+    onOrientationChange.disable();
+
     lastPictureOrientation=-1;
   }
 
