@@ -20,6 +20,18 @@ but complex things may be a bit complex".
 In addition to what is written here,
 JavaDocs [are also available](http://javadocs.commonsware.com/cwac/camera/index.html).
 
+Library Objectives
+------------------
+The #1 objective of this library is maximum compatibility with hardware. As such,
+this library will not be suitable for all use cases.
+
+The targeted use case is an app that might otherwise have relied upon
+`ACTION_IMAGE_CAPTURE`, but needs greater reliablilty and somewhat greater
+control (e.g., capture images directly to internal storage).
+
+If you are trying to write "a camera app" &mdash; an app whose primary job is
+to take pictures &mdash; this library may be unsuitable for you.
+
 Installation
 ------------
 If you are using Gradle, or otherwise can use AAR artifacts,
