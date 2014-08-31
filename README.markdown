@@ -86,7 +86,7 @@ there are two JARs in
 - `cwac-camera-X.Y.Z.jar` represents the core classes, used in all environments
 - `cwac-camera-v9-X.Y.Z.jar` adds support for ActionBarSherlock
 
-(where `X.Y.Z` is the version number of the project, such as `0.6.8`)
+(where `X.Y.Z` is the version number of the project, such as `0.6.10`)
 
 **NOTE**: The JAR name, as of v0.6.8, has a `cwac-` prefix, to help distinguish
 it from other JARs.
@@ -965,6 +965,7 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.6.10: addressed memory leaks and crashes due to inconsistent pause handling
 - v0.6.9: updated Gradle, fixed `-v9` manifest for merging, "fixed" issue #176
 - v0.6.8: yet more bug fixes, added `cwac-` prefix to JAR
 - v0.6.7: extended S3 bug fix to AT&T model
