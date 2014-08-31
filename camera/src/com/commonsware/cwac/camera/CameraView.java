@@ -55,7 +55,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
   public CameraView(Context context) {
     super(context);
 
-    onOrientationChange=new OnOrientationChange(context);
+    onOrientationChange=new OnOrientationChange(context.getApplicationContext());
   }
 
   public CameraView(Context context, AttributeSet attrs) {
@@ -65,7 +65,7 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
   public CameraView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
 
-    onOrientationChange=new OnOrientationChange(context);
+    onOrientationChange=new OnOrientationChange(context.getApplicationContext());
 
     if (context instanceof CameraHostProvider) {
       setHost(((CameraHostProvider)context).getCameraHost());
