@@ -130,8 +130,11 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
   public void onPause() {
     if (camera != null) {
       previewDestroyed();
-      removeView(previewStrategy.getWidget());
     }
+
+    removeView(previewStrategy.getWidget());
+
+    onOrientationChange.disable();
 
     lastPictureOrientation=-1;
   }
