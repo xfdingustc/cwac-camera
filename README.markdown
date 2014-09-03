@@ -142,6 +142,12 @@ will be stored in the default videos directory (e.g., `Movies`) on external stor
  `Video_yyyyMMdd_HHmmss.mp4`, where
 `yyyyMMdd_HHmmss` is replaced by the current date and time.
 
+Step #4: Add appropriate `<uses-permission>` elements to your manifest.
+For what is described in the preceding steps, you would need the `CAMERA`,
+`RECORD_AUDIO`, and `WRITE_EXTERNAL_STORAGE` permissions. `RECORD_AUDIO`
+is for the video recording using `startRecording()`; if you are only taking
+still photos, you will not need that permission.
+
 And that's it.
 
 `CameraFragment` (and its underlying `CameraView`)
