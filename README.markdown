@@ -1,6 +1,11 @@
 CWAC-Camera: Taking Pictures. Made (Somewhat) Sensible.
 =======================================================
 
+**NOTE**: This library [is slated to be rewritten from scratch](http://commonsware.com/blog/2014/12/01/my-mistakes-cwac-camera.html).
+Please bear that in mind when working with the library.
+
+----
+
 Taking pictures or videos using a third-party app is fairly straightforward,
 using `ACTION_IMAGE_CAPTURE` or `ACTION_VIDEO_CAPTURE`. However, you as the
 developer have little control over what happens with the image or video,
