@@ -937,7 +937,7 @@ if you are using the `.acl` flavor of `CameraFragment`.
 
 Version
 -------
-This is version v0.6.9 of this module, meaning it is coming along nicely.
+This is version v0.6.12 of this module, meaning it is coming along nicely.
 
 Demo
 ----
@@ -976,6 +976,8 @@ the fence may work, but it may not.
 
 Release Notes
 -------------
+- v0.6.12: updated for Android Studio 1.0 and new AAR publishing system
+- v0.6.11: this release intentionally left blank
 - v0.6.10: addressed memory leaks and crashes due to inconsistent pause handling
 - v0.6.9: updated Gradle, fixed `-v9` manifest for merging, "fixed" issue #176
 - v0.6.8: yet more bug fixes, added `cwac-` prefix to JAR

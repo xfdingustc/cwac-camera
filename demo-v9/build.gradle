@@ -1,13 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
-    }
-}
-
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral();
@@ -18,11 +9,13 @@ repositories {
 }
 
 dependencies {
-    compile('com.commonsware.cwac:camera-v9:0.6.+') {
+    debugCompile project(':camera-v9')
+
+    releaseCompile('com.commonsware.cwac:camera-v9:0.6.+') {
       exclude module: 'support-v4'
     }
 
-    compile 'com.android.support:support-v4:18.0.+'
+    releaseCompile 'com.android.support:support-v4:18.0.+'
 }
 
 android {
