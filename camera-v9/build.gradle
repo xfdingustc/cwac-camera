@@ -2,10 +2,15 @@ apply plugin: 'com.android.library'
 
 repositories {
     mavenCentral()
+
+    maven {
+        url "https://repo.commonsware.com.s3.amazonaws.com"
+    }
 }
 
 dependencies {
-    compile project(':camera')
+    debugCompile project(':camera')
+    releaseCompile 'com.commonsware.cwac:camera:0.6.+'
     compile 'com.android.support:support-v4:18.0.+'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
 }
@@ -40,7 +45,7 @@ android.libraryVariants.all { variant ->
   def task = project.tasks.create "jar${name.capitalize()}", Jar
   task.dependsOn variant.javaCompile
   task.from variant.javaCompile.destinationDir
-  task.baseName = "cwac-${PUBLISH_ARTIFACT_ID}"
+  task.baseName = "cwac-camera-v9"
   task.version = PUBLISH_VERSION
   task.exclude('com/commonsware/cwac/**/BuildConfig.**')
 }
