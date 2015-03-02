@@ -139,7 +139,7 @@ that `takePicture()` can throw an `IllegalStateException` if you
 call it before the preview is ready or if you call it while auto-focus
 is occurring.
 
-Step #3b: Call `startRecording()` and `stopRecording()` on the
+Step #3b: Call `record()` and `stopRecording()` on the
 `CameraFragment` to record a video. **NOTE** that this is presently
 only available on `com.commonsware.cwac.camera.CameraFragment`
 for use with native API Level 11+ fragments. The resulting video
@@ -150,7 +150,7 @@ will be stored in the default videos directory (e.g., `Movies`) on external stor
 Step #4: Add appropriate `<uses-permission>` elements to your manifest.
 For what is described in the preceding steps, you would need the `CAMERA`,
 `RECORD_AUDIO`, and `WRITE_EXTERNAL_STORAGE` permissions. `RECORD_AUDIO`
-is for the video recording using `startRecording()`; if you are only taking
+is for the video recording using `record()`; if you are only taking
 still photos, you will not need that permission.
 
 And that's it.
@@ -223,7 +223,7 @@ retrieve that object later via the zero-argument `tag()` method.
 There are a series of methods that you can override on `SimpleCameraHost`
 to control where photos and videos
 are stored once taken. These methods will be called for each `takePicture()`
-or `startRecording()` call, so you can create customized results for each
+or `record()` call, so you can create customized results for each
 distinct photo or video.
 
 Specifically:
@@ -566,7 +566,7 @@ the revised `Camera.Parameters`, where the stock implementation in
 
 ### Arbitrary Video Configuration
 
-Shortly after you call `startRecording()`, your `CameraHost` will be called
+Shortly after you call `record()`, your `CameraHost` will be called
 with:
 
 - `configureRecorderAudio()`
