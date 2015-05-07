@@ -687,8 +687,8 @@ replacing the system default.
 
 The stock `DeviceProfile` is largely driven by XML resources. These
 resources' names are of the form `cwac_camera_profile_XXX_YYY`,
-where `XXX` is the `Build.MANUFACTURER` and `YYY` is the `Build.MODEL`.
-Both `Build.MANUFACTURER` and `BUILD.MODEL` are converted to lowercase
+where `XXX` is the `Build.MANUFACTURER` and `YYY` is the `Build.PRODUCT`.
+Both `Build.MANUFACTURER` and `BUILD.PRODUCT` are converted to lowercase
 and have non-alphanumeric values converted to underscores, to ensure
 that we wind up with a valid resource filename. Each of those
 XML resource files has a `<deviceProfile>` root element, containing
