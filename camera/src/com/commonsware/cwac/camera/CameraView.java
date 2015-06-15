@@ -33,6 +33,8 @@ import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import java.io.IOException;
+import java.util.List;
+
 import com.commonsware.cwac.camera.CameraHost.FailureReason;
 
 public class CameraView extends ViewGroup implements AutoFocusCallback {
@@ -395,6 +397,14 @@ public class CameraView extends ViewGroup implements AutoFocusCallback {
       camera.autoFocus(this);
       isAutoFocusing=true;
     }
+  }
+
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+  public void autoFocus(List<Camera.Area> focusAreas) {
+    Camera.Parameters params = camera.getParameters();
+    params.setFocusAreas(focusAreas);
+    camera.setParameters(params);
+    autoFocus();
   }
 
   public void cancelAutoFocus() {
